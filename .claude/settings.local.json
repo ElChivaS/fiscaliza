@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --no-eslint --yes)",
+      "Bash(mkdir -p _tmp)",
+      "Bash(mv docuvault-claude-code-prompt.md _tmp/)",
+      "Read(//c/Users/nueve/allMyShit/projects/**)",
+      "Bash(npx create-next-app@latest fiscaliza-app --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --no-eslint --yes)",
+      "Bash(cp -r C:/Users/nueve/allMyShit/projects/fiscaliza-app/. C:/Users/nueve/allMyShit/projects/fiscaliza/)",
+      "Bash(rm -rf C:/Users/nueve/allMyShit/projects/fiscaliza-app)",
+      "Bash(cp -r C:/Users/nueve/allMyShit/projects/fiscaliza-app/app C:/Users/nueve/allMyShit/projects/fiscaliza/)",
+      "Bash(cp -r C:/Users/nueve/allMyShit/projects/fiscaliza-app/public C:/Users/nueve/allMyShit/projects/fiscaliza/)",
+      "Bash(cp C:/Users/nueve/allMyShit/projects/fiscaliza-app/package-lock.json C:/Users/nueve/allMyShit/projects/fiscaliza/)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)"
+    ]
+  }
+}
