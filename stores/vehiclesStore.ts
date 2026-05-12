@@ -1,7 +1,16 @@
 "use client"
 
 import { create } from "zustand"
-import { createClient } from "@/lib/supabase/client"
+import { auth } from "@/lib/firebase/auth"
+import {
+  getVehicles,
+  getDocumentsForVehicle,
+  createVehicle as fbCreateVehicle,
+  updateVehicle as fbUpdateVehicle,
+  softDeleteVehicle,
+  checkPlateExists as fbCheckPlate,
+  getProfile,
+} from "@/lib/firebase/firestore"
 import { enrichWithStatus } from "@/lib/utils/document.utils"
 import { normalizePlate } from "@/lib/utils/plate.utils"
 import type { VehicleWithDocuments, CreateVehiclePayload } from "@/types/document.types"
@@ -27,96 +36,54 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
   fetchVehiclesWithDocuments: async () => {
     set({ loading: true, error: null })
     try {
-      const supabase = createClient()
+      const user = auth.currentUser
+      if (!user) throw new Error("No autenticado")
 
-      const { data: vehicles, error: vErr } = await supabase
-        .from("vehicles")
-        .select("*")
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
+      const profile = await getProfile(user.uid)
+      if (!profile) throw new Error("Perfil no encontrado")
 
-      if (vErr) throw vErr
+      const vehicles = await getVehicles(profile.organization_id)
 
-      const vehicleIds = (vehicles ?? []).map((v) => v.id)
+      // Cargar documentos en paralelo
+      const vehiclesWithDocs: VehicleWithDocuments[] = await Promise.all(
+        vehicles.map(async (v) => {
+          const docs = await getDocumentsForVehicle(v.id)
+          return { ...v, documents: docs.map(enrichWithStatus) }
+        })
+      )
 
-      const { data: docs, error: dErr } = vehicleIds.length
-        ? await supabase
-            .from("documents")
-            .select("*")
-            .in("vehicle_id", vehicleIds)
-            .eq("is_current", true)
-        : { data: [], error: null }
-
-      if (dErr) throw dErr
-
-      const enriched: VehicleWithDocuments[] = (vehicles ?? []).map((v) => ({
-        ...v,
-        documents: (docs ?? [])
-          .filter((d) => d.vehicle_id === v.id)
-          .map(enrichWithStatus),
-      }))
-
-      set({ vehicles: enriched, loading: false })
+      set({ vehicles: vehiclesWithDocs, loading: false })
     } catch (err) {
       set({
-        error: err instanceof Error ? err.message : "Error al cargar vehículos",
+        error:   err instanceof Error ? err.message : "Error al cargar vehículos",
         loading: false,
       })
     }
   },
 
   createVehicle: async (payload) => {
-    const supabase = createClient()
-
-    const { data: { user } } = await supabase.auth.getUser()
+    const user = auth.currentUser
     if (!user) throw new Error("No autenticado")
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("organization_id")
-      .eq("id", user.id)
-      .single()
-
+    const profile = await getProfile(user.uid)
     if (!profile) throw new Error("Perfil no encontrado")
 
-    const { data, error } = await supabase
-      .from("vehicles")
-      .insert({
-        organization_id: profile.organization_id,
-        alias:  payload.alias,
-        plate:  normalizePlate(payload.plate),
-        brand:  payload.brand ?? null,
-        model:  payload.model ?? null,
-        year:   payload.year ?? null,
-      })
-      .select("id")
-      .single()
-
-    if (error) {
-      if (error.message.includes("vehicle_limit_reached")) {
-        throw new Error("vehicle_limit_reached")
-      }
-      throw error
-    }
+    const id = await fbCreateVehicle(profile.organization_id, {
+      ...payload,
+      plate: normalizePlate(payload.plate),
+    })
 
     await get().fetchVehiclesWithDocuments()
-    return data.id
+    return id
   },
 
   updateVehicle: async (id, payload) => {
-    const supabase = createClient()
-
-    const { error } = await supabase
-      .from("vehicles")
-      .update({
-        alias:  payload.alias,
-        brand:  payload.brand,
-        model:  payload.model,
-        year:   payload.year,
-      })
-      .eq("id", id)
-
-    if (error) throw error
+    await fbUpdateVehicle(id, {
+      alias: payload.alias,
+      brand: payload.brand,
+      model: payload.model,
+      year:  payload.year,
+    })
 
     set((state) => ({
       vehicles: state.vehicles.map((v) =>
@@ -126,44 +93,22 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
   },
 
   deleteVehicle: async (id) => {
-    const supabase = createClient()
-
-    const { error } = await supabase
-      .from("vehicles")
-      .update({ is_active: false })
-      .eq("id", id)
-
-    if (error) throw error
-
+    await softDeleteVehicle(id)
     set((state) => ({
       vehicles: state.vehicles.filter((v) => v.id !== id),
     }))
   },
 
   checkPlateExists: async (plate) => {
-    const supabase = createClient()
-    const { count } = await supabase
-      .from("vehicles")
-      .select("id", { count: "exact", head: true })
-      .eq("plate", normalizePlate(plate))
-      .eq("is_active", true)
-
-    return (count ?? 0) > 0
+    return fbCheckPlate(normalizePlate(plate))
   },
 
   refreshVehicleDocuments: async (vehicleId) => {
-    const supabase = createClient()
-
-    const { data: docs } = await supabase
-      .from("documents")
-      .select("*")
-      .eq("vehicle_id", vehicleId)
-      .eq("is_current", true)
-
+    const docs = await getDocumentsForVehicle(vehicleId)
     set((state) => ({
       vehicles: state.vehicles.map((v) =>
         v.id === vehicleId
-          ? { ...v, documents: (docs ?? []).map(enrichWithStatus) }
+          ? { ...v, documents: docs.map(enrichWithStatus) }
           : v
       ),
     }))

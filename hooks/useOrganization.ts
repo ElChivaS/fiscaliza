@@ -1,64 +1,52 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { onAuthStateChanged } from "@/lib/firebase/auth"
+import { auth } from "@/lib/firebase/auth"
+import { getProfile, getOrganization, getPlanLimits } from "@/lib/firebase/firestore"
 import type { Organization, Profile, PlanLimits } from "@/types/document.types"
 
 interface OrgData {
-  profile: Profile | null
+  profile:      Profile | null
   organization: Organization | null
-  planLimits: PlanLimits | null
+  planLimits:   PlanLimits | null
 }
 
 export function useOrganization() {
-  const [data, setData] = useState<OrgData>({
-    profile: null,
-    organization: null,
-    planLimits: null,
-  })
+  const [data, setData]       = useState<OrgData>({ profile: null, organization: null, planLimits: null })
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError]     = useState<string | null>(null)
 
   useEffect(() => {
-    async function fetch() {
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setData({ profile: null, organization: null, planLimits: null })
+        setLoading(false)
+        return
+      }
+
       try {
-        const supabase = createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+        const profile = await getProfile(user.uid)
+        if (!profile) throw new Error("Perfil no encontrado")
 
-        const { data: profile, error: profileErr } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", user.id)
-          .single()
+        const [organization, planLimits] = await Promise.all([
+          getOrganization(profile.organization_id),
+          getPlanLimits(profile.organization_id).then(() =>
+            getOrganization(profile.organization_id).then((org) =>
+              org ? getPlanLimits(org.plan) : null
+            )
+          ),
+        ])
 
-        if (profileErr) throw profileErr
-
-        const { data: org, error: orgErr } = await supabase
-          .from("organizations")
-          .select("*")
-          .eq("id", profile.organization_id)
-          .single()
-
-        if (orgErr) throw orgErr
-
-        const { data: limits, error: limitsErr } = await supabase
-          .from("plan_limits")
-          .select("*")
-          .eq("plan", org.plan)
-          .single()
-
-        if (limitsErr) throw limitsErr
-
-        setData({ profile, organization: org, planLimits: limits })
+        setData({ profile, organization, planLimits })
       } catch (err) {
         setError(err instanceof Error ? err.message : "Error al cargar organización")
       } finally {
         setLoading(false)
       }
-    }
+    })
 
-    fetch()
+    return unsub
   }, [])
 
   return { ...data, loading, error }

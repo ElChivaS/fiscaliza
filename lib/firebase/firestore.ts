@@ -1,0 +1,280 @@
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  addDoc,
+  collection,
+  query,
+  where,
+  orderBy,
+  serverTimestamp,
+  Timestamp,
+  type DocumentData,
+} from "firebase/firestore"
+import { firebaseApp } from "./config"
+import type { User } from "firebase/auth"
+import type {
+  Organization,
+  Profile,
+  Vehicle,
+  Document,
+  PlanLimits,
+  CreateVehiclePayload,
+} from "@/types/document.types"
+
+export const db = getFirestore(firebaseApp)
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function fromTimestamp(ts: Timestamp | null | undefined): string | null {
+  if (!ts) return null
+  return ts.toDate().toISOString()
+}
+
+function toFirestoreVehicle(data: DocumentData): Vehicle {
+  return {
+    id:              data.id,
+    organization_id: data.organization_id,
+    alias:           data.alias,
+    plate:           data.plate,
+    brand:           data.brand ?? null,
+    model:           data.model ?? null,
+    year:            data.year ?? null,
+    is_active:       data.is_active ?? true,
+    created_at:      fromTimestamp(data.created_at) ?? new Date().toISOString(),
+    updated_at:      fromTimestamp(data.updated_at) ?? new Date().toISOString(),
+  }
+}
+
+function toFirestoreDocument(data: DocumentData): Document {
+  return {
+    id:              data.id,
+    vehicle_id:      data.vehicle_id,
+    organization_id: data.organization_id,
+    type:            data.type,
+    storage_path:    data.storage_path,
+    file_name:       data.file_name,
+    mime_type:       data.mime_type,
+    expires_at:      data.expires_at ?? null,
+    issued_at:       data.issued_at ?? null,
+    is_current:      data.is_current ?? true,
+    uploaded_by:     data.uploaded_by ?? null,
+    created_at:      fromTimestamp(data.created_at) ?? new Date().toISOString(),
+  }
+}
+
+// ─── User / Profile ───────────────────────────────────────────────────────────
+
+export async function createUserProfile(user: User, fullName?: string): Promise<void> {
+  const profileRef = doc(db, "profiles", user.uid)
+  const existing   = await getDoc(profileRef)
+  if (existing.exists()) return // Ya existe
+
+  const name = fullName ?? user.displayName ?? user.email?.split("@")[0] ?? "Usuario"
+
+  // Crear organización
+  const orgRef = await addDoc(collection(db, "organizations"), {
+    name:             `${name}'s Fiscaliza`,
+    type:             "personal",
+    plan:             "free",
+    plan_expires_at:  null,
+    stripe_customer_id: null,
+    created_at:       serverTimestamp(),
+    updated_at:       serverTimestamp(),
+  })
+
+  // Crear perfil
+  await setDoc(profileRef, {
+    organization_id: orgRef.id,
+    role:            "owner",
+    full_name:       name,
+    avatar_url:      user.photoURL ?? null,
+    email:           user.email,
+  })
+}
+
+export async function getProfile(userId: string): Promise<Profile | null> {
+  const snap = await getDoc(doc(db, "profiles", userId))
+  if (!snap.exists()) return null
+  return { id: snap.id, ...snap.data() } as Profile
+}
+
+export async function updateProfile(
+  userId: string,
+  data: { full_name?: string; avatar_url?: string }
+): Promise<void> {
+  await updateDoc(doc(db, "profiles", userId), data)
+}
+
+// ─── Organization ─────────────────────────────────────────────────────────────
+
+export async function getOrganization(orgId: string): Promise<Organization | null> {
+  const snap = await getDoc(doc(db, "organizations", orgId))
+  if (!snap.exists()) return null
+  return { id: snap.id, ...snap.data() } as Organization
+}
+
+export async function getPlanLimits(plan: string): Promise<PlanLimits | null> {
+  const snap = await getDoc(doc(db, "plan_limits", plan))
+  if (!snap.exists()) return null
+  return { plan, ...snap.data() } as PlanLimits
+}
+
+// ─── Vehicles ─────────────────────────────────────────────────────────────────
+
+export async function getVehicles(orgId: string): Promise<Vehicle[]> {
+  const q    = query(
+    collection(db, "vehicles"),
+    where("organization_id", "==", orgId),
+    where("is_active", "==", true),
+    orderBy("created_at", "desc")
+  )
+  const snap = await getDocs(q)
+  return snap.docs.map((d) => toFirestoreVehicle({ id: d.id, ...d.data() }))
+}
+
+export async function getVehicle(vehicleId: string): Promise<Vehicle | null> {
+  const snap = await getDoc(doc(db, "vehicles", vehicleId))
+  if (!snap.exists()) return null
+  return toFirestoreVehicle({ id: snap.id, ...snap.data() })
+}
+
+export async function createVehicle(
+  orgId:   string,
+  payload: CreateVehiclePayload
+): Promise<string> {
+  // Verificar límite de plan
+  const profile = await getDoc(doc(db, "organizations", orgId))
+  const plan    = profile.data()?.plan ?? "free"
+  const limits  = await getPlanLimits(plan)
+
+  if (limits && limits.max_vehicles !== -1) {
+    const q    = query(
+      collection(db, "vehicles"),
+      where("organization_id", "==", orgId),
+      where("is_active", "==", true)
+    )
+    const snap = await getDocs(q)
+    if (snap.size >= limits.max_vehicles) {
+      throw new Error("vehicle_limit_reached")
+    }
+  }
+
+  // Verificar patente duplicada
+  const plateQ = query(
+    collection(db, "vehicles"),
+    where("plate", "==", payload.plate),
+    where("is_active", "==", true)
+  )
+  const plateSnap = await getDocs(plateQ)
+  if (!plateSnap.empty) throw new Error("plate_already_exists")
+
+  const ref = await addDoc(collection(db, "vehicles"), {
+    organization_id: orgId,
+    alias:           payload.alias,
+    plate:           payload.plate,
+    brand:           payload.brand ?? null,
+    model:           payload.model ?? null,
+    year:            payload.year ?? null,
+    is_active:       true,
+    created_at:      serverTimestamp(),
+    updated_at:      serverTimestamp(),
+  })
+
+  return ref.id
+}
+
+export async function updateVehicle(
+  vehicleId: string,
+  data: Partial<Pick<Vehicle, "alias" | "brand" | "model" | "year">>
+): Promise<void> {
+  await updateDoc(doc(db, "vehicles", vehicleId), {
+    ...data,
+    updated_at: serverTimestamp(),
+  })
+}
+
+export async function softDeleteVehicle(vehicleId: string): Promise<void> {
+  await updateDoc(doc(db, "vehicles", vehicleId), {
+    is_active:  false,
+    updated_at: serverTimestamp(),
+  })
+}
+
+export async function checkPlateExists(plate: string): Promise<boolean> {
+  const q    = query(
+    collection(db, "vehicles"),
+    where("plate", "==", plate),
+    where("is_active", "==", true)
+  )
+  const snap = await getDocs(q)
+  return !snap.empty
+}
+
+// ─── Documents ───────────────────────────────────────────────────────────────
+
+export async function getDocumentsForVehicle(vehicleId: string): Promise<Document[]> {
+  const q    = query(
+    collection(db, "documents"),
+    where("vehicle_id", "==", vehicleId),
+    where("is_current", "==", true)
+  )
+  const snap = await getDocs(q)
+  return snap.docs.map((d) => toFirestoreDocument({ id: d.id, ...d.data() }))
+}
+
+export async function getDocumentsForOrg(orgId: string): Promise<Document[]> {
+  const q    = query(
+    collection(db, "documents"),
+    where("organization_id", "==", orgId),
+    where("is_current", "==", true)
+  )
+  const snap = await getDocs(q)
+  return snap.docs.map((d) => toFirestoreDocument({ id: d.id, ...d.data() }))
+}
+
+export async function insertDocument(data: {
+  vehicleId:      string
+  orgId:          string
+  type:           Document["type"]
+  storagePath:    string
+  fileName:       string
+  mimeType:       string
+  expiresAt?:     string | null
+  issuedAt?:      string | null
+  uploadedBy?:    string | null
+}): Promise<void> {
+  // Retirar el anterior (retire_previous_document equivalente)
+  const prevQ = query(
+    collection(db, "documents"),
+    where("vehicle_id",  "==", data.vehicleId),
+    where("type",        "==", data.type),
+    where("is_current",  "==", true)
+  )
+  const prevSnap = await getDocs(prevQ)
+  for (const d of prevSnap.docs) {
+    await updateDoc(d.ref, { is_current: false })
+  }
+
+  await addDoc(collection(db, "documents"), {
+    vehicle_id:      data.vehicleId,
+    organization_id: data.orgId,
+    type:            data.type,
+    storage_path:    data.storagePath,
+    file_name:       data.fileName,
+    mime_type:       data.mimeType,
+    expires_at:      data.expiresAt ?? null,
+    issued_at:       data.issuedAt ?? null,
+    is_current:      true,
+    uploaded_by:     data.uploadedBy ?? null,
+    created_at:      serverTimestamp(),
+  })
+}
+
+export async function retireDocument(documentId: string): Promise<void> {
+  await updateDoc(doc(db, "documents", documentId), { is_current: false })
+}

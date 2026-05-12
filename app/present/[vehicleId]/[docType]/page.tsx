@@ -2,7 +2,8 @@
 
 import { use, useEffect, useRef, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { getVehicle, getDocumentsForVehicle } from "@/lib/firebase/firestore"
+import { getDocumentUrl } from "@/lib/firebase/storage"
 import { enrichWithStatus } from "@/lib/utils/document.utils"
 import { formatPlate } from "@/lib/utils/plate.utils"
 import {
@@ -16,9 +17,11 @@ import {
 import { STATUS_COLOR } from "@/lib/utils/document.utils"
 import Spinner from "@/components/ui/Spinner"
 
+// ─── IndexedDB cache para URLs de Firebase Storage ───────────────────────────
+
 const DB_NAME    = "fiscaliza-cache"
 const DB_VERSION = 1
-const STORE_NAME = "signed-urls"
+const STORE_NAME = "download-urls"
 
 async function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -39,6 +42,7 @@ async function getCachedUrl(path: string): Promise<string | null> {
       const req = tx.objectStore(STORE_NAME).get(path)
       req.onsuccess = () => {
         const entry = req.result as { path: string; url: string; exp: number } | undefined
+        // Firebase Storage URLs no expiran por defecto, cache 60 min para ser conservadores
         if (entry && entry.exp > Date.now()) resolve(entry.url)
         else resolve(null)
       }
@@ -56,10 +60,12 @@ async function cacheUrl(path: string, url: string) {
     tx.objectStore(STORE_NAME).put({
       path,
       url,
-      exp: Date.now() + 12 * 60 * 1000, // 12 min (TTL 15 min en Supabase)
+      exp: Date.now() + 60 * 60 * 1000, // 60 min
     })
   } catch {}
 }
+
+// ─── Página ───────────────────────────────────────────────────────────────────
 
 export default function PresentPage({
   params,
@@ -67,13 +73,12 @@ export default function PresentPage({
   params: Promise<{ vehicleId: string; docType: string }>
 }) {
   const { vehicleId, docType } = use(params)
-  const router  = useRouter()
-  const supabase = createClient()
+  const router = useRouter()
 
-  const [vehicle, setVehicle]   = useState<Vehicle | null>(null)
-  const [docs, setDocs]         = useState<Partial<Record<DocumentType, DocumentWithStatus>>>({})
+  const [vehicle, setVehicle]       = useState<Vehicle | null>(null)
+  const [docs, setDocs]             = useState<Partial<Record<DocumentType, DocumentWithStatus>>>({})
   const [activeType, setActiveType] = useState<DocumentType>(docType as DocumentType)
-  const [signedUrl, setSignedUrl]   = useState<string | null>(null)
+  const [docUrl, setDocUrl]         = useState<string | null>(null)
   const [loadingUrl, setLoadingUrl] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -85,67 +90,60 @@ export default function PresentPage({
     } catch {}
   }, [])
 
-  // Cargar vehículo y documentos
+  // Cargar vehículo y documentos desde Firestore
   useEffect(() => {
     async function load() {
-      const { data: v } = await supabase.from("vehicles").select("*").eq("id", vehicleId).single()
+      const [v, rawDocs] = await Promise.all([
+        getVehicle(vehicleId),
+        getDocumentsForVehicle(vehicleId),
+      ])
       if (v) setVehicle(v)
 
-      const { data: rawDocs } = await supabase
-        .from("documents")
-        .select("*")
-        .eq("vehicle_id", vehicleId)
-        .eq("is_current", true)
-
-      if (rawDocs) {
-        const byType: Partial<Record<DocumentType, DocumentWithStatus>> = {}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        rawDocs.forEach((d: any) => {
-          byType[d.type as DocumentType] = enrichWithStatus(d)
-        })
-        setDocs(byType)
-      }
+      const byType: Partial<Record<DocumentType, DocumentWithStatus>> = {}
+      rawDocs.forEach((d) => {
+        byType[d.type as DocumentType] = enrichWithStatus(d)
+      })
+      setDocs(byType)
     }
     load()
-  }, [vehicleId]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [vehicleId])
 
-  // Obtener signed URL al cambiar de tab
-  const loadSignedUrl = useCallback(async (type: DocumentType) => {
+  // Obtener URL de descarga al cambiar de tab
+  const loadDocUrl = useCallback(async (type: DocumentType) => {
     const doc = docs[type]
-    if (!doc) { setSignedUrl(null); return }
+    if (!doc) { setDocUrl(null); return }
 
     setLoadingUrl(true)
-    setSignedUrl(null)
+    setDocUrl(null)
 
-    // Intentar desde cache IndexedDB
+    // Cache IndexedDB
     const cached = await getCachedUrl(doc.storage_path)
     if (cached) {
-      setSignedUrl(cached)
+      setDocUrl(cached)
       setLoadingUrl(false)
       return
     }
 
-    const { data } = await supabase.storage
-      .from("documents")
-      .createSignedUrl(doc.storage_path, 900)
-
-    if (data?.signedUrl) {
-      await cacheUrl(doc.storage_path, data.signedUrl)
-      setSignedUrl(data.signedUrl)
+    try {
+      const url = await getDocumentUrl(doc.storage_path)
+      await cacheUrl(doc.storage_path, url)
+      setDocUrl(url)
+    } catch {
+      setDocUrl(null)
+    } finally {
+      setLoadingUrl(false)
     }
-
-    setLoadingUrl(false)
-  }, [docs, supabase]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [docs])
 
   useEffect(() => {
     if (Object.keys(docs).length > 0) {
-      loadSignedUrl(activeType)
+      loadDocUrl(activeType)
     }
-  }, [activeType, docs, loadSignedUrl])
+  }, [activeType, docs, loadDocUrl])
 
   // Renderizar PDF en canvas
   useEffect(() => {
-    if (!signedUrl || !canvasRef.current) return
+    if (!docUrl || !canvasRef.current) return
     const doc = docs[activeType]
     if (!doc || doc.mime_type !== "application/pdf") return
 
@@ -158,14 +156,14 @@ export default function PresentPage({
         pdfjsLib.GlobalWorkerOptions.workerSrc =
           "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs"
 
-        const pdf     = await pdfjsLib.getDocument(signedUrl!).promise
-        const page    = await pdf.getPage(1)
-        const canvas  = canvasRef.current
+        const pdf    = await pdfjsLib.getDocument(docUrl!).promise
+        const page   = await pdf.getPage(1)
+        const canvas = canvasRef.current
         if (!canvas || cancelled) return
 
-        const viewport  = page.getViewport({ scale: 1 })
-        const scale     = canvas.parentElement!.clientWidth / viewport.width
-        const scaled    = page.getViewport({ scale })
+        const viewport = page.getViewport({ scale: 1 })
+        const scale    = canvas.parentElement!.clientWidth / viewport.width
+        const scaled   = page.getViewport({ scale })
 
         canvas.width  = scaled.width
         canvas.height = scaled.height
@@ -181,12 +179,12 @@ export default function PresentPage({
 
     renderPdf()
     return () => { cancelled = true }
-  }, [signedUrl, activeType, docs])
+  }, [docUrl, activeType, docs])
 
   const activeDoc = docs[activeType]
 
   return (
-    <div className="fixed inset-0 bg-dark-bg flex flex-col" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="fixed inset-0 flex flex-col" style={{ backgroundColor: "#0a0a0a" }}>
       {/* Header oscuro */}
       <header className="flex items-center gap-3 px-4 pt-12 pb-4 shrink-0">
         <button
@@ -245,9 +243,8 @@ export default function PresentPage({
             style={{ maxWidth: "100%" }}
           />
         ) : (
-          // Imagen
           <img
-            src={signedUrl ?? ""}
+            src={docUrl ?? ""}
             alt={DOCUMENT_TYPE_LABELS[activeType]}
             className="w-full rounded-xl object-contain"
             style={{ maxHeight: "calc(100dvh - 200px)" }}
@@ -256,10 +253,7 @@ export default function PresentPage({
       </main>
 
       {/* Bottom nav de tabs */}
-      <nav
-        className="shrink-0 pb-8"
-        style={{ backgroundColor: "#141414" }}
-      >
+      <nav className="shrink-0 pb-8" style={{ backgroundColor: "#141414" }}>
         <div className="flex">
           {DOCUMENT_TYPE_ORDER.map((type) => {
             const d      = docs[type]
@@ -272,20 +266,10 @@ export default function PresentPage({
                 onClick={() => setActiveType(type)}
                 className="flex-1 flex flex-col items-center pt-3 pb-2 gap-1 relative transition-colors"
               >
-                {/* Línea activa */}
                 {active && (
-                  <span
-                    className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full"
-                    style={{ backgroundColor: "white" }}
-                  />
+                  <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-white" />
                 )}
-
-                {/* Punto de estado */}
-                <span
-                  className="size-1.5 rounded-full"
-                  style={{ backgroundColor: color }}
-                />
-
+                <span className="size-1.5 rounded-full" style={{ backgroundColor: color }} />
                 <span
                   className={[
                     "text-[10px] font-medium leading-tight text-center",

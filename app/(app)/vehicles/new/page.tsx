@@ -102,26 +102,28 @@ export default function NewVehiclePage() {
 
     setUploading(true)
     try {
-      const supabase = (await import("@/lib/supabase/client")).createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      const { data: profile }  = await supabase.from("profiles").select("organization_id").eq("id", user!.id).single()
+      const { auth: fbAuth } = await import("@/lib/firebase/auth")
+      const { getProfile }   = await import("@/lib/firebase/firestore")
+      const { uploadDocument: uploadToStorage } = await import("@/lib/firebase/storage")
+      const { insertDocument } = await import("@/lib/firebase/firestore")
+
+      const user    = fbAuth.currentUser
+      if (!user) throw new Error("No autenticado")
+      const profile = await getProfile(user.uid)
+      if (!profile) throw new Error("Perfil no encontrado")
 
       for (const type of types) {
         const file = files[type]!
-        const ext  = file.name.split(".").pop() ?? "pdf"
-        const path = `${profile!.organization_id}/${createdId}/${type}/${Date.now()}.${ext}`
-
-        await supabase.storage.from("documents").upload(path, file, { contentType: file.type })
-
-        await supabase.from("documents").insert({
-          vehicle_id:      createdId,
-          organization_id: profile!.organization_id,
+        const { storagePath } = await uploadToStorage(file, profile.organization_id, createdId!, type)
+        await insertDocument({
+          vehicleId:   createdId!,
+          orgId:       profile.organization_id,
           type,
-          storage_path:    path,
-          file_name:       file.name,
-          mime_type:       file.type,
-          expires_at:      expires[type] ?? null,
-          uploaded_by:     user!.id,
+          storagePath,
+          fileName:    file.name,
+          mimeType:    file.type,
+          expiresAt:   expires[type] ?? null,
+          uploadedBy:  user.uid,
         })
       }
 
