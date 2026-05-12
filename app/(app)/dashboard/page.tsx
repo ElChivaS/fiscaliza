@@ -3,12 +3,11 @@
 import { useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
 import { useVehiclesStore } from "@/stores/vehiclesStore"
 import { useOrganization } from "@/hooks/useOrganization"
 import VehicleList from "@/components/vehicle/VehicleList"
 import Spinner from "@/components/ui/Spinner"
-import { worstStatus, STATUS_COLOR } from "@/lib/utils/document.utils"
+import { worstStatus, STATUS_COLOR } from "@/lib/utils/document.utils" // eslint-disable-line @typescript-eslint/no-unused-vars
 
 function getGreeting(): string {
   const h = new Date().getHours()
@@ -18,7 +17,6 @@ function getGreeting(): string {
 }
 
 export default function DashboardPage() {
-  const router   = useRouter()
   const { profile, organization } = useOrganization()
   const { vehicles, loading, fetchVehiclesWithDocuments } = useVehiclesStore()
 

@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { logout, sendResetEmail, auth } from "@/lib/firebase/auth"
+import { updateProfile as fbUpdateProfile } from "@/lib/firebase/firestore"
 import { useOrganization } from "@/hooks/useOrganization"
 import PageHeader from "@/components/layout/PageHeader"
 import Button from "@/components/ui/Button"
@@ -30,11 +31,10 @@ export default function AccountPage() {
     if (!name.trim()) return
     setSavingName(true)
     try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
+      const user = auth.currentUser
       if (!user) throw new Error("No autenticado")
 
-      await supabase.from("profiles").update({ full_name: name.trim() }).eq("id", user.id)
+      await fbUpdateProfile(user.uid, { full_name: name.trim() })
       toast("Nombre actualizado", "success")
       setEditName(false)
     } catch {
@@ -45,21 +45,18 @@ export default function AccountPage() {
   }
 
   async function handleResetPassword() {
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const user = auth.currentUser
     if (!user?.email) return
-
-    const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-      redirectTo: `${location.origin}/auth/callback`,
-    })
-
-    if (error) toast("Error al enviar el correo", "error")
-    else toast("Revisa tu email para cambiar la contraseña", "success")
+    try {
+      await sendResetEmail(user.email)
+      toast("Revisa tu email para cambiar la contraseña", "success")
+    } catch {
+      toast("Error al enviar el correo", "error")
+    }
   }
 
   async function handleSignOut() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    await logout()
     router.push("/login")
     router.refresh()
   }

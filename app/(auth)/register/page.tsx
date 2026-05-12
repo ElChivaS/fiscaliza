@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { signInWithGoogle, registerWithEmail } from "@/lib/firebase/auth"
 import Button from "@/components/ui/Button"
 
 function getPasswordStrength(p: string): { label: string; color: string; width: string } {
@@ -14,89 +14,65 @@ function getPasswordStrength(p: string): { label: string; color: string; width: 
   return              { label: "Fuerte",   color: "#22c55e", width: "100%" }
 }
 
-const SUPABASE_ERRORS: Record<string, string> = {
-  "User already registered": "Ya existe una cuenta con ese email.",
-  "Password should be at least": "La contraseña debe tener al menos 6 caracteres.",
+const FIREBASE_ERRORS: Record<string, string> = {
+  "auth/email-already-in-use":   "Ya existe una cuenta con ese email.",
+  "auth/weak-password":          "La contraseña debe tener al menos 6 caracteres.",
+  "auth/invalid-email":          "Email inválido.",
+  "auth/network-request-failed": "Error de red. Verifica tu conexión.",
 }
 
-function mapError(msg: string): string {
-  for (const [key, val] of Object.entries(SUPABASE_ERRORS)) {
-    if (msg.includes(key)) return val
-  }
-  return "Ocurrió un error. Intenta de nuevo."
+function mapError(code: string): string {
+  return FIREBASE_ERRORS[code] ?? "Ocurrió un error. Intenta de nuevo."
+}
+
+function setSessionCookie() {
+  document.cookie = "fiscaliza-session=1; path=/; max-age=86400; SameSite=Lax"
 }
 
 export default function RegisterPage() {
   const router = useRouter()
-  const [name, setName]           = useState("")
-  const [email, setEmail]         = useState("")
-  const [password, setPassword]   = useState("")
-  const [showPass, setShowPass]   = useState(false)
-  const [loading, setLoading]     = useState(false)
+  const [name, setName]                 = useState("")
+  const [email, setEmail]               = useState("")
+  const [password, setPassword]         = useState("")
+  const [showPass, setShowPass]         = useState(false)
+  const [loading, setLoading]           = useState(false)
   const [loadingOAuth, setLoadingOAuth] = useState(false)
-  const [error, setError]         = useState<string | null>(null)
-  const [success, setSuccess]     = useState(false)
+  const [error, setError]               = useState<string | null>(null)
 
   const strength = getPasswordStrength(password)
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault()
-    if (password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres.")
-      return
-    }
-
+    if (password.length < 6) { setError("La contraseña debe tener al menos 6 caracteres."); return }
     setLoading(true)
     setError(null)
-
-    const supabase = createClient()
-    const { error: err } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: name },
-      },
-    })
-
-    if (err) {
-      setError(mapError(err.message))
+    try {
+      await registerWithEmail(email, password, name.trim())
+      setSessionCookie()
+      router.push("/dashboard")
+      router.refresh()
+    } catch (err) {
+      const code = (err as { code?: string }).code ?? ""
+      setError(mapError(code))
+    } finally {
       setLoading(false)
-      return
     }
-
-    setSuccess(true)
-    setLoading(false)
   }
 
   async function handleGoogle() {
     setLoadingOAuth(true)
-    const supabase = createClient()
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${location.origin}/auth/callback` },
-    })
-  }
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 text-center">
-        <div className="size-16 rounded-3xl bg-valid/10 flex items-center justify-center text-3xl mb-6">
-          ✉️
-        </div>
-        <h1 className="font-syne font-bold text-2xl text-ink mb-2">
-          Revisa tu email
-        </h1>
-        <p className="text-sm text-muted max-w-xs">
-          Te enviamos un enlace de confirmación a <strong>{email}</strong>. Haz clic en él para activar tu cuenta.
-        </p>
-        <Link
-          href="/login"
-          className="mt-8 text-sm font-medium text-ink underline underline-offset-2"
-        >
-          Volver al inicio de sesión
-        </Link>
-      </div>
-    )
+    setError(null)
+    try {
+      await signInWithGoogle()
+      setSessionCookie()
+      router.push("/dashboard")
+      router.refresh()
+    } catch (err) {
+      const code = (err as { code?: string }).code ?? ""
+      if (code !== "auth/popup-closed-by-user") setError(mapError(code))
+    } finally {
+      setLoadingOAuth(false)
+    }
   }
 
   return (
@@ -145,9 +121,7 @@ export default function RegisterPage() {
             )}
 
             <div>
-              <label className="text-xs font-medium text-muted mb-1.5 block">
-                Nombre
-              </label>
+              <label className="text-xs font-medium text-muted mb-1.5 block">Nombre</label>
               <input
                 type="text"
                 autoComplete="name"
@@ -160,9 +134,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="text-xs font-medium text-muted mb-1.5 block">
-                Email
-              </label>
+              <label className="text-xs font-medium text-muted mb-1.5 block">Email</label>
               <input
                 type="email"
                 autoComplete="email"
@@ -175,9 +147,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="text-xs font-medium text-muted mb-1.5 block">
-                Contraseña
-              </label>
+              <label className="text-xs font-medium text-muted mb-1.5 block">Contraseña</label>
               <div className="relative">
                 <input
                   type={showPass ? "text" : "password"}
@@ -196,8 +166,6 @@ export default function RegisterPage() {
                   {showPass ? "🙈" : "👁️"}
                 </button>
               </div>
-
-              {/* Indicador de fuerza */}
               {password.length > 0 && (
                 <div className="mt-2">
                   <div className="h-1 rounded-full bg-black/8 overflow-hidden">

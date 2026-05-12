@@ -1,0 +1,56 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper: obtener org del usuario autenticado ──────────────────────────
+    function userOrgId() {
+      return get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.organization_id;
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // ── plan_limits: lectura pública para autenticados ───────────────────────
+    match /plan_limits/{plan} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Solo via Admin SDK
+    }
+
+    // ── profiles ─────────────────────────────────────────────────────────────
+    match /profiles/{userId} {
+      allow read: if isAuthenticated() && (
+        request.auth.uid == userId ||
+        resource.data.organization_id == userOrgId()
+      );
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAuthenticated() && request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    // ── organizations ────────────────────────────────────────────────────────
+    match /organizations/{orgId} {
+      allow read: if isAuthenticated() && orgId == userOrgId();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && orgId == userOrgId();
+      allow delete: if false;
+    }
+
+    // ── vehicles ─────────────────────────────────────────────────────────────
+    match /vehicles/{vehicleId} {
+      allow read: if isAuthenticated() && resource.data.organization_id == userOrgId();
+      allow create: if isAuthenticated() && request.resource.data.organization_id == userOrgId();
+      allow update: if isAuthenticated() && resource.data.organization_id == userOrgId();
+      allow delete: if false; // Soft delete via is_active
+    }
+
+    // ── documents ────────────────────────────────────────────────────────────
+    match /documents/{documentId} {
+      allow read: if isAuthenticated() && resource.data.organization_id == userOrgId();
+      allow create: if isAuthenticated() && request.resource.data.organization_id == userOrgId();
+      allow update: if isAuthenticated() && resource.data.organization_id == userOrgId();
+      allow delete: if false; // Soft delete via is_current
+    }
+  }
+}

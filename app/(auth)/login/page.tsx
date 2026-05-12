@@ -3,83 +3,92 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { signInWithGoogle, signInWithEmail } from "@/lib/firebase/auth"
 import Button from "@/components/ui/Button"
 
-const SUPABASE_ERRORS: Record<string, string> = {
-  "Invalid login credentials": "Email o contraseña incorrectos.",
-  "Email not confirmed":        "Debes confirmar tu email antes de ingresar.",
-  "Too many requests":          "Demasiados intentos. Espera unos minutos.",
+const FIREBASE_ERRORS: Record<string, string> = {
+  "auth/invalid-credential":       "Email o contraseña incorrectos.",
+  "auth/user-not-found":           "No existe una cuenta con ese email.",
+  "auth/wrong-password":           "Contraseña incorrecta.",
+  "auth/too-many-requests":        "Demasiados intentos. Espera unos minutos.",
+  "auth/user-disabled":            "Esta cuenta ha sido deshabilitada.",
+  "auth/email-already-in-use":     "Ya existe una cuenta con ese email.",
+  "auth/network-request-failed":   "Error de red. Verifica tu conexión.",
 }
 
-function mapError(msg: string): string {
-  for (const [key, val] of Object.entries(SUPABASE_ERRORS)) {
-    if (msg.includes(key)) return val
-  }
-  return "Ocurrió un error. Intenta de nuevo."
+function mapError(code: string): string {
+  return FIREBASE_ERRORS[code] ?? "Ocurrió un error. Intenta de nuevo."
+}
+
+function setSessionCookie() {
+  // Cookie de sesión ligera — la validación real está en Firestore Security Rules
+  document.cookie = "fiscaliza-session=1; path=/; max-age=86400; SameSite=Lax"
 }
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail]         = useState("")
-  const [password, setPassword]   = useState("")
-  const [showPass, setShowPass]   = useState(false)
-  const [loading, setLoading]     = useState(false)
+  const [email, setEmail]               = useState("")
+  const [password, setPassword]         = useState("")
+  const [showPass, setShowPass]         = useState(false)
+  const [loading, setLoading]           = useState(false)
   const [loadingOAuth, setLoadingOAuth] = useState(false)
-  const [error, setError]         = useState<string | null>(null)
+  const [error, setError]               = useState<string | null>(null)
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError(null)
-
-    const supabase = createClient()
-    const { error: err } = await supabase.auth.signInWithPassword({ email, password })
-
-    if (err) {
-      setError(mapError(err.message))
+    try {
+      await signInWithEmail(email, password)
+      setSessionCookie()
+      router.push("/dashboard")
+      router.refresh()
+    } catch (err) {
+      const code = (err as { code?: string }).code ?? ""
+      setError(mapError(code))
+    } finally {
       setLoading(false)
-      return
     }
-
-    router.push("/dashboard")
-    router.refresh()
   }
 
   async function handleGoogle() {
     setLoadingOAuth(true)
-    const supabase = createClient()
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${location.origin}/auth/callback`,
-      },
-    })
+    setError(null)
+    try {
+      await signInWithGoogle()
+      setSessionCookie()
+      router.push("/dashboard")
+      router.refresh()
+    } catch (err) {
+      const code = (err as { code?: string }).code ?? ""
+      if (code !== "auth/popup-closed-by-user") {
+        setError(mapError(code))
+      }
+    } finally {
+      setLoadingOAuth(false)
+    }
   }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
       <header className="px-6 py-8 text-center">
         <Link href="/" className="font-syne font-bold text-2xl text-ink">
           FISCALIZA
         </Link>
       </header>
 
-      {/* Form */}
       <main className="flex-1 flex items-start justify-center px-6 pt-4">
         <div className="w-full max-w-sm">
           <h1 className="font-syne font-bold text-2xl text-ink mb-1">
             Bienvenido de vuelta
           </h1>
           <p className="text-sm text-muted mb-8">
-            No tienes cuenta?{" "}
+            ¿No tienes cuenta?{" "}
             <Link href="/register" className="text-ink font-medium underline underline-offset-2">
               Regístrate gratis
             </Link>
           </p>
 
-          {/* Google OAuth */}
           <Button
             variant="secondary"
             fullWidth
@@ -92,14 +101,12 @@ export default function LoginPage() {
             Continuar con Google
           </Button>
 
-          {/* Divisor */}
           <div className="flex items-center gap-3 mb-6">
             <div className="flex-1 h-px bg-black/8" />
             <span className="text-xs text-muted">o con email</span>
             <div className="flex-1 h-px bg-black/8" />
           </div>
 
-          {/* Email/pass form */}
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
             {error && (
               <div className="rounded-xl bg-expired/10 border border-expired/20 px-4 py-3 text-sm text-expired">
@@ -108,9 +115,7 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="text-xs font-medium text-muted mb-1.5 block">
-                Email
-              </label>
+              <label className="text-xs font-medium text-muted mb-1.5 block">Email</label>
               <input
                 type="email"
                 autoComplete="email"
@@ -123,9 +128,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="text-xs font-medium text-muted mb-1.5 block">
-                Contraseña
-              </label>
+              <label className="text-xs font-medium text-muted mb-1.5 block">Contraseña</label>
               <div className="relative">
                 <input
                   type={showPass ? "text" : "password"}
@@ -153,18 +156,12 @@ export default function LoginPage() {
         </div>
       </main>
 
-      {/* Footer legal */}
       <footer className="px-6 py-6 text-center">
         <p className="text-xs text-muted">
           Al continuar, aceptas nuestra{" "}
-          <Link href="#" className="underline underline-offset-2">
-            política de privacidad
-          </Link>{" "}
-          y{" "}
-          <Link href="#" className="underline underline-offset-2">
-            términos de uso
-          </Link>
-          .
+          <Link href="#" className="underline underline-offset-2">política de privacidad</Link>
+          {" "}y{" "}
+          <Link href="#" className="underline underline-offset-2">términos de uso</Link>.
         </p>
       </footer>
     </div>

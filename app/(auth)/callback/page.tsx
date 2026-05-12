@@ -2,23 +2,22 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
+import { auth, onAuthStateChanged } from "@/lib/firebase/auth"
 import Spinner from "@/components/ui/Spinner"
 
 export default function CallbackPage() {
   const router = useRouter()
 
   useEffect(() => {
-    async function handle() {
-      const supabase = createClient()
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.cookie = "fiscaliza-session=1; path=/; max-age=86400; SameSite=Lax"
         router.replace("/dashboard")
       } else {
         router.replace("/login")
       }
-    }
-    handle()
+    })
+    return unsub
   }, [router])
 
   return (
