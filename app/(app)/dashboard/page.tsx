@@ -7,7 +7,6 @@ import { useVehiclesStore } from "@/stores/vehiclesStore"
 import { useOrganization } from "@/hooks/useOrganization"
 import VehicleList from "@/components/vehicle/VehicleList"
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton"
-import { worstStatus, STATUS_COLOR } from "@/lib/utils/document.utils" // eslint-disable-line @typescript-eslint/no-unused-vars
 
 function getGreeting(): string {
   const h = new Date().getHours()
@@ -17,14 +16,13 @@ function getGreeting(): string {
 }
 
 export default function DashboardPage() {
-  const { profile, organization, loading: orgLoading } = useOrganization()
-  const { vehicles, loading, fetchVehiclesWithDocuments } = useVehiclesStore()
+  const { profile, organization } = useOrganization()
+  const { vehicles, fetchVehiclesWithDocuments } = useVehiclesStore()
 
   useEffect(() => {
     fetchVehiclesWithDocuments()
   }, [fetchVehiclesWithDocuments])
 
-  const isLoading = orgLoading || loading
   const firstName = profile?.full_name?.split(" ")[0] ?? "Usuario"
 
   if (!profile) {

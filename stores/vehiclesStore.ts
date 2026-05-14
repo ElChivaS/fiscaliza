@@ -16,9 +16,10 @@ import { normalizePlate } from "@/lib/utils/plate.utils"
 import type { VehicleWithDocuments, CreateVehiclePayload } from "@/types/document.types"
 
 interface VehiclesStore {
-  vehicles: VehicleWithDocuments[]
-  loading:  boolean
-  error:    string | null
+  vehicles:       VehicleWithDocuments[]
+  organizationId: string | null
+  loading:        boolean
+  error:          string | null
 
   fetchVehiclesWithDocuments:  () => Promise<void>
   createVehicle:               (payload: CreateVehiclePayload) => Promise<string>
@@ -26,12 +27,14 @@ interface VehiclesStore {
   deleteVehicle:               (id: string) => Promise<void>
   checkPlateExists:            (plate: string) => Promise<boolean>
   refreshVehicleDocuments:     (vehicleId: string) => Promise<void>
+  reset:                       () => void
 }
 
 export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
-  vehicles: [],
-  loading:  false,
-  error:    null,
+  vehicles:       [],
+  organizationId: null,
+  loading:        false,
+  error:          null,
 
   fetchVehiclesWithDocuments: async () => {
     set({ loading: true, error: null })
@@ -42,17 +45,18 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
       const profile = await getProfile(user.uid)
       if (!profile) throw new Error("Perfil no encontrado")
 
-      const vehicles = await getVehicles(profile.organization_id)
+      const orgId    = profile.organization_id
+      const vehicles = await getVehicles(orgId)
 
       // Cargar documentos en paralelo
       const vehiclesWithDocs: VehicleWithDocuments[] = await Promise.all(
         vehicles.map(async (v) => {
-          const docs = await getDocumentsForVehicle(v.id)
+          const docs = await getDocumentsForVehicle(v.id, orgId)
           return { ...v, documents: docs.map(enrichWithStatus) }
         })
       )
 
-      set({ vehicles: vehiclesWithDocs, loading: false })
+      set({ vehicles: vehiclesWithDocs, organizationId: orgId, loading: false })
     } catch (err) {
       set({
         error:   err instanceof Error ? err.message : "Error al cargar vehículos",
@@ -100,11 +104,22 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
   },
 
   checkPlateExists: async (plate) => {
-    return fbCheckPlate(normalizePlate(plate))
+    const orgId = get().organizationId
+    if (!orgId) {
+      // Si aún no tenemos el orgId, cargamos el perfil
+      const user = auth.currentUser
+      if (!user) return false
+      const profile = await getProfile(user.uid)
+      if (!profile) return false
+      return fbCheckPlate(normalizePlate(plate), profile.organization_id)
+    }
+    return fbCheckPlate(normalizePlate(plate), orgId)
   },
 
   refreshVehicleDocuments: async (vehicleId) => {
-    const docs = await getDocumentsForVehicle(vehicleId)
+    const orgId = get().organizationId
+    if (!orgId) return
+    const docs = await getDocumentsForVehicle(vehicleId, orgId)
     set((state) => ({
       vehicles: state.vehicles.map((v) =>
         v.id === vehicleId
@@ -113,4 +128,6 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
       ),
     }))
   },
+
+  reset: () => set({ vehicles: [], organizationId: null, loading: false, error: null }),
 }))
