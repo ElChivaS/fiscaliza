@@ -9,6 +9,7 @@ interface DocumentRowProps {
   document: DocumentWithStatus | null
   onOptions: (type: DocumentType) => void
   onClick: (type: DocumentType) => void
+  hasBothSides?: boolean
 }
 
 export default function DocumentRow({
@@ -16,11 +17,13 @@ export default function DocumentRow({
   document,
   onOptions,
   onClick,
+  hasBothSides,
 }: DocumentRowProps) {
   const status   = document?.expiryStatus ?? "unknown"
   const color    = STATUS_COLOR[status]
   const label    = STATUS_LABEL[status]
-  const subtitle = document ? formatExpiry(document) : "Sin documento cargado"
+  const baseSubtitle = document ? formatExpiry(document) : "Sin documento cargado"
+  const subtitle = hasBothSides ? `${baseSubtitle} · 2 lados` : baseSubtitle
   const hasDoc   = document !== null
 
   return (

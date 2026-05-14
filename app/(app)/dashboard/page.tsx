@@ -2,11 +2,11 @@
 
 import { useEffect } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { useVehiclesStore } from "@/stores/vehiclesStore"
 import { useOrganization } from "@/hooks/useOrganization"
 import VehicleList from "@/components/vehicle/VehicleList"
-import Spinner from "@/components/ui/Spinner"
+import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton"
 import { worstStatus, STATUS_COLOR } from "@/lib/utils/document.utils" // eslint-disable-line @typescript-eslint/no-unused-vars
 
 function getGreeting(): string {
@@ -17,14 +17,19 @@ function getGreeting(): string {
 }
 
 export default function DashboardPage() {
-  const { profile, organization } = useOrganization()
+  const { profile, organization, loading: orgLoading } = useOrganization()
   const { vehicles, loading, fetchVehiclesWithDocuments } = useVehiclesStore()
 
   useEffect(() => {
     fetchVehiclesWithDocuments()
   }, [fetchVehiclesWithDocuments])
 
+  const isLoading = orgLoading || loading
   const firstName = profile?.full_name?.split(" ")[0] ?? "Usuario"
+
+  if (!profile) {
+    return <DashboardSkeleton />
+  }
 
   // Vehículos con documentos por vencer (≤30 días)
   const alertVehicles = vehicles.filter((v) =>
@@ -43,9 +48,19 @@ export default function DashboardPage() {
         </div>
         <Link
           href="/account"
-          className="size-11 rounded-full bg-surface border border-black/10 flex items-center justify-center text-ink font-syne font-bold text-sm hover:bg-black/5 transition-colors"
+          className="size-11 rounded-full bg-surface border border-black/10 flex items-center justify-center text-ink font-syne font-bold text-sm hover:bg-black/5 transition-colors overflow-hidden"
         >
-          {firstName[0]?.toUpperCase()}
+          {profile.avatar_url ? (
+            <Image
+              src={profile.avatar_url}
+              alt={firstName}
+              width={44}
+              height={44}
+              className="size-11 rounded-full object-cover"
+            />
+          ) : (
+            firstName[0]?.toUpperCase()
+          )}
         </Link>
       </header>
 
@@ -67,13 +82,7 @@ export default function DashboardPage() {
       )}
 
       {/* Lista */}
-      {loading ? (
-        <div className="flex justify-center py-20">
-          <Spinner size="lg" className="text-ink" />
-        </div>
-      ) : (
-        <VehicleList vehicles={vehicles} />
-      )}
+      <VehicleList vehicles={vehicles} />
 
       {/* Strip de plan */}
       {!isPro && (

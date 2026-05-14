@@ -44,6 +44,8 @@ function toFirestoreVehicle(data: DocumentData): Vehicle {
     brand:           data.brand ?? null,
     model:           data.model ?? null,
     year:            data.year ?? null,
+    body_type:       data.body_type ?? null,
+    category:        data.category ?? null,
     is_active:       data.is_active ?? true,
     created_at:      fromTimestamp(data.created_at) ?? new Date().toISOString(),
     updated_at:      fromTimestamp(data.updated_at) ?? new Date().toISOString(),
@@ -56,6 +58,7 @@ function toFirestoreDocument(data: DocumentData): Document {
     vehicle_id:      data.vehicle_id,
     organization_id: data.organization_id,
     type:            data.type,
+    side:            data.side ?? null,
     storage_path:    data.storage_path,
     file_name:       data.file_name,
     mime_type:       data.mime_type,
@@ -164,9 +167,10 @@ export async function createVehicle(
     }
   }
 
-  // Verificar patente duplicada
+  // Verificar patente duplicada (dentro de la organización)
   const plateQ = query(
     collection(db, "vehicles"),
+    where("organization_id", "==", orgId),
     where("plate", "==", payload.plate),
     where("is_active", "==", true)
   )
@@ -180,6 +184,8 @@ export async function createVehicle(
     brand:           payload.brand ?? null,
     model:           payload.model ?? null,
     year:            payload.year ?? null,
+    body_type:       payload.body_type ?? null,
+    category:        payload.category ?? null,
     is_active:       true,
     created_at:      serverTimestamp(),
     updated_at:      serverTimestamp(),
@@ -205,9 +211,10 @@ export async function softDeleteVehicle(vehicleId: string): Promise<void> {
   })
 }
 
-export async function checkPlateExists(plate: string): Promise<boolean> {
+export async function checkPlateExists(plate: string, orgId: string): Promise<boolean> {
   const q    = query(
     collection(db, "vehicles"),
+    where("organization_id", "==", orgId),
     where("plate", "==", plate),
     where("is_active", "==", true)
   )
@@ -217,9 +224,10 @@ export async function checkPlateExists(plate: string): Promise<boolean> {
 
 // ─── Documents ───────────────────────────────────────────────────────────────
 
-export async function getDocumentsForVehicle(vehicleId: string): Promise<Document[]> {
+export async function getDocumentsForVehicle(vehicleId: string, orgId: string): Promise<Document[]> {
   const q    = query(
     collection(db, "documents"),
+    where("organization_id", "==", orgId),
     where("vehicle_id", "==", vehicleId),
     where("is_current", "==", true)
   )
@@ -241,6 +249,7 @@ export async function insertDocument(data: {
   vehicleId:      string
   orgId:          string
   type:           Document["type"]
+  side?:          "front" | "back" | null
   storagePath:    string
   fileName:       string
   mimeType:       string
@@ -248,22 +257,30 @@ export async function insertDocument(data: {
   issuedAt?:      string | null
   uploadedBy?:    string | null
 }): Promise<void> {
-  // Retirar el anterior (retire_previous_document equivalente)
+  // Retirar el anterior del mismo tipo (y del mismo lado si aplica).
+  // Usamos la query sin filtro de `side` y filtramos en memoria para
+  // evitar necesitar un índice compuesto adicional.
   const prevQ = query(
     collection(db, "documents"),
-    where("vehicle_id",  "==", data.vehicleId),
-    where("type",        "==", data.type),
-    where("is_current",  "==", true)
+    where("organization_id", "==", data.orgId),
+    where("vehicle_id",      "==", data.vehicleId),
+    where("type",            "==", data.type),
+    where("is_current",      "==", true)
   )
   const prevSnap = await getDocs(prevQ)
   for (const d of prevSnap.docs) {
-    await updateDoc(d.ref, { is_current: false })
+    const docSide = d.data().side ?? null
+    // Si insertamos con lado específico, solo retiramos el mismo lado
+    if (!data.side || docSide === data.side) {
+      await updateDoc(d.ref, { is_current: false })
+    }
   }
 
   await addDoc(collection(db, "documents"), {
     vehicle_id:      data.vehicleId,
     organization_id: data.orgId,
     type:            data.type,
+    side:            data.side ?? null,
     storage_path:    data.storagePath,
     file_name:       data.fileName,
     mime_type:       data.mimeType,

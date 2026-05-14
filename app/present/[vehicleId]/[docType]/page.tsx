@@ -42,7 +42,6 @@ async function getCachedUrl(path: string): Promise<string | null> {
       const req = tx.objectStore(STORE_NAME).get(path)
       req.onsuccess = () => {
         const entry = req.result as { path: string; url: string; exp: number } | undefined
-        // Firebase Storage URLs no expiran por defecto, cache 60 min para ser conservadores
         if (entry && entry.exp > Date.now()) resolve(entry.url)
         else resolve(null)
       }
@@ -60,9 +59,21 @@ async function cacheUrl(path: string, url: string) {
     tx.objectStore(STORE_NAME).put({
       path,
       url,
-      exp: Date.now() + 60 * 60 * 1000, // 60 min
+      exp: Date.now() + 60 * 60 * 1000,
     })
   } catch {}
+}
+
+async function resolveUrl(path: string): Promise<string | null> {
+  const cached = await getCachedUrl(path)
+  if (cached) return cached
+  try {
+    const url = await getDocumentUrl(path)
+    await cacheUrl(path, url)
+    return url
+  } catch {
+    return null
+  }
 }
 
 // ─── Página ───────────────────────────────────────────────────────────────────
@@ -77,10 +88,19 @@ export default function PresentPage({
 
   const [vehicle, setVehicle]       = useState<Vehicle | null>(null)
   const [docs, setDocs]             = useState<Partial<Record<DocumentType, DocumentWithStatus>>>({})
+  // Licencia tiene frente y reverso por separado
+  const [licenciaFront, setLicenciaFront] = useState<DocumentWithStatus | null>(null)
+  const [licenciaBack,  setLicenciaBack]  = useState<DocumentWithStatus | null>(null)
+
   const [activeType, setActiveType] = useState<DocumentType>(docType as DocumentType)
-  const [docUrl, setDocUrl]         = useState<string | null>(null)
+
+  // URLs resueltas para el tipo activo
+  const [docUrl,     setDocUrl]     = useState<string | null>(null)
+  const [backUrl,    setBackUrl]    = useState<string | null>(null)
   const [loadingUrl, setLoadingUrl] = useState(false)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  const canvasRef     = useRef<HTMLCanvasElement>(null)
+  const canvasBackRef = useRef<HTMLCanvasElement>(null)
 
   // Bloquear orientación portrait
   useEffect(() => {
@@ -93,95 +113,114 @@ export default function PresentPage({
   // Cargar vehículo y documentos desde Firestore
   useEffect(() => {
     async function load() {
-      const [v, rawDocs] = await Promise.all([
-        getVehicle(vehicleId),
-        getDocumentsForVehicle(vehicleId),
-      ])
-      if (v) setVehicle(v)
+      const v = await getVehicle(vehicleId)
+      if (!v) return
+      setVehicle(v)
+      const rawDocs = await getDocumentsForVehicle(vehicleId, v.organization_id)
 
       const byType: Partial<Record<DocumentType, DocumentWithStatus>> = {}
+      let front: DocumentWithStatus | null = null
+      let back:  DocumentWithStatus | null = null
+
       rawDocs.forEach((d) => {
-        byType[d.type as DocumentType] = enrichWithStatus(d)
+        const enriched = enrichWithStatus(d)
+        if (d.type === "licencia") {
+          if (d.side === "back") back  = enriched
+          else                   front = enriched  // front o null (doc antiguo sin side)
+        } else {
+          byType[d.type as DocumentType] = enriched
+        }
       })
+
       setDocs(byType)
+      setLicenciaFront(front)
+      setLicenciaBack(back)
+
+      // El representante de licencia en byType es el frente (para el badge de estado)
+      if (front ?? back) {
+        byType["licencia"] = (front ?? back)!
+        setDocs({ ...byType })
+      }
     }
     load()
   }, [vehicleId])
 
-  // Obtener URL de descarga al cambiar de tab
-  const loadDocUrl = useCallback(async (type: DocumentType) => {
-    const doc = docs[type]
-    if (!doc) { setDocUrl(null); return }
-
+  // Obtener URLs al cambiar de tab
+  const loadDocUrls = useCallback(async (type: DocumentType) => {
     setLoadingUrl(true)
     setDocUrl(null)
+    setBackUrl(null)
 
-    // Cache IndexedDB
-    const cached = await getCachedUrl(doc.storage_path)
-    if (cached) {
-      setDocUrl(cached)
-      setLoadingUrl(false)
-      return
-    }
-
-    try {
-      const url = await getDocumentUrl(doc.storage_path)
-      await cacheUrl(doc.storage_path, url)
+    if (type === "licencia") {
+      const [fUrl, bUrl] = await Promise.all([
+        licenciaFront ? resolveUrl(licenciaFront.storage_path) : Promise.resolve(null),
+        licenciaBack  ? resolveUrl(licenciaBack.storage_path)  : Promise.resolve(null),
+      ])
+      setDocUrl(fUrl)
+      setBackUrl(bUrl)
+    } else {
+      const doc = docs[type]
+      if (!doc) { setLoadingUrl(false); return }
+      const url = await resolveUrl(doc.storage_path)
       setDocUrl(url)
-    } catch {
-      setDocUrl(null)
-    } finally {
-      setLoadingUrl(false)
     }
-  }, [docs])
+
+    setLoadingUrl(false)
+  }, [docs, licenciaFront, licenciaBack])
 
   useEffect(() => {
-    if (Object.keys(docs).length > 0) {
-      loadDocUrl(activeType)
+    if (Object.keys(docs).length > 0 || licenciaFront || licenciaBack) {
+      loadDocUrls(activeType)
     }
-  }, [activeType, docs, loadDocUrl])
+  }, [activeType, docs, licenciaFront, licenciaBack, loadDocUrls])
 
-  // Renderizar PDF en canvas
+  // Renderizar PDF en canvas — helper
+  async function renderPdfToCanvas(url: string, canvas: HTMLCanvasElement) {
+    try {
+      const pdfjsLib = await import("pdfjs-dist")
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs"
+
+      const pdf     = await pdfjsLib.getDocument(url).promise
+      const page    = await pdf.getPage(1)
+      const viewport = page.getViewport({ scale: 1 })
+      const scale   = canvas.parentElement!.clientWidth / viewport.width
+      const scaled  = page.getViewport({ scale })
+
+      canvas.width  = scaled.width
+      canvas.height = scaled.height
+
+      await page.render({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        canvasContext: canvas.getContext("2d") as any,
+        canvas,
+        viewport: scaled,
+      }).promise
+    } catch {}
+  }
+
+  // Renderizar PDFs en canvas al cambiar URLs
   useEffect(() => {
     if (!docUrl || !canvasRef.current) return
-    const doc = docs[activeType]
+    const doc = activeType === "licencia" ? licenciaFront : docs[activeType]
     if (!doc || doc.mime_type !== "application/pdf") return
+    renderPdfToCanvas(docUrl, canvasRef.current)
+  }, [docUrl, activeType, docs, licenciaFront])
 
-    let cancelled = false
-
-    async function renderPdf() {
-      if (!canvasRef.current) return
-      try {
-        const pdfjsLib = await import("pdfjs-dist")
-        pdfjsLib.GlobalWorkerOptions.workerSrc =
-          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs"
-
-        const pdf    = await pdfjsLib.getDocument(docUrl!).promise
-        const page   = await pdf.getPage(1)
-        const canvas = canvasRef.current
-        if (!canvas || cancelled) return
-
-        const viewport = page.getViewport({ scale: 1 })
-        const scale    = canvas.parentElement!.clientWidth / viewport.width
-        const scaled   = page.getViewport({ scale })
-
-        canvas.width  = scaled.width
-        canvas.height = scaled.height
-
-        await page.render({
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          canvasContext: canvas.getContext("2d") as any,
-          canvas,
-          viewport: scaled,
-        }).promise
-      } catch {}
-    }
-
-    renderPdf()
-    return () => { cancelled = true }
-  }, [docUrl, activeType, docs])
+  useEffect(() => {
+    if (!backUrl || !canvasBackRef.current || !licenciaBack) return
+    if (licenciaBack.mime_type !== "application/pdf") return
+    renderPdfToCanvas(backUrl, canvasBackRef.current)
+  }, [backUrl, licenciaBack])
 
   const activeDoc = docs[activeType]
+  const isLicencia = activeType === "licencia"
+  const hasFront   = isLicencia && !!licenciaFront
+  const hasBack    = isLicencia && !!licenciaBack
+
+  // Determina si el doc activo (no licencia) es PDF
+  const isPdf = (doc: DocumentWithStatus | null | undefined) =>
+    doc?.mime_type === "application/pdf"
 
   return (
     <div className="fixed inset-0 flex flex-col" style={{ backgroundColor: "#0a0a0a" }}>
@@ -211,7 +250,7 @@ export default function PresentPage({
             className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0"
             style={{
               backgroundColor: STATUS_COLOR[activeDoc.expiryStatus] + "30",
-              color:            STATUS_COLOR[activeDoc.expiryStatus],
+              color:           STATUS_COLOR[activeDoc.expiryStatus],
             }}
           >
             {activeDoc.daysUntilExpiry !== null
@@ -224,7 +263,7 @@ export default function PresentPage({
       </header>
 
       {/* Área de documento */}
-      <main className="flex-1 overflow-auto flex items-start justify-center px-4 py-2">
+      <main className="flex-1 overflow-auto flex flex-col items-center px-4 py-2 gap-3">
         {loadingUrl ? (
           <div className="flex items-center justify-center w-full h-full">
             <Spinner size="lg" className="text-white/40" />
@@ -236,13 +275,52 @@ export default function PresentPage({
               Carga el {DOCUMENT_TYPE_LABELS[activeType]} desde el detalle del vehículo
             </p>
           </div>
-        ) : activeDoc.mime_type === "application/pdf" ? (
+        ) : isLicencia ? (
+          /* ── Licencia: frente + reverso apilados ── */
+          <>
+            {hasFront && (
+              <div className="w-full">
+                <p className="text-white/40 text-[10px] font-medium mb-1.5 tracking-wide uppercase">Frente</p>
+                {isPdf(licenciaFront) ? (
+                  <canvas ref={canvasRef} className="w-full rounded-xl" />
+                ) : (
+                  <img
+                    src={docUrl ?? ""}
+                    alt="Frente licencia"
+                    className="w-full rounded-xl object-contain"
+                  />
+                )}
+              </div>
+            )}
+            {hasBack && (
+              <div className="w-full">
+                <p className="text-white/40 text-[10px] font-medium mb-1.5 tracking-wide uppercase">Reverso</p>
+                {isPdf(licenciaBack) ? (
+                  <canvas ref={canvasBackRef} className="w-full rounded-xl" />
+                ) : (
+                  <img
+                    src={backUrl ?? ""}
+                    alt="Reverso licencia"
+                    className="w-full rounded-xl object-contain"
+                  />
+                )}
+              </div>
+            )}
+            {!hasFront && !hasBack && (
+              <div className="flex flex-col items-center justify-center w-full h-full text-center gap-3">
+                <p className="text-white/40 text-sm">Sin documento</p>
+              </div>
+            )}
+          </>
+        ) : isPdf(activeDoc) ? (
+          /* ── PDF normal ── */
           <canvas
             ref={canvasRef}
             className="w-full rounded-xl"
             style={{ maxWidth: "100%" }}
           />
         ) : (
+          /* ── Imagen normal ── */
           <img
             src={docUrl ?? ""}
             alt={DOCUMENT_TYPE_LABELS[activeType]}

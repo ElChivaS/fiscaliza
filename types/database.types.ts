@@ -108,6 +108,8 @@ export type Database = {
           brand: string | null
           model: string | null
           year: number | null
+          body_type: string | null
+          category: "auto" | "moto" | null
           is_active: boolean
           created_at: string
           updated_at: string
@@ -120,6 +122,8 @@ export type Database = {
           brand?: string | null
           model?: string | null
           year?: number | null
+          body_type?: string | null
+          category?: "auto" | "moto" | null
           is_active?: boolean
           created_at?: string
           updated_at?: string
@@ -132,6 +136,8 @@ export type Database = {
           brand?: string | null
           model?: string | null
           year?: number | null
+          body_type?: string | null
+          category?: "auto" | "moto" | null
           is_active?: boolean
           updated_at?: string
         }
@@ -151,6 +157,7 @@ export type Database = {
           vehicle_id: string
           organization_id: string
           type: "licencia" | "revision_tecnica" | "permiso_circulacion" | "soap"
+          side: "front" | "back" | null
           storage_path: string
           file_name: string
           mime_type: string
@@ -165,6 +172,7 @@ export type Database = {
           vehicle_id: string
           organization_id: string
           type: "licencia" | "revision_tecnica" | "permiso_circulacion" | "soap"
+          side?: "front" | "back" | null
           storage_path: string
           file_name: string
           mime_type: string
@@ -179,6 +187,7 @@ export type Database = {
           vehicle_id?: string
           organization_id?: string
           type?: "licencia" | "revision_tecnica" | "permiso_circulacion" | "soap"
+          side?: "front" | "back" | null
           storage_path?: string
           file_name?: string
           mime_type?: string

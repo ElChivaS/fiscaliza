@@ -1,4 +1,5 @@
 import type { Database } from "./database.types"
+import type { VehicleCategory } from "@/lib/data/vehicles"
 
 export type DocumentType  = Database["public"]["Enums"]["document_type"]
 export type PlanType      = Database["public"]["Enums"]["plan_type"]
@@ -41,17 +42,23 @@ export const DOCUMENT_TYPE_ORDER: DocumentType[] = [
 ]
 
 export interface CreateVehiclePayload {
-  alias: string
-  plate: string
-  brand?: string
-  model?: string
-  year?: number
+  alias:      string
+  plate:      string
+  brand?:     string
+  model?:     string
+  year?:      number
+  body_type?: string
+  category?:  VehicleCategory
 }
 
 export interface UploadDocumentPayload {
   vehicleId: string
   type: DocumentType
   file: File
+  side?: "front" | "back" | null
   expiresAt?: string
   issuedAt?: string
 }
+
+/** Tipos de documento que requieren frente y reverso */
+export const DUAL_SIDE_TYPES: DocumentType[] = ["licencia"]

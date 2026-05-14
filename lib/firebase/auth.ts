@@ -16,6 +16,7 @@ import { createUserProfile } from "./firestore"
 export const auth = getAuth(firebaseApp)
 
 const googleProvider = new GoogleAuthProvider()
+googleProvider.setCustomParameters({ prompt: "select_account" })
 
 export async function signInWithGoogle(): Promise<User> {
   const result = await signInWithPopup(auth, googleProvider)
@@ -26,6 +27,8 @@ export async function signInWithGoogle(): Promise<User> {
 
 export async function signInWithEmail(email: string, password: string): Promise<User> {
   const result = await signInWithEmailAndPassword(auth, email, password)
+  // Crear perfil si no existe (p.ej. si falló durante el registro)
+  await createUserProfile(result.user)
   return result.user
 }
 

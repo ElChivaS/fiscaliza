@@ -5,14 +5,18 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useVehiclesStore } from "@/stores/vehiclesStore"
 import { useDocuments } from "@/hooks/useDocuments"
+import { getVehicle } from "@/lib/firebase/firestore"
+import type { Vehicle } from "@/types/document.types"
+import VehicleDetailSkeleton from "@/components/skeletons/VehicleDetailSkeleton"
 import PageHeader from "@/components/layout/PageHeader"
 import DocumentRow from "@/components/document/DocumentRow"
 import DocumentUploadSlot from "@/components/document/DocumentUploadSlot"
+import LicenciaUploadSlot from "@/components/document/LicenciaUploadSlot"
 import Modal from "@/components/ui/Modal"
 import Button from "@/components/ui/Button"
 import Spinner from "@/components/ui/Spinner"
 import { toast } from "@/components/ui/Toast"
-import { DOCUMENT_TYPE_ORDER, DOCUMENT_TYPE_LABELS, type DocumentType } from "@/types/document.types"
+import { DOCUMENT_TYPE_ORDER, DOCUMENT_TYPE_LABELS, DUAL_SIDE_TYPES, type DocumentType } from "@/types/document.types"
 import { formatPlate } from "@/lib/utils/plate.utils"
 import { worstStatus, STATUS_COLOR, STATUS_LABEL } from "@/lib/utils/document.utils"
 
@@ -24,8 +28,17 @@ export default function VehicleDetailPage({
   const { id } = use(params)
   const router  = useRouter()
 
-  const { vehicles, deleteVehicle, refreshVehicleDocuments } = useVehiclesStore()
-  const vehicle = vehicles.find((v) => v.id === id)
+  const { vehicles, fetchVehiclesWithDocuments, deleteVehicle, refreshVehicleDocuments } = useVehiclesStore()
+  const [fallbackVehicle, setFallbackVehicle] = useState<Vehicle | null>(null)
+  const vehicle = vehicles.find((v) => v.id === id) ?? fallbackVehicle ?? null
+
+  // Si el store no tiene el vehículo, cargarlo directamente
+  useEffect(() => {
+    if (!vehicles.find((v) => v.id === id)) {
+      fetchVehiclesWithDocuments()
+      getVehicle(id).then((v) => { if (v) setFallbackVehicle(v) })
+    }
+  }, [id, vehicles, fetchVehiclesWithDocuments])
 
   const {
     documents,
@@ -33,8 +46,11 @@ export default function VehicleDetailPage({
     fetchDocuments,
     getSignedUrl,
     uploadDocument,
+    uploadLicencia,
     deleteDocument,
+    deleteAllByType,
     getDocumentByType,
+    getDocumentBySide,
   } = useDocuments(id)
 
   const [activeDocType, setActiveDocType]     = useState<DocumentType | null>(null)
@@ -43,6 +59,8 @@ export default function VehicleDetailPage({
   const [showDeleteVehicle, setShowDeleteVehicle] = useState(false)
   const [showUpload, setShowUpload]           = useState<DocumentType | null>(null)
   const [uploadFile, setUploadFile]           = useState<File | null>(null)
+  const [uploadFrontFile, setUploadFrontFile] = useState<File | null>(null)
+  const [uploadBackFile, setUploadBackFile]   = useState<File | null>(null)
   const [uploadExpires, setUploadExpires]     = useState("")
   const [uploading, setUploading]             = useState(false)
   const [deletingDoc, setDeletingDoc]         = useState(false)
@@ -53,30 +71,43 @@ export default function VehicleDetailPage({
   }, [fetchDocuments])
 
   if (!vehicle) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner size="lg" className="text-ink" />
-      </div>
-    )
+    return <VehicleDetailSkeleton />
   }
 
   const worst = worstStatus(documents.map((d) => d.expiryStatus))
   const worstColor = STATUS_COLOR[worst]
 
+  function closeUploadModal() {
+    setShowUpload(null)
+    setUploadFile(null)
+    setUploadFrontFile(null)
+    setUploadBackFile(null)
+    setUploadExpires("")
+  }
+
   async function handleUpload() {
-    if (!showUpload || !uploadFile) return
+    if (!showUpload) return
     setUploading(true)
     try {
-      await uploadDocument({
-        vehicleId: id,
-        type: showUpload,
-        file: uploadFile,
-        expiresAt: uploadExpires || undefined,
-      })
+      if (DUAL_SIDE_TYPES.includes(showUpload)) {
+        if (!uploadFrontFile) return
+        await uploadLicencia({
+          vehicleId: id,
+          frontFile: uploadFrontFile,
+          backFile:  uploadBackFile,
+          expiresAt: uploadExpires || undefined,
+        })
+      } else {
+        if (!uploadFile) return
+        await uploadDocument({
+          vehicleId: id,
+          type:      showUpload,
+          file:      uploadFile,
+          expiresAt: uploadExpires || undefined,
+        })
+      }
       toast("Documento cargado", "success")
-      setShowUpload(null)
-      setUploadFile(null)
-      setUploadExpires("")
+      closeUploadModal()
     } catch (err) {
       toast(err instanceof Error ? err.message : "Error al subir", "error")
     } finally {
@@ -86,11 +117,16 @@ export default function VehicleDetailPage({
 
   async function handleDeleteDoc() {
     if (!docOptionsType) return
-    const doc = getDocumentByType(docOptionsType)
-    if (!doc) return
     setDeletingDoc(true)
     try {
-      await deleteDocument(doc.id, doc.storage_path)
+      if (DUAL_SIDE_TYPES.includes(docOptionsType)) {
+        // Eliminar ambos lados de la licencia
+        await deleteAllByType(docOptionsType)
+      } else {
+        const doc = getDocumentByType(docOptionsType)
+        if (!doc) return
+        await deleteDocument(doc.id, doc.storage_path)
+      }
       toast("Documento eliminado", "success")
       setDocOptionsType(null)
     } catch {
@@ -161,12 +197,13 @@ export default function VehicleDetailPage({
               key={type}
               type={type}
               document={getDocumentByType(type)}
-              onOptions={(t) => {
-                setDocOptionsType(t)
-              }}
-              onClick={(t) => {
-                router.push(`/present/${id}/${t}`)
-              }}
+              hasBothSides={
+                DUAL_SIDE_TYPES.includes(type) &&
+                getDocumentBySide(type, "front") !== null &&
+                getDocumentBySide(type, "back") !== null
+              }
+              onOptions={(t) => setDocOptionsType(t)}
+              onClick={(t) => router.push(`/present/${id}/${t}`)}
             />
           ))}
         </div>
@@ -250,24 +287,35 @@ export default function VehicleDetailPage({
       {/* === Bottom sheet: subir documento === */}
       <Modal
         open={showUpload !== null}
-        onClose={() => { setShowUpload(null); setUploadFile(null); setUploadExpires("") }}
+        onClose={closeUploadModal}
         title={showUpload ? `Subir ${DOCUMENT_TYPE_LABELS[showUpload]}` : ""}
         bottomSheet
       >
         {showUpload && (
           <>
-            <DocumentUploadSlot
-              type={showUpload}
-              value={uploadFile}
-              expiresAt={uploadExpires}
-              onFileChange={(_, f) => setUploadFile(f)}
-              onExpiresAtChange={(_, d) => setUploadExpires(d)}
-            />
+            {DUAL_SIDE_TYPES.includes(showUpload) ? (
+              <LicenciaUploadSlot
+                frontFile={uploadFrontFile}
+                backFile={uploadBackFile}
+                expiresAt={uploadExpires}
+                onFrontChange={setUploadFrontFile}
+                onBackChange={setUploadBackFile}
+                onExpiresAtChange={setUploadExpires}
+              />
+            ) : (
+              <DocumentUploadSlot
+                type={showUpload}
+                value={uploadFile}
+                expiresAt={uploadExpires}
+                onFileChange={(_, f) => setUploadFile(f)}
+                onExpiresAtChange={(_, d) => setUploadExpires(d)}
+              />
+            )}
             <Button
               fullWidth
               size="lg"
               loading={uploading}
-              disabled={!uploadFile}
+              disabled={DUAL_SIDE_TYPES.includes(showUpload) ? !uploadFrontFile : !uploadFile}
               onClick={handleUpload}
               className="mt-4"
             >
