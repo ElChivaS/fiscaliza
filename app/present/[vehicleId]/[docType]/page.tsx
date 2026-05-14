@@ -283,12 +283,16 @@ export default function PresentPage({
                 <p className="text-white/40 text-[10px] font-medium mb-1.5 tracking-wide uppercase">Frente</p>
                 {isPdf(licenciaFront) ? (
                   <canvas ref={canvasRef} className="w-full rounded-xl" />
-                ) : (
+                ) : docUrl ? (
                   <img
-                    src={docUrl ?? ""}
+                    src={docUrl}
                     alt="Frente licencia"
                     className="w-full rounded-xl object-contain"
                   />
+                ) : (
+                  <div className="w-full h-32 flex items-center justify-center">
+                    <Spinner />
+                  </div>
                 )}
               </div>
             )}
@@ -297,12 +301,16 @@ export default function PresentPage({
                 <p className="text-white/40 text-[10px] font-medium mb-1.5 tracking-wide uppercase">Reverso</p>
                 {isPdf(licenciaBack) ? (
                   <canvas ref={canvasBackRef} className="w-full rounded-xl" />
-                ) : (
+                ) : backUrl ? (
                   <img
-                    src={backUrl ?? ""}
+                    src={backUrl}
                     alt="Reverso licencia"
                     className="w-full rounded-xl object-contain"
                   />
+                ) : (
+                  <div className="w-full h-32 flex items-center justify-center">
+                    <Spinner />
+                  </div>
                 )}
               </div>
             )}
@@ -319,14 +327,18 @@ export default function PresentPage({
             className="w-full rounded-xl"
             style={{ maxWidth: "100%" }}
           />
-        ) : (
+        ) : docUrl ? (
           /* ── Imagen normal ── */
           <img
-            src={docUrl ?? ""}
+            src={docUrl}
             alt={DOCUMENT_TYPE_LABELS[activeType]}
             className="w-full rounded-xl object-contain"
             style={{ maxHeight: "calc(100dvh - 200px)" }}
           />
+        ) : (
+          <div className="flex items-center justify-center h-40">
+            <Spinner />
+          </div>
         )}
       </main>
 
