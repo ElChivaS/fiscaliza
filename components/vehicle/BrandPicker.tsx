@@ -36,7 +36,7 @@ export default function BrandPicker({ value, category, onChange }: Props) {
             <button
               key={brand.slug}
               type="button"
-              onClick={() => onChange(brand)}
+              onClick={() => { setSearch(brand.name); onChange(brand) }}
               className={[
                 "flex flex-col items-center gap-1.5 p-2 rounded-2xl border transition-all duration-150",
                 isSelected
