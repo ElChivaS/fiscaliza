@@ -1,15 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { logout, sendResetEmail, auth } from "@/lib/firebase/auth"
 import { updateProfile as fbUpdateProfile } from "@/lib/firebase/firestore"
+import { uploadAvatar } from "@/lib/firebase/storage"
 import { useOrganization } from "@/hooks/useOrganization"
+import { useAuthStore } from "@/stores/authStore"
 import PageHeader from "@/components/layout/PageHeader"
 import Button from "@/components/ui/Button"
 import Modal from "@/components/ui/Modal"
 import { toast } from "@/components/ui/Toast"
-import Spinner from "@/components/ui/Spinner"
+import AccountSkeleton from "@/components/skeletons/AccountSkeleton"
 
 const PLAN_LABELS: Record<string, string> = {
   free:     "Free",
@@ -21,11 +24,13 @@ export default function AccountPage() {
   const router = useRouter()
   const { profile, organization, planLimits, loading } = useOrganization()
 
-  const [editName, setEditName]     = useState(false)
-  const [name, setName]             = useState("")
-  const [savingName, setSavingName] = useState(false)
-  const [showPlans, setShowPlans]   = useState(false)
+  const [editName, setEditName]         = useState(false)
+  const [name, setName]                 = useState("")
+  const [savingName, setSavingName]     = useState(false)
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
+  const [showPlans, setShowPlans]       = useState(false)
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly")
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   async function handleSaveName() {
     if (!name.trim()) return
@@ -41,6 +46,31 @@ export default function AccountPage() {
       toast("Error al guardar", "error")
     } finally {
       setSavingName(false)
+    }
+  }
+
+  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const user = auth.currentUser
+    if (!user) return
+
+    setUploadingAvatar(true)
+    try {
+      const url = await uploadAvatar(file, user.uid)
+      await fbUpdateProfile(user.uid, { avatar_url: url })
+      // Actualizar el store inmediatamente
+      useAuthStore.setState((s) => ({
+        profile: s.profile ? { ...s.profile, avatar_url: url } : s.profile,
+      }))
+      toast("Foto actualizada", "success")
+    } catch {
+      toast("Error al subir la foto", "error")
+    } finally {
+      setUploadingAvatar(false)
+      // Reset input para permitir reseleccionar el mismo archivo
+      if (fileInputRef.current) fileInputRef.current.value = ""
     }
   }
 
@@ -62,24 +92,67 @@ export default function AccountPage() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Spinner size="lg" className="text-ink" />
-      </div>
-    )
+    return <AccountSkeleton />
   }
 
   const displayName = profile?.full_name ?? "Usuario"
 
   return (
     <div className="max-w-md mx-auto px-4">
-      <PageHeader title="Mi cuenta" />
+      <PageHeader title="Mi cuenta" back backHref="/dashboard" />
 
       {/* Avatar + nombre */}
       <div className="flex flex-col items-center py-8 gap-3">
-        <div className="size-20 rounded-full bg-ink flex items-center justify-center text-white font-syne font-bold text-3xl">
-          {displayName[0]?.toUpperCase()}
-        </div>
+        {/* Input oculto */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleAvatarChange}
+        />
+
+        {/* Avatar clickeable */}
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="relative group focus:outline-none"
+          disabled={uploadingAvatar}
+        >
+          {profile?.avatar_url ? (
+            <Image
+              src={profile.avatar_url}
+              alt={displayName}
+              width={80}
+              height={80}
+              className="size-20 rounded-full object-cover"
+            />
+          ) : (
+            <div className="size-20 rounded-full bg-ink flex items-center justify-center text-white font-syne font-bold text-3xl">
+              {displayName[0]?.toUpperCase()}
+            </div>
+          )}
+
+          {/* Overlay de cámara */}
+          <div className={[
+            "absolute inset-0 rounded-full flex items-center justify-center transition-all duration-150",
+            uploadingAvatar
+              ? "bg-black/40"
+              : "bg-black/0 group-hover:bg-black/30",
+          ].join(" ")}>
+            {uploadingAvatar ? (
+              <span className="size-5 rounded-full border-2 border-white border-t-transparent animate-spin block" />
+            ) : (
+              <svg
+                width="22" height="22" viewBox="0 0 24 24"
+                fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg>
+            )}
+          </div>
+        </button>
 
         {editName ? (
           <div className="flex items-center gap-2 w-full max-w-xs">
@@ -143,7 +216,12 @@ export default function AccountPage() {
       <div className="flex flex-col gap-1 rounded-2xl bg-surface border border-black/8 overflow-hidden mb-4">
         <MenuItem
           label="Cambiar contraseña"
-          icon="🔑"
+          icon={
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          }
           onClick={handleResetPassword}
         />
       </div>
@@ -151,7 +229,13 @@ export default function AccountPage() {
       <div className="flex flex-col gap-1 rounded-2xl bg-surface border border-black/8 overflow-hidden">
         <MenuItem
           label="Cerrar sesión"
-          icon="↩️"
+          icon={
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          }
           danger
           onClick={handleSignOut}
         />
@@ -237,8 +321,8 @@ function MenuItem({
   danger = false,
   onClick,
 }: {
-  label: string
-  icon: string
+  label:   string
+  icon:    React.ReactNode
   danger?: boolean
   onClick: () => void
 }) {
@@ -250,9 +334,9 @@ function MenuItem({
         danger ? "text-expired" : "text-ink",
       ].join(" ")}
     >
-      <span className="text-xl">{icon}</span>
+      <span className="size-5 flex items-center justify-center shrink-0">{icon}</span>
       <span className="text-sm font-medium">{label}</span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="ml-auto text-muted">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="ml-auto text-muted shrink-0">
         <path d="M9 18l6-6-6-6" />
       </svg>
     </button>

@@ -42,24 +42,36 @@ export default function BottomNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 bg-surface/90 backdrop-blur-md border-t border-black/5 safe-area-bottom">
+    <nav className="fixed bottom-0 inset-x-0 z-40 bg-surface/95 backdrop-blur-md border-t border-black/8 safe-area-bottom">
       <div className="flex items-center justify-around h-16 px-4 max-w-md mx-auto">
         {NAV_ITEMS.map(({ href, label, icon, isAction }) => {
-          const active = pathname === href || (href !== "/dashboard" && !isAction && pathname.startsWith(href))
+          const active = pathname === href ||
+            (href !== "/dashboard" && !isAction && pathname.startsWith(href))
 
           return (
             <Link
               key={href}
               href={href}
               className={[
-                "flex flex-col items-center gap-0.5 px-4 transition-colors duration-150",
-                isAction ? "-mt-4" : "",
-                active ? "text-ink" : "text-muted",
+                "relative flex flex-col items-center gap-1 px-5 py-1 rounded-2xl transition-colors duration-150",
+                isAction ? "-mt-5" : "",
+                active ? "text-ink" : "text-muted hover:text-ink/60",
               ].join(" ")}
             >
+              {/* Indicador activo */}
+              {active && !isAction && (
+                <span className="absolute -top-0.5 w-5 h-0.5 rounded-full bg-ink" />
+              )}
+
               {icon(active)}
+
               {!isAction && (
-                <span className="text-[10px] font-medium">{label}</span>
+                <span className={[
+                  "text-[10px] font-medium transition-colors",
+                  active ? "text-ink" : "text-muted",
+                ].join(" ")}>
+                  {label}
+                </span>
               )}
             </Link>
           )

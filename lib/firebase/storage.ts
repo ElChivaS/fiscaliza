@@ -47,3 +47,19 @@ export async function deleteDocument(storagePath: string): Promise<void> {
 export async function getDocumentUrl(storagePath: string): Promise<string> {
   return getDownloadURL(ref(storage, storagePath))
 }
+
+/**
+ * Sube una foto de perfil y retorna la download URL.
+ * Path: avatars/{userId}.{ext}
+ */
+export async function uploadAvatar(
+  file:   File,
+  userId: string
+): Promise<string> {
+  const ext        = file.name.split(".").pop() ?? "jpg"
+  const storagePath = `avatars/${userId}.${ext}`
+  const storageRef  = ref(storage, storagePath)
+
+  await uploadBytes(storageRef, file, { contentType: file.type })
+  return getDownloadURL(storageRef)
+}
