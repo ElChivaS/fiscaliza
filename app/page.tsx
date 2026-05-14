@@ -157,7 +157,7 @@ export default function LandingPage() {
                 key={title}
                 className="rounded-2xl bg-surface border border-black/8 p-6"
               >
-                <span className="text-3xl mb-4 block">{icon}</span>
+                <span className="text-3xl mb-4 flex justify-center">{icon}</span>
                 <h3 className="font-syne font-bold text-ink mb-2">{title}</h3>
                 <p className="text-sm text-muted leading-relaxed">{desc}</p>
               </div>
