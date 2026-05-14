@@ -273,6 +273,7 @@ export default function NewVehiclePage() {
           {/* Marca */}
           <Field label="Marca">
             <BrandPicker
+              key={category}
               value={selectedBrand?.name ?? ""}
               category={category}
               onChange={handleBrandSelect}
