@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useVehiclesStore } from "@/stores/vehiclesStore"
 import { useOrganization } from "@/hooks/useOrganization"
 import VehicleList from "@/components/vehicle/VehicleList"
 import DashboardSkeleton from "@/components/skeletons/DashboardSkeleton"
+import PricingModal from "@/components/ui/PricingModal"
 
 function getGreeting(): string {
   const h = new Date().getHours()
@@ -22,6 +23,8 @@ export default function DashboardPage() {
   useEffect(() => {
     fetchVehiclesWithDocuments()
   }, [fetchVehiclesWithDocuments])
+
+  const [showPlans, setShowPlans] = useState(false)
 
   const firstName = profile?.full_name?.split(" ")[0] ?? "Usuario"
 
@@ -91,14 +94,20 @@ export default function DashboardPage() {
               1 vehículo · Sin alertas
             </p>
           </div>
-          <Link
-            href="/account"
+          <button
+            onClick={() => setShowPlans(true)}
             className="text-xs font-medium bg-white text-ink px-4 py-2 rounded-xl hover:bg-white/90 transition-colors shrink-0"
           >
             Mejorar plan
-          </Link>
+          </button>
         </div>
       )}
+
+      <PricingModal
+        open={showPlans}
+        onClose={() => setShowPlans(false)}
+        currentPlan={organization?.plan ?? "free"}
+      />
     </div>
   )
 }
