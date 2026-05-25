@@ -10,6 +10,8 @@ export const PLANS = [
   {
     id: "free",
     name: "Free",
+    subtitle: null,
+    badge: null,
     monthly: 0,
     annual: 0,
     features: ["1 vehículo", "1 usuario", "Documentos ilimitados"],
@@ -17,6 +19,8 @@ export const PLANS = [
   {
     id: "pro",
     name: "Pro",
+    subtitle: null,
+    badge: "Recomendado",
     monthly: 4990,
     annual: 3990,
     features: ["Vehículos ilimitados", "1 usuario", "Alertas de vencimiento", "QR verificable"],
@@ -24,6 +28,8 @@ export const PLANS = [
   {
     id: "business",
     name: "Business",
+    subtitle: "Para empresas",
+    badge: null,
     monthly: 14990,
     annual: 11990,
     features: ["Vehículos ilimitados", "Hasta 20 usuarios", "Alertas de vencimiento", "Panel de flota", "Reportes"],
@@ -69,16 +75,30 @@ export default function PricingModal({ open, onClose, currentPlan }: Props) {
               key={plan.id}
               className={[
                 "rounded-2xl border p-4",
-                isCurrent ? "border-valid bg-valid/5" : "border-black/10 bg-surface",
+                isCurrent        ? "border-valid bg-valid/5" :
+                plan.id === "pro" ? "border-ink bg-ink/[0.03]" :
+                "border-black/10 bg-surface",
               ].join(" ")}
             >
               <div className="flex items-center justify-between mb-2">
-                <p className="font-syne font-bold text-ink">{plan.name}</p>
-                {isCurrent && (
-                  <span className="text-xs font-medium text-valid bg-valid/10 px-2 py-0.5 rounded-full">
-                    Actual
-                  </span>
-                )}
+                <div className="flex items-baseline gap-1.5">
+                  <p className="font-syne font-bold text-ink">Plan {plan.name}</p>
+                  {plan.subtitle && (
+                    <p className="text-[11px] text-muted">{plan.subtitle}</p>
+                  )}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {plan.badge && (
+                    <span className="text-xs font-medium text-ink bg-ink/10 px-2 py-0.5 rounded-full">
+                      {plan.badge}
+                    </span>
+                  )}
+                  {isCurrent && (
+                    <span className="text-xs font-medium text-valid bg-valid/10 px-2 py-0.5 rounded-full">
+                      Actual
+                    </span>
+                  )}
+                </div>
               </div>
               <p className="font-syne font-bold text-2xl text-ink">
                 {price === 0 ? "Gratis" : `$${price.toLocaleString("es-CL")} CLP`}

@@ -19,6 +19,7 @@ interface VehiclesStore {
   vehicles:       VehicleWithDocuments[]
   organizationId: string | null
   loading:        boolean
+  fetched:        boolean
   error:          string | null
 
   fetchVehiclesWithDocuments:  () => Promise<void>
@@ -34,6 +35,7 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
   vehicles:       [],
   organizationId: null,
   loading:        false,
+  fetched:        false,
   error:          null,
 
   fetchVehiclesWithDocuments: async () => {
@@ -56,11 +58,12 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
         })
       )
 
-      set({ vehicles: vehiclesWithDocs, organizationId: orgId, loading: false })
+      set({ vehicles: vehiclesWithDocs, organizationId: orgId, loading: false, fetched: true })
     } catch (err) {
       set({
         error:   err instanceof Error ? err.message : "Error al cargar vehículos",
         loading: false,
+        fetched: true,
       })
     }
   },
@@ -129,5 +132,5 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
     }))
   },
 
-  reset: () => set({ vehicles: [], organizationId: null, loading: false, error: null }),
+  reset: () => set({ vehicles: [], organizationId: null, loading: false, fetched: false, error: null }),
 }))

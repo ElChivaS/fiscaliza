@@ -6,6 +6,7 @@ import { useVehiclesStore } from "@/stores/vehiclesStore"
 import { useOrganization } from "@/hooks/useOrganization"
 import PageHeader from "@/components/layout/PageHeader"
 import Button from "@/components/ui/Button"
+import PricingModal from "@/components/ui/PricingModal"
 import DocumentUploadSlot from "@/components/document/DocumentUploadSlot"
 import LicenciaUploadSlot from "@/components/document/LicenciaUploadSlot"
 import BrandPicker from "@/components/vehicle/BrandPicker"
@@ -21,7 +22,8 @@ type Step = 1 | 2
 export default function NewVehiclePage() {
   const router        = useRouter()
   const { createVehicle, checkPlateExists } = useVehiclesStore()
-  const { planLimits } = useOrganization()
+  const { planLimits, organization } = useOrganization()
+  const [showPlans, setShowPlans] = useState(false)
 
   const [step, setStep]       = useState<Step>(1)
   const [loading, setLoading] = useState(false)
@@ -44,6 +46,10 @@ export default function NewVehiclePage() {
   const [licenciaFront, setLicenciaFront] = useState<File | null>(null)
   const [licenciaBack, setLicenciaBack]   = useState<File | null>(null)
   const [uploading, setUploading]   = useState(false)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [step])
 
   // Debounce plate check
   useEffect(() => {
@@ -101,6 +107,7 @@ export default function NewVehiclePage() {
       const msg = err instanceof Error ? err.message : "Error al crear vehículo"
       if (msg === "vehicle_limit_reached") {
         toast("Límite del plan alcanzado. Mejora tu plan para agregar más vehículos.", "error")
+        setShowPlans(true)
       } else {
         toast(msg, "error")
       }
@@ -375,6 +382,12 @@ export default function NewVehiclePage() {
           </div>
         </div>
       )}
+
+      <PricingModal
+        open={showPlans}
+        onClose={() => setShowPlans(false)}
+        currentPlan={organization?.plan ?? "free"}
+      />
     </div>
   )
 }

@@ -18,7 +18,7 @@ function getGreeting(): string {
 
 export default function DashboardPage() {
   const { profile, organization } = useOrganization()
-  const { vehicles, fetchVehiclesWithDocuments } = useVehiclesStore()
+  const { vehicles, fetchVehiclesWithDocuments, fetched: vehiclesFetched } = useVehiclesStore()
 
   useEffect(() => {
     fetchVehiclesWithDocuments()
@@ -40,7 +40,7 @@ export default function DashboardPage() {
   const isPro  = organization?.plan === "pro" || organization?.plan === "business"
 
   return (
-    <div className="max-w-md mx-auto px-4">
+    <div className="max-w-md mx-auto px-4 flex flex-col min-h-[calc(100vh-5rem)]">
       {/* Header */}
       <header className="pt-12 pb-6 flex items-center justify-between">
         <div>
@@ -83,11 +83,12 @@ export default function DashboardPage() {
       )}
 
       {/* Lista */}
-      <VehicleList vehicles={vehicles} />
+      <VehicleList vehicles={vehicles} loading={!vehiclesFetched} />
 
       {/* Strip de plan */}
       {!isPro && (
-        <div className="mt-8 rounded-2xl bg-ink p-5 flex items-center justify-between">
+        <div className="mt-auto pt-6 pb-4">
+        <div className="rounded-2xl bg-ink p-5 flex items-center justify-between">
           <div>
             <p className="font-syne font-bold text-white text-sm">Plan Free</p>
             <p className="text-white/60 text-xs mt-0.5">
@@ -100,6 +101,7 @@ export default function DashboardPage() {
           >
             Mejorar plan
           </button>
+        </div>
         </div>
       )}
 

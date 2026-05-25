@@ -27,9 +27,12 @@ export default function DocumentRow({
   const hasDoc   = document !== null
 
   return (
-    <button
-      className="flex items-center gap-4 w-full py-3 px-1 text-left group"
+    <div
+      className="flex items-center gap-4 w-full py-3 px-1 text-left group cursor-pointer"
       onClick={() => (hasDoc ? onClick(type) : onOptions(type))}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") hasDoc ? onClick(type) : onOptions(type) }}
     >
       {/* Icono */}
       <span
@@ -71,7 +74,7 @@ export default function DocumentRow({
           ···
         </button>
       </div>
-    </button>
+    </div>
   )
 }
 

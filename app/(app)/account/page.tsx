@@ -97,7 +97,7 @@ export default function AccountPage() {
   const displayName = profile?.full_name ?? "Usuario"
 
   return (
-    <div className="max-w-md mx-auto px-4">
+    <div className="max-w-md mx-auto px-4 flex flex-col min-h-[calc(100vh-5rem)]">
       <PageHeader title="Mi cuenta" back backHref="/dashboard" />
 
       {/* Avatar + nombre */}
@@ -241,7 +241,7 @@ export default function AccountPage() {
       </div>
 
       {/* App info */}
-      <p className="text-center text-xs text-muted mt-8">
+      <p className="text-center text-xs text-muted mt-auto pt-8 pb-4">
         FISCALIZA v0.1.0 · Ley 21.302 Chile
       </p>
 

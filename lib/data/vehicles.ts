@@ -193,6 +193,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
       L("MG 5",    "sedan"),
       L("MG GT",   "sedan"),
       L("ZS",      "suv"),
+      L("ZX",      "suv"),
       L("ZST",     "suv"),
       L("HS",      "suv"),
     ],
@@ -280,6 +281,16 @@ const AUTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
+    name: "Foton", slug: "foton", hasLogo: false, category: "auto",
+    models: [
+      L("Tunland",    "pickup"),
+      L("Tunland G7", "pickup"),
+      L("Thunder",    "pickup"),
+      L("Sauvana",    "van"),
+      L("View C2",    "van"),
+    ],
+  },
+  {
     name: "Geely", slug: "geely", hasLogo: false, category: "auto",
     models: [
       L("Emgrand",  "sedan"),
@@ -305,6 +316,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
       L("Cherokee",  "suv"),
       L("Grand Cherokee","suv"),
       L("Wrangler",  "suv"),
+      L("Avenger",  "suv"),
       L("Gladiator", "pickup"),
     ],
   },
