@@ -43,7 +43,6 @@ export default function LoginPage() {
       await signInWithEmail(email, password)
       setSessionCookie()
       router.push("/dashboard")
-      router.refresh()
     } catch (err) {
       const code = (err as { code?: string }).code ?? ""
       setError(mapError(code))
@@ -59,7 +58,6 @@ export default function LoginPage() {
       await signInWithGoogle()
       setSessionCookie()
       router.push("/dashboard")
-      router.refresh()
     } catch (err) {
       const code = (err as { code?: string }).code ?? ""
       if (code !== "auth/popup-closed-by-user") {

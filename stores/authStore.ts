@@ -6,6 +6,9 @@ import { getProfile, getOrganization, getPlanLimits } from "@/lib/firebase/fires
 import type { Organization, Profile, PlanLimits } from "@/types/document.types"
 import { useVehiclesStore } from "./vehiclesStore"
 
+// Persiste el listener de Firebase fuera de React para que sobreviva desmontes de componentes
+let _firebaseUnsub: (() => void) | null = null
+
 interface AuthStore {
   profile:      Profile | null
   organization: Organization | null
@@ -27,11 +30,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   _initialized: false,
 
   init: () => {
-    // Solo inicializar una vez por sesión de browser
     if (get()._initialized) return () => {}
     set({ _initialized: true })
 
-    const unsub = onAuthStateChanged(auth, async (user) => {
+    _firebaseUnsub = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         // Limpiar datos del usuario anterior
         useVehiclesStore.getState().reset()
@@ -69,11 +71,16 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       }
     })
 
-    return unsub
+    // El listener vive a nivel de módulo — no lo matamos al desmontar el componente
+    return () => {}
   },
 
-  reset: () => set({
-    profile: null, organization: null, planLimits: null,
-    loading: true, error: null, _initialized: false,
-  }),
+  reset: () => {
+    _firebaseUnsub?.()
+    _firebaseUnsub = null
+    set({
+      profile: null, organization: null, planLimits: null,
+      loading: true, error: null, _initialized: false,
+    })
+  },
 }))
