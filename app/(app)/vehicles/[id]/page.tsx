@@ -3,10 +3,12 @@
 import { use, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import QRCode from "qrcode"
 import { useVehiclesStore } from "@/stores/vehiclesStore"
 import { useDocuments } from "@/hooks/useDocuments"
-import { getVehicle } from "@/lib/firebase/firestore"
-import type { Vehicle } from "@/types/document.types"
+import { useOrganization } from "@/hooks/useOrganization"
+import { getVehicle, createQrShare, QR_SHARE_TTL_MS } from "@/lib/firebase/firestore"
+import type { Vehicle, QrShareDocument } from "@/types/document.types"
 import VehicleDetailSkeleton from "@/components/skeletons/VehicleDetailSkeleton"
 import PageHeader from "@/components/layout/PageHeader"
 import DocumentRow from "@/components/document/DocumentRow"
@@ -29,6 +31,7 @@ export default function VehicleDetailPage({
   const router  = useRouter()
 
   const { vehicles, fetchVehiclesWithDocuments, deleteVehicle, refreshVehicleDocuments } = useVehiclesStore()
+  const { profile } = useOrganization()
   const [fallbackVehicle, setFallbackVehicle] = useState<Vehicle | null>(null)
   const vehicle = vehicles.find((v) => v.id === id) ?? fallbackVehicle ?? null
 
@@ -65,6 +68,21 @@ export default function VehicleDetailPage({
   const [uploading, setUploading]             = useState(false)
   const [deletingDoc, setDeletingDoc]         = useState(false)
   const [deletingVehicle, setDeletingVehicle] = useState(false)
+  const [generatingQr, setGeneratingQr]       = useState(false)
+  const [showQr, setShowQr]                   = useState(false)
+  const [qrDataUrl, setQrDataUrl]             = useState<string | null>(null)
+  const [qrExpiresAt, setQrExpiresAt]         = useState<number | null>(null)
+  const [qrSecondsLeft, setQrSecondsLeft]     = useState(0)
+
+  // Cuenta regresiva del QR mientras el modal está abierto
+  useEffect(() => {
+    if (!showQr || !qrExpiresAt) return
+
+    const tick = () => setQrSecondsLeft(Math.max(0, Math.round((qrExpiresAt - Date.now()) / 1000)))
+    tick()
+    const interval = setInterval(tick, 1000)
+    return () => clearInterval(interval)
+  }, [showQr, qrExpiresAt])
 
   useEffect(() => {
     fetchDocuments()
@@ -148,6 +166,62 @@ export default function VehicleDetailPage({
     }
   }
 
+  async function handleGenerateQr() {
+    if (!vehicle) return
+    setGeneratingQr(true)
+    try {
+      const shareDocs: QrShareDocument[] = []
+
+      for (const type of DOCUMENT_TYPE_ORDER) {
+        if (DUAL_SIDE_TYPES.includes(type)) {
+          const front = getDocumentBySide(type, "front")
+          const back  = getDocumentBySide(type, "back")
+          if (!front && !back) continue
+
+          shareDocs.push({
+            type,
+            label:      DOCUMENT_TYPE_LABELS[type],
+            expires_at: (front ?? back)?.expires_at ?? null,
+            front_url:  front ? await getSignedUrl(front.storage_path) : null,
+            back_url:   back  ? await getSignedUrl(back.storage_path)  : null,
+          })
+        } else {
+          const d = getDocumentByType(type)
+          if (!d) continue
+
+          shareDocs.push({
+            type,
+            label:      DOCUMENT_TYPE_LABELS[type],
+            expires_at: d.expires_at ?? null,
+            front_url:  await getSignedUrl(d.storage_path),
+            back_url:   null,
+          })
+        }
+      }
+
+      const shareId = await createQrShare({
+        orgId:           vehicle.organization_id,
+        vehicleId:       id,
+        vehicleAlias:    vehicle.alias,
+        vehiclePlate:    vehicle.plate,
+        vehiclePhotoUrl: vehicle.photo_url,
+        platePhotoUrl:   vehicle.plate_photo_url,
+        ownerName:       profile?.full_name ?? "Usuario",
+        documents:       shareDocs,
+      })
+
+      const baseUrl  = process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin
+      const shareUrl = `${baseUrl}/qr/${shareId}`
+      setQrDataUrl(await QRCode.toDataURL(shareUrl))
+      setQrExpiresAt(Date.now() + QR_SHARE_TTL_MS)
+      setShowQr(true)
+    } catch {
+      toast("Error al generar el QR", "error")
+    } finally {
+      setGeneratingQr(false)
+    }
+  }
+
   const docOptionsDoc = docOptionsType ? getDocumentByType(docOptionsType) : null
 
   return (
@@ -227,6 +301,52 @@ export default function VehicleDetailPage({
       >
         Modo presentación
       </Button>
+
+      {/* Botón generar QR */}
+      <Button
+        fullWidth
+        size="lg"
+        variant="secondary"
+        className="mt-3"
+        loading={generatingQr}
+        onClick={handleGenerateQr}
+      >
+        Generar QR
+      </Button>
+
+      {/* === Modal: código QR === */}
+      <Modal open={showQr} onClose={() => setShowQr(false)} title="Código QR">
+        <div className="flex flex-col items-center gap-4">
+          {qrDataUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={qrDataUrl}
+              alt="Código QR"
+              width={220}
+              height={220}
+              className={["rounded-2xl transition-opacity", qrSecondsLeft === 0 ? "opacity-30" : ""].join(" ")}
+            />
+          )}
+
+          <span
+            className="text-sm font-mono font-semibold px-3 py-1.5 rounded-full"
+            style={{
+              backgroundColor: (qrSecondsLeft === 0 ? STATUS_COLOR.expired : STATUS_COLOR.valid) + "20",
+              color:           qrSecondsLeft === 0 ? STATUS_COLOR.expired : STATUS_COLOR.valid,
+            }}
+          >
+            {qrSecondsLeft === 0
+              ? "Expirado"
+              : `${String(Math.floor(qrSecondsLeft / 60)).padStart(2, "0")}:${String(qrSecondsLeft % 60).padStart(2, "0")}`}
+          </span>
+
+          <p className="text-sm text-muted text-center">
+            {qrSecondsLeft === 0
+              ? "Este código ya no es válido. Genera uno nuevo si lo necesitas."
+              : "Pide al fiscalizador que lo escanee con la cámara de su celular."}
+          </p>
+        </div>
+      </Modal>
 
       {/* === Bottom sheet: opciones de documento === */}
       <Modal

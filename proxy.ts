@@ -15,7 +15,8 @@ export function proxy(request: NextRequest) {
   const isPublic     = pathname === "/" ||
                        pathname.startsWith("/auth/") ||
                        pathname.startsWith("/_next") ||
-                       pathname.startsWith("/api")
+                       pathname.startsWith("/api") ||
+                       pathname.startsWith("/qr")
 
   // No autenticado → redirigir a login
   if (!session && !isAuthRoute && !isPublic) {

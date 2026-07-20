@@ -62,5 +62,13 @@ service cloud.firestore {
       allow update: if false; // Log inmutable
       allow delete: if false;
     }
+
+    // ── qr_shares: única colección de lectura pública (landing sin sesión) ───
+    match /qr_shares/{shareId} {
+      allow read: if resource.data.expires_at > request.time;
+      allow create: if isAuthenticated() && request.resource.data.organization_id == userOrgId();
+      allow update: if false; // Inmutable
+      allow delete: if false;
+    }
   }
 }

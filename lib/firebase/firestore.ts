@@ -27,6 +27,8 @@ import type {
   CreateVehiclePayload,
   ActivityAction,
   ActivityLogEntry,
+  QrShare,
+  QrShareDocument,
 } from "@/types/document.types"
 
 export const db = getFirestore(firebaseApp)
@@ -49,9 +51,27 @@ function toFirestoreVehicle(data: DocumentData): Vehicle {
     year:            data.year ?? null,
     body_type:       data.body_type ?? null,
     category:        data.category ?? null,
+    photo_url:       data.photo_url ?? null,
+    plate_photo_url: data.plate_photo_url ?? null,
     is_active:       data.is_active ?? true,
     created_at:      fromTimestamp(data.created_at) ?? new Date().toISOString(),
     updated_at:      fromTimestamp(data.updated_at) ?? new Date().toISOString(),
+  }
+}
+
+function toQrShare(data: DocumentData): QrShare {
+  return {
+    id:                data.id,
+    organization_id:   data.organization_id,
+    vehicle_id:         data.vehicle_id,
+    vehicle_alias:      data.vehicle_alias,
+    vehicle_plate:      data.vehicle_plate,
+    vehicle_photo_url:  data.vehicle_photo_url ?? null,
+    plate_photo_url:    data.plate_photo_url ?? null,
+    owner_name:         data.owner_name,
+    documents:          data.documents ?? [],
+    created_at:         fromTimestamp(data.created_at) ?? new Date().toISOString(),
+    expires_at:         fromTimestamp(data.expires_at) ?? new Date().toISOString(),
   }
 }
 
@@ -232,6 +252,16 @@ export async function updateVehicle(
   })
 }
 
+export async function updateVehiclePhoto(
+  vehicleId: string,
+  data: Partial<Pick<Vehicle, "photo_url" | "plate_photo_url">>
+): Promise<void> {
+  await updateDoc(doc(db, "vehicles", vehicleId), {
+    ...data,
+    updated_at: serverTimestamp(),
+  })
+}
+
 export async function softDeleteVehicle(vehicleId: string): Promise<void> {
   await updateDoc(doc(db, "vehicles", vehicleId), {
     is_active:  false,
@@ -360,4 +390,40 @@ export async function getActivityLog(orgId: string, count = 50): Promise<Activit
   )
   const snap = await getDocs(q)
   return snap.docs.map((d) => toActivityLogEntry({ id: d.id, ...d.data() }))
+}
+
+// ─── QR shares (landing pública temporal) ───────────────────────────────────
+
+export const QR_SHARE_TTL_MS = 5 * 60 * 1000
+
+export async function createQrShare(entry: {
+  orgId:            string
+  vehicleId:        string
+  vehicleAlias:     string
+  vehiclePlate:     string
+  vehiclePhotoUrl:  string | null
+  platePhotoUrl:    string | null
+  ownerName:        string
+  documents:        QrShareDocument[]
+}): Promise<string> {
+  const ref = await addDoc(collection(db, "qr_shares"), {
+    organization_id:   entry.orgId,
+    vehicle_id:         entry.vehicleId,
+    vehicle_alias:      entry.vehicleAlias,
+    vehicle_plate:      entry.vehiclePlate,
+    vehicle_photo_url:  entry.vehiclePhotoUrl,
+    plate_photo_url:    entry.platePhotoUrl,
+    owner_name:         entry.ownerName,
+    documents:          entry.documents,
+    created_at:         serverTimestamp(),
+    // No usar serverTimestamp() aquí: necesitamos "ahora + 5min", no la hora de escritura.
+    expires_at:         Timestamp.fromMillis(Date.now() + QR_SHARE_TTL_MS),
+  })
+  return ref.id
+}
+
+export async function getQrShare(id: string): Promise<QrShare | null> {
+  const snap = await getDoc(doc(db, "qr_shares", id))
+  if (!snap.exists()) return null
+  return toQrShare({ id: snap.id, ...snap.data() })
 }

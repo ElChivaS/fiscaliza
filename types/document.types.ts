@@ -84,3 +84,27 @@ export interface ActivityLogEntry {
   target_label:     string | null
   created_at:       string
 }
+
+// ─── Landing pública por QR ──────────────────────────────────────────────────
+
+export interface QrShareDocument {
+  type:        DocumentType
+  label:       string
+  expires_at:  string | null
+  front_url:   string | null
+  back_url:    string | null
+}
+
+export interface QrShare {
+  id:                 string
+  organization_id:    string
+  vehicle_id:         string
+  vehicle_alias:      string
+  vehicle_plate:      string
+  vehicle_photo_url:  string | null
+  plate_photo_url:    string | null
+  owner_name:         string
+  documents:          QrShareDocument[]
+  created_at:         string
+  expires_at:         string
+}

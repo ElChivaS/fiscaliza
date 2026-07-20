@@ -110,6 +110,8 @@ export type Database = {
           year: number | null
           body_type: string | null
           category: "auto" | "moto" | null
+          photo_url: string | null
+          plate_photo_url: string | null
           is_active: boolean
           created_at: string
           updated_at: string
@@ -124,6 +126,8 @@ export type Database = {
           year?: number | null
           body_type?: string | null
           category?: "auto" | "moto" | null
+          photo_url?: string | null
+          plate_photo_url?: string | null
           is_active?: boolean
           created_at?: string
           updated_at?: string
@@ -138,6 +142,8 @@ export type Database = {
           year?: number | null
           body_type?: string | null
           category?: "auto" | "moto" | null
+          photo_url?: string | null
+          plate_photo_url?: string | null
           is_active?: boolean
           updated_at?: string
         }

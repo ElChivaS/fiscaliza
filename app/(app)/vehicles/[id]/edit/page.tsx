@@ -1,8 +1,11 @@
 "use client"
 
-import { use, useState, useEffect } from "react"
+import { use, useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { useVehiclesStore } from "@/stores/vehiclesStore"
+import { uploadDocument } from "@/lib/firebase/storage"
+import { updateVehiclePhoto } from "@/lib/firebase/firestore"
 import PageHeader from "@/components/layout/PageHeader"
 import Button from "@/components/ui/Button"
 import { toast } from "@/components/ui/Toast"
@@ -24,6 +27,11 @@ export default function EditVehiclePage({
   const [model, setModel] = useState(vehicle?.model ?? "")
   const [year, setYear]   = useState(vehicle?.year?.toString() ?? "")
   const [saving, setSaving] = useState(false)
+
+  const [uploadingPhoto, setUploadingPhoto]           = useState(false)
+  const [uploadingPlatePhoto, setUploadingPlatePhoto] = useState(false)
+  const photoInputRef      = useRef<HTMLInputElement>(null)
+  const platePhotoInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (vehicle) {
@@ -59,6 +67,41 @@ export default function EditVehiclePage({
     }
   }
 
+  async function handlePhotoChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    kind: "photo" | "plate"
+  ) {
+    const file = e.target.files?.[0]
+    if (!file || !vehicle) return
+
+    const setUploading = kind === "photo" ? setUploadingPhoto : setUploadingPlatePhoto
+    setUploading(true)
+    try {
+      const { downloadUrl } = await uploadDocument(
+        file,
+        vehicle.organization_id,
+        id,
+        kind === "photo" ? "vehicle_photo" : "plate_photo"
+      )
+      await updateVehiclePhoto(id, kind === "photo" ? { photo_url: downloadUrl } : { plate_photo_url: downloadUrl })
+
+      useVehiclesStore.setState((s) => ({
+        vehicles: s.vehicles.map((v) =>
+          v.id === id
+            ? { ...v, ...(kind === "photo" ? { photo_url: downloadUrl } : { plate_photo_url: downloadUrl }) }
+            : v
+        ),
+      }))
+
+      toast(kind === "photo" ? "Foto actualizada" : "Foto de patente actualizada", "success")
+    } catch {
+      toast("Error al subir la foto", "error")
+    } finally {
+      setUploading(false)
+      e.target.value = ""
+    }
+  }
+
   if (!vehicle) {
     router.push("/dashboard")
     return null
@@ -80,6 +123,68 @@ export default function EditVehiclePage({
           <p className="text-xs text-muted mt-1">
             La patente no puede modificarse una vez registrada.
           </p>
+        </div>
+
+        {/* Foto del vehículo */}
+        <div>
+          <label className="text-xs font-medium text-muted mb-1.5 block">Foto del vehículo</label>
+          <input
+            ref={photoInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => handlePhotoChange(e, "photo")}
+          />
+          <button
+            type="button"
+            onClick={() => photoInputRef.current?.click()}
+            disabled={uploadingPhoto}
+            className="w-full h-32 rounded-2xl border border-dashed border-black/15 bg-black/3 flex items-center justify-center overflow-hidden relative"
+          >
+            {vehicle.photo_url ? (
+              <Image src={vehicle.photo_url} alt="Foto del vehículo" fill className="object-cover" />
+            ) : (
+              <span className="text-xs text-muted">
+                {uploadingPhoto ? "Subiendo..." : "Toca para subir una foto"}
+              </span>
+            )}
+            {uploadingPhoto && (
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <span className="size-5 rounded-full border-2 border-white border-t-transparent animate-spin block" />
+              </div>
+            )}
+          </button>
+        </div>
+
+        {/* Foto de la patente (opcional) */}
+        <div>
+          <label className="text-xs font-medium text-muted mb-1.5 block">Foto de la patente (opcional)</label>
+          <input
+            ref={platePhotoInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => handlePhotoChange(e, "plate")}
+          />
+          <button
+            type="button"
+            onClick={() => platePhotoInputRef.current?.click()}
+            disabled={uploadingPlatePhoto}
+            className="w-full h-20 rounded-2xl border border-dashed border-black/15 bg-black/3 flex items-center justify-center overflow-hidden relative"
+          >
+            {vehicle.plate_photo_url ? (
+              <Image src={vehicle.plate_photo_url} alt="Foto de la patente" fill className="object-cover" />
+            ) : (
+              <span className="text-xs text-muted">
+                {uploadingPlatePhoto ? "Subiendo..." : "Toca para subir una foto"}
+              </span>
+            )}
+            {uploadingPlatePhoto && (
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <span className="size-5 rounded-full border-2 border-white border-t-transparent animate-spin block" />
+              </div>
+            )}
+          </button>
         </div>
 
         <div>
