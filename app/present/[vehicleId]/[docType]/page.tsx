@@ -98,6 +98,7 @@ export default function PresentPage({
   const [docUrl,     setDocUrl]     = useState<string | null>(null)
   const [backUrl,    setBackUrl]    = useState<string | null>(null)
   const [loadingUrl, setLoadingUrl] = useState(false)
+  const [renderError, setRenderError] = useState<string | null>(null)
 
   const canvasRef     = useRef<HTMLCanvasElement>(null)
   const canvasBackRef = useRef<HTMLCanvasElement>(null)
@@ -150,6 +151,7 @@ export default function PresentPage({
     setLoadingUrl(true)
     setDocUrl(null)
     setBackUrl(null)
+    setRenderError(null)
 
     if (type === "licencia") {
       const [fUrl, bUrl] = await Promise.all([
@@ -177,9 +179,12 @@ export default function PresentPage({
   // Renderizar PDF en canvas — helper
   async function renderPdfToCanvas(url: string, canvas: HTMLCanvasElement) {
     try {
+      setRenderError(null)
       const pdfjsLib = await import("pdfjs-dist")
-      pdfjsLib.GlobalWorkerOptions.workerSrc =
-        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs"
+      pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+        "pdfjs-dist/build/pdf.worker.min.mjs",
+        import.meta.url
+      ).toString()
 
       const pdf     = await pdfjsLib.getDocument(url).promise
       const page    = await pdf.getPage(1)
@@ -196,7 +201,10 @@ export default function PresentPage({
         canvas,
         viewport: scaled,
       }).promise
-    } catch {}
+    } catch (err) {
+      console.error("[present] fallo al renderizar PDF:", err)
+      setRenderError(err instanceof Error ? err.message : String(err))
+    }
   }
 
   // Renderizar PDFs en canvas al cambiar URLs
@@ -282,7 +290,20 @@ export default function PresentPage({
               <div className="w-full">
                 <p className="text-white/40 text-[10px] font-medium mb-1.5 tracking-wide uppercase">Frente</p>
                 {isPdf(licenciaFront) ? (
-                  <canvas ref={canvasRef} className="w-full rounded-xl" />
+                  docUrl ? (
+                    <>
+                      <canvas ref={canvasRef} className="w-full rounded-xl" />
+                      {renderError && (
+                        <p className="text-red-400 text-xs mt-2 text-center wrap-break-word">
+                          Error al renderizar PDF: {renderError}
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <div className="w-full h-32 flex items-center justify-center">
+                      <p className="text-red-400 text-xs">No se pudo obtener la URL</p>
+                    </div>
+                  )
                 ) : docUrl ? (
                   <img
                     src={docUrl}
@@ -300,7 +321,20 @@ export default function PresentPage({
               <div className="w-full">
                 <p className="text-white/40 text-[10px] font-medium mb-1.5 tracking-wide uppercase">Reverso</p>
                 {isPdf(licenciaBack) ? (
-                  <canvas ref={canvasBackRef} className="w-full rounded-xl" />
+                  backUrl ? (
+                    <>
+                      <canvas ref={canvasBackRef} className="w-full rounded-xl" />
+                      {renderError && (
+                        <p className="text-red-400 text-xs mt-2 text-center wrap-break-word">
+                          Error al renderizar PDF: {renderError}
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <div className="w-full h-32 flex items-center justify-center">
+                      <p className="text-red-400 text-xs">No se pudo obtener la URL</p>
+                    </div>
+                  )
                 ) : backUrl ? (
                   <img
                     src={backUrl}
@@ -322,11 +356,24 @@ export default function PresentPage({
           </>
         ) : isPdf(activeDoc) ? (
           /* ── PDF normal ── */
-          <canvas
-            ref={canvasRef}
-            className="w-full rounded-xl"
-            style={{ maxWidth: "100%" }}
-          />
+          docUrl ? (
+            <div className="w-full">
+              <canvas
+                ref={canvasRef}
+                className="w-full rounded-xl"
+                style={{ maxWidth: "100%" }}
+              />
+              {renderError && (
+                <p className="text-red-400 text-xs mt-2 text-center wrap-break-word">
+                  Error al renderizar PDF: {renderError}
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center w-full h-full text-center gap-2">
+              <p className="text-red-400 text-sm">No se pudo obtener la URL del documento</p>
+            </div>
+          )
         ) : docUrl ? (
           /* ── Imagen normal ── */
           <img
