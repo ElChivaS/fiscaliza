@@ -44,6 +44,14 @@
         { "fieldPath": "plate",           "order": "ASCENDING" },
         { "fieldPath": "is_active",       "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "activity_log",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "organization_id", "order": "ASCENDING" },
+        { "fieldPath": "created_at",      "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

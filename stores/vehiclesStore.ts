@@ -10,6 +10,7 @@ import {
   softDeleteVehicle,
   checkPlateExists as fbCheckPlate,
   getProfile,
+  logActivity,
 } from "@/lib/firebase/firestore"
 import { enrichWithStatus } from "@/lib/utils/document.utils"
 import { normalizePlate } from "@/lib/utils/plate.utils"
@@ -80,6 +81,16 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
       plate: normalizePlate(payload.plate),
     })
 
+    await logActivity({
+      orgId:       profile.organization_id,
+      userId:      user.uid,
+      userName:    profile.full_name ?? "Usuario",
+      action:      "vehicle_created",
+      targetType:  "vehicle",
+      targetId:    id,
+      targetLabel: payload.alias,
+    })
+
     await get().fetchVehiclesWithDocuments()
     return id
   },
@@ -92,6 +103,23 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
       year:  payload.year,
     })
 
+    const user = auth.currentUser
+    if (user) {
+      const profile = await getProfile(user.uid)
+      if (profile) {
+        const existing = get().vehicles.find((v) => v.id === id)
+        await logActivity({
+          orgId:       profile.organization_id,
+          userId:      user.uid,
+          userName:    profile.full_name ?? "Usuario",
+          action:      "vehicle_updated",
+          targetType:  "vehicle",
+          targetId:    id,
+          targetLabel: payload.alias ?? existing?.alias ?? null,
+        })
+      }
+    }
+
     set((state) => ({
       vehicles: state.vehicles.map((v) =>
         v.id === id ? { ...v, ...payload } : v
@@ -100,7 +128,25 @@ export const useVehiclesStore = create<VehiclesStore>((set, get) => ({
   },
 
   deleteVehicle: async (id) => {
+    const existing = get().vehicles.find((v) => v.id === id)
     await softDeleteVehicle(id)
+
+    const user = auth.currentUser
+    if (user) {
+      const profile = await getProfile(user.uid)
+      if (profile) {
+        await logActivity({
+          orgId:       profile.organization_id,
+          userId:      user.uid,
+          userName:    profile.full_name ?? "Usuario",
+          action:      "vehicle_deleted",
+          targetType:  "vehicle",
+          targetId:    id,
+          targetLabel: existing?.alias ?? null,
+        })
+      }
+    }
+
     set((state) => ({
       vehicles: state.vehicles.filter((v) => v.id !== id),
     }))

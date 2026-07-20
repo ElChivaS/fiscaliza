@@ -62,3 +62,25 @@ export interface UploadDocumentPayload {
 
 /** Tipos de documento que requieren frente y reverso */
 export const DUAL_SIDE_TYPES: DocumentType[] = ["licencia"]
+
+// ─── Log de actividad ──────────────────────────────────────────────────────
+
+export type ActivityAction =
+  | "login"
+  | "vehicle_created"
+  | "vehicle_updated"
+  | "vehicle_deleted"
+  | "document_uploaded"
+  | "document_deleted"
+
+export interface ActivityLogEntry {
+  id:               string
+  organization_id:  string
+  user_id:          string
+  user_name:        string
+  action:           ActivityAction
+  target_type:      "vehicle" | "document" | null
+  target_id:        string | null
+  target_label:     string | null
+  created_at:       string
+}

@@ -52,5 +52,15 @@ service cloud.firestore {
       allow update: if isAuthenticated() && resource.data.organization_id == userOrgId();
       allow delete: if false; // Soft delete via is_current
     }
+
+    // ── activity_log ─────────────────────────────────────────────────────────
+    match /activity_log/{logId} {
+      allow read: if isAuthenticated() && resource.data.organization_id == userOrgId();
+      allow create: if isAuthenticated()
+        && request.resource.data.organization_id == userOrgId()
+        && request.resource.data.user_id == request.auth.uid;
+      allow update: if false; // Log inmutable
+      allow delete: if false;
+    }
   }
 }

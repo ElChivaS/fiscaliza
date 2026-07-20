@@ -11,7 +11,7 @@ import {
   type User,
 } from "firebase/auth"
 import { firebaseApp } from "./config"
-import { createUserProfile } from "./firestore"
+import { createUserProfile, logActivity } from "./firestore"
 
 export const auth = getAuth(firebaseApp)
 
@@ -21,14 +21,16 @@ googleProvider.setCustomParameters({ prompt: "select_account" })
 export async function signInWithGoogle(): Promise<User> {
   const result = await signInWithPopup(auth, googleProvider)
   // Crear perfil si es la primera vez
-  await createUserProfile(result.user)
+  const { organizationId, fullName } = await createUserProfile(result.user)
+  await logActivity({ orgId: organizationId, userId: result.user.uid, userName: fullName, action: "login" })
   return result.user
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<User> {
   const result = await signInWithEmailAndPassword(auth, email, password)
   // Crear perfil si no existe (p.ej. si falló durante el registro)
-  await createUserProfile(result.user)
+  const { organizationId, fullName } = await createUserProfile(result.user)
+  await logActivity({ orgId: organizationId, userId: result.user.uid, userName: fullName, action: "login" })
   return result.user
 }
 
@@ -40,7 +42,8 @@ export async function registerWithEmail(
   const result = await createUserWithEmailAndPassword(auth, email, password)
   await updateProfile(result.user, { displayName: fullName })
   // Crear organización y perfil automáticamente
-  await createUserProfile(result.user, fullName)
+  const { organizationId, fullName: profileName } = await createUserProfile(result.user, fullName)
+  await logActivity({ orgId: organizationId, userId: result.user.uid, userName: profileName, action: "login" })
   return result.user
 }
 

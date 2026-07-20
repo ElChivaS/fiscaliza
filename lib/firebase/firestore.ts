@@ -11,6 +11,7 @@ import {
   query,
   where,
   orderBy,
+  limit,
   serverTimestamp,
   Timestamp,
   type DocumentData,
@@ -24,6 +25,8 @@ import type {
   Document,
   PlanLimits,
   CreateVehiclePayload,
+  ActivityAction,
+  ActivityLogEntry,
 } from "@/types/document.types"
 
 export const db = getFirestore(firebaseApp)
@@ -52,6 +55,20 @@ function toFirestoreVehicle(data: DocumentData): Vehicle {
   }
 }
 
+function toActivityLogEntry(data: DocumentData): ActivityLogEntry {
+  return {
+    id:              data.id,
+    organization_id: data.organization_id,
+    user_id:         data.user_id,
+    user_name:       data.user_name,
+    action:          data.action,
+    target_type:     data.target_type ?? null,
+    target_id:       data.target_id ?? null,
+    target_label:    data.target_label ?? null,
+    created_at:      fromTimestamp(data.created_at) ?? new Date().toISOString(),
+  }
+}
+
 function toFirestoreDocument(data: DocumentData): Document {
   return {
     id:              data.id,
@@ -72,10 +89,19 @@ function toFirestoreDocument(data: DocumentData): Document {
 
 // ─── User / Profile ───────────────────────────────────────────────────────────
 
-export async function createUserProfile(user: User, fullName?: string): Promise<void> {
+export async function createUserProfile(
+  user: User,
+  fullName?: string
+): Promise<{ organizationId: string; fullName: string }> {
   const profileRef = doc(db, "profiles", user.uid)
   const existing   = await getDoc(profileRef)
-  if (existing.exists()) return // Ya existe
+  if (existing.exists()) {
+    const data = existing.data()
+    return {
+      organizationId: data.organization_id,
+      fullName:       data.full_name ?? fullName ?? "Usuario",
+    }
+  }
 
   const name = fullName ?? user.displayName ?? user.email?.split("@")[0] ?? "Usuario"
 
@@ -98,6 +124,8 @@ export async function createUserProfile(user: User, fullName?: string): Promise<
     avatar_url:      user.photoURL ?? null,
     email:           user.email,
   })
+
+  return { organizationId: orgRef.id, fullName: name }
 }
 
 export async function getProfile(userId: string): Promise<Profile | null> {
@@ -294,4 +322,42 @@ export async function insertDocument(data: {
 
 export async function retireDocument(documentId: string): Promise<void> {
   await updateDoc(doc(db, "documents", documentId), { is_current: false })
+}
+
+// ─── Activity log ──────────────────────────────────────────────────────────
+
+export async function logActivity(entry: {
+  orgId:       string
+  userId:      string
+  userName:    string
+  action:      ActivityAction
+  targetType?: "vehicle" | "document" | null
+  targetId?:   string | null
+  targetLabel?: string | null
+}): Promise<void> {
+  try {
+    await addDoc(collection(db, "activity_log"), {
+      organization_id: entry.orgId,
+      user_id:         entry.userId,
+      user_name:       entry.userName,
+      action:          entry.action,
+      target_type:     entry.targetType ?? null,
+      target_id:       entry.targetId ?? null,
+      target_label:    entry.targetLabel ?? null,
+      created_at:      serverTimestamp(),
+    })
+  } catch (err) {
+    console.error("[activity_log] fallo al registrar:", err)
+  }
+}
+
+export async function getActivityLog(orgId: string, count = 50): Promise<ActivityLogEntry[]> {
+  const q    = query(
+    collection(db, "activity_log"),
+    where("organization_id", "==", orgId),
+    orderBy("created_at", "desc"),
+    limit(count)
+  )
+  const snap = await getDocs(q)
+  return snap.docs.map((d) => toActivityLogEntry({ id: d.id, ...d.data() }))
 }

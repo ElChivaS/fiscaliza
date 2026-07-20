@@ -7,10 +7,18 @@ import {
   getProfile,
   insertDocument,
   retireDocument,
+  logActivity,
 } from "@/lib/firebase/firestore"
 import { uploadDocument as uploadToStorage, deleteDocument as deleteFromStorage, getDocumentUrl } from "@/lib/firebase/storage"
 import { enrichWithStatus } from "@/lib/utils/document.utils"
-import type { DocumentWithStatus, DocumentType, UploadDocumentPayload } from "@/types/document.types"
+import { useVehiclesStore } from "@/stores/vehiclesStore"
+import { DOCUMENT_TYPE_LABELS, type DocumentWithStatus, type DocumentType, type UploadDocumentPayload } from "@/types/document.types"
+
+/** Label legible para el log de actividad: "SOAP · Corolla" (o solo el tipo si no hay alias). */
+function documentTargetLabel(vehicleId: string, type: DocumentType): string {
+  const alias = useVehiclesStore.getState().vehicles.find((v) => v.id === vehicleId)?.alias
+  return alias ? `${DOCUMENT_TYPE_LABELS[type]} · ${alias}` : DOCUMENT_TYPE_LABELS[type]
+}
 
 export function useDocuments(vehicleId: string) {
   const [documents, setDocuments] = useState<DocumentWithStatus[]>([])
@@ -71,6 +79,16 @@ export function useDocuments(vehicleId: string) {
       uploadedBy:  user.uid,
     })
 
+    await logActivity({
+      orgId:       profile.organization_id,
+      userId:      user.uid,
+      userName:    profile.full_name ?? "Usuario",
+      action:      "document_uploaded",
+      targetType:  "vehicle",
+      targetId:    vehicleId,
+      targetLabel: documentTargetLabel(vehicleId, type),
+    })
+
     await fetchDocuments()
   }, [fetchDocuments])
 
@@ -125,28 +143,75 @@ export function useDocuments(vehicleId: string) {
       })
     }
 
+    await logActivity({
+      orgId:       profile.organization_id,
+      userId:      user.uid,
+      userName:    profile.full_name ?? "Usuario",
+      action:      "document_uploaded",
+      targetType:  "vehicle",
+      targetId:    vehicleId,
+      targetLabel: documentTargetLabel(vehicleId, "licencia"),
+    })
+
     await fetchDocuments()
   }, [fetchDocuments])
 
   const deleteDocument = useCallback(async (docId: string, storagePath: string) => {
+    const target = documents.find((d) => d.id === docId)
     await Promise.all([
       deleteFromStorage(storagePath),
       retireDocument(docId),
     ])
+
+    const user = auth.currentUser
+    if (user && target) {
+      const profile = await getProfile(user.uid)
+      if (profile) {
+        await logActivity({
+          orgId:       profile.organization_id,
+          userId:      user.uid,
+          userName:    profile.full_name ?? "Usuario",
+          action:      "document_deleted",
+          targetType:  "vehicle",
+          targetId:    vehicleId,
+          targetLabel: documentTargetLabel(vehicleId, target.type),
+        })
+      }
+    }
+
     await fetchDocuments()
-  }, [fetchDocuments])
+  }, [documents, fetchDocuments])
 
   /**
    * Elimina todos los documentos actuales de un tipo (útil para licencia con dos lados).
    */
   const deleteAllByType = useCallback(async (type: DocumentType) => {
     const toDelete = documents.filter((d) => d.type === type)
+    if (toDelete.length === 0) return
+
     await Promise.all(
       toDelete.map((d) => Promise.all([
         deleteFromStorage(d.storage_path),
         retireDocument(d.id),
       ]))
     )
+
+    const user = auth.currentUser
+    if (user) {
+      const profile = await getProfile(user.uid)
+      if (profile) {
+        await logActivity({
+          orgId:       profile.organization_id,
+          userId:      user.uid,
+          userName:    profile.full_name ?? "Usuario",
+          action:      "document_deleted",
+          targetType:  "vehicle",
+          targetId:    vehicleId,
+          targetLabel: documentTargetLabel(vehicleId, type),
+        })
+      }
+    }
+
     await fetchDocuments()
   }, [documents, fetchDocuments])
 
