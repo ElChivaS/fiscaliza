@@ -13,7 +13,27 @@
       "Bash(cp C:/Users/nueve/allMyShit/projects/fiscaliza-app/package-lock.json C:/Users/nueve/allMyShit/projects/fiscaliza/)",
       "Bash(npm install *)",
       "Bash(npx tsc *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:3456/)",
+      "Bash(gh auth *)",
+      "Bash(gh api *)",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git merge *)",
+      "Bash(npx next *)",
+      "Bash(npx playwright *)",
+      "Bash(node -e ' *)",
+      "Bash(where playwright *)",
+      "Bash(npx --yes playwright@1.60.0 --version)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(node -e \"require.resolve\\('@playwright/test'\\)\")",
+      "Bash(node -e \"const p = require.resolve\\('playwright'\\); console.log\\(p\\)\")",
+      "Read(//c/Users/nueve/AppData/Roaming/npm/node_modules/**)",
+      "Bash(node -e \"const pkg = require\\('./package.json'\\); console.log\\(JSON.stringify\\({...pkg.dependencies, ...pkg.devDependencies}, null, 2\\)\\)\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(grep -v \"^\\\\s*$\")"
     ]
   }
 }
