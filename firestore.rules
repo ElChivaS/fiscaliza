@@ -25,7 +25,10 @@ service cloud.firestore {
         resource.data.organization_id == userOrgId()
       );
       allow create: if isAuthenticated() && request.auth.uid == userId;
-      allow update: if isAuthenticated() && request.auth.uid == userId;
+      // Solo full_name/avatar_url son editables por el propio usuario — organization_id
+      // y role NO, porque userOrgId() lee ese mismo campo y gatea todas las demás reglas.
+      allow update: if isAuthenticated() && request.auth.uid == userId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['full_name', 'avatar_url']);
       allow delete: if false;
     }
 

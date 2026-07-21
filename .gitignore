@@ -40,6 +40,9 @@ yarn-error.log*
 *firebase-adminsdk*.json
 serviceAccountKey.json
 
+# local security/audit reports
+informe.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
