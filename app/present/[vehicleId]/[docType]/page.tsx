@@ -186,7 +186,14 @@ export default function PresentPage({
         import.meta.url
       ).toString()
 
-      const pdf     = await pdfjsLib.getDocument(url).promise
+      // Descargamos el PDF nosotros mismos en vez de dejar que pdf.js haga sus
+      // propios range-requests: evita "Invalid PDF structure" cuando esas
+      // peticiones parciales chocan con la config de CORS del bucket.
+      const response = await fetch(url)
+      if (!response.ok) throw new Error(`No se pudo descargar el PDF (${response.status})`)
+      const data = await response.arrayBuffer()
+
+      const pdf     = await pdfjsLib.getDocument({ data }).promise
       const page    = await pdf.getPage(1)
       const viewport = page.getViewport({ scale: 1 })
       const scale   = canvas.parentElement!.clientWidth / viewport.width

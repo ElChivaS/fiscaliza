@@ -82,7 +82,7 @@ export default function DocumentUploadSlot({
           </span>
 
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-ink">
+            <p className="text-sm font-medium text-ink uppercase tracking-wide">
               {DOCUMENT_TYPE_LABELS[type]}
             </p>
             <p className="text-xs text-muted truncate">

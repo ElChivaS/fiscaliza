@@ -39,8 +39,8 @@ export default function LandingPage() {
         </h1>
 
         <p className="text-lg text-muted max-w-xl mx-auto mb-10 leading-relaxed">
-          Fiscalización en camino. Licencia, revisión técnica, permiso de circulación
-          y SOAP — todos en tu celular, en segundos.
+          ¿Fiscalización en camino? Tus documentos a la mano, todos en tu celular,
+          sin búsquedas, sin tarjetas, en segundos.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

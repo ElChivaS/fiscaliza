@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import QRCode from "qrcode"
@@ -68,11 +68,12 @@ export default function VehicleDetailPage({
   const [uploading, setUploading]             = useState(false)
   const [deletingDoc, setDeletingDoc]         = useState(false)
   const [deletingVehicle, setDeletingVehicle] = useState(false)
-  const [generatingQr, setGeneratingQr]       = useState(false)
   const [showQr, setShowQr]                   = useState(false)
+  const [qrStep, setQrStep]                   = useState<"warning" | "loading" | "ready">("warning")
   const [qrDataUrl, setQrDataUrl]             = useState<string | null>(null)
   const [qrExpiresAt, setQrExpiresAt]         = useState<number | null>(null)
   const [qrSecondsLeft, setQrSecondsLeft]     = useState(0)
+  const qrDocsRef = useRef<Promise<QrShareDocument[] | null> | null>(null)
 
   // Cuenta regresiva del QR mientras el modal está abierto
   useEffect(() => {
@@ -166,9 +167,12 @@ export default function VehicleDetailPage({
     }
   }
 
-  async function handleGenerateQr() {
-    if (!vehicle) return
-    setGeneratingQr(true)
+  // Solo resuelve las URLs de los documentos (la parte lenta) en segundo
+  // plano mientras se lee la advertencia. NO crea el share todavía: el
+  // share (y su expires_at real) se crea recién al aceptar, para que los
+  // 5 minutos de validez empiecen exactamente cuando se muestra el QR.
+  async function resolveQrDocsInBackground(): Promise<QrShareDocument[] | null> {
+    if (!vehicle) return null
     try {
       const shareDocs: QrShareDocument[] = []
 
@@ -199,6 +203,31 @@ export default function VehicleDetailPage({
         }
       }
 
+      return shareDocs
+    } catch {
+      toast("Error al generar el QR", "error")
+      setShowQr(false)
+      return null
+    }
+  }
+
+  function openQrModal() {
+    setQrStep("warning")
+    setQrDataUrl(null)
+    setQrExpiresAt(null)
+    setQrSecondsLeft(0)
+    setShowQr(true)
+    qrDocsRef.current = resolveQrDocsInBackground()
+  }
+
+  async function handleAcceptWarning() {
+    if (!vehicle) return
+    setQrStep("loading")
+
+    const shareDocs = await qrDocsRef.current
+    if (!shareDocs) return // ya se avisó el error y se cerró el modal
+
+    try {
       const shareId = await createQrShare({
         orgId:           vehicle.organization_id,
         vehicleId:       id,
@@ -214,11 +243,10 @@ export default function VehicleDetailPage({
       const shareUrl = `${baseUrl}/qr/${shareId}`
       setQrDataUrl(await QRCode.toDataURL(shareUrl))
       setQrExpiresAt(Date.now() + QR_SHARE_TTL_MS)
-      setShowQr(true)
+      setQrStep("ready")
     } catch {
       toast("Error al generar el QR", "error")
-    } finally {
-      setGeneratingQr(false)
+      setShowQr(false)
     }
   }
 
@@ -308,44 +336,62 @@ export default function VehicleDetailPage({
         size="lg"
         variant="secondary"
         className="mt-3"
-        loading={generatingQr}
-        onClick={handleGenerateQr}
+        onClick={openQrModal}
       >
         Generar QR
       </Button>
 
       {/* === Modal: código QR === */}
       <Modal open={showQr} onClose={() => setShowQr(false)} title="Código QR">
-        <div className="flex flex-col items-center gap-4">
-          {qrDataUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
+        {qrStep === "warning" ? (
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex gap-3 rounded-2xl p-4" style={{ backgroundColor: STATUS_COLOR.expiring_soon + "15" }}>
+              <span className="text-lg leading-none shrink-0" aria-hidden>⚠️</span>
+              <p className="text-base leading-relaxed" style={{ color: STATUS_COLOR.expiring_soon }}>
+                Si estás por ser fiscalizado, recuerda que los fiscalizadores pueden ocupar
+                dispositivos anti escape como el Barracuda que pueden dañar tu vehículo.
+                Mantente siempre alerta y atento a las instrucciones de los fiscalizadores.
+              </p>
+            </div>
+
+            <Button fullWidth size="lg" onClick={handleAcceptWarning}>
+              Aceptar
+            </Button>
+          </div>
+        ) : qrStep === "loading" ? (
+          <div className="flex flex-col items-center gap-4 py-6">
+            <Spinner className="text-ink" />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={qrDataUrl}
+              src={qrDataUrl ?? undefined}
               alt="Código QR"
               width={220}
               height={220}
               className={["rounded-2xl transition-opacity", qrSecondsLeft === 0 ? "opacity-30" : ""].join(" ")}
             />
-          )}
 
-          <span
-            className="text-sm font-mono font-semibold px-3 py-1.5 rounded-full"
-            style={{
-              backgroundColor: (qrSecondsLeft === 0 ? STATUS_COLOR.expired : STATUS_COLOR.valid) + "20",
-              color:           qrSecondsLeft === 0 ? STATUS_COLOR.expired : STATUS_COLOR.valid,
-            }}
-          >
-            {qrSecondsLeft === 0
-              ? "Expirado"
-              : `${String(Math.floor(qrSecondsLeft / 60)).padStart(2, "0")}:${String(qrSecondsLeft % 60).padStart(2, "0")}`}
-          </span>
+            <span
+              className="text-sm font-mono font-semibold px-3 py-1.5 rounded-full"
+              style={{
+                backgroundColor: (qrSecondsLeft === 0 ? STATUS_COLOR.expired : STATUS_COLOR.valid) + "20",
+                color:           qrSecondsLeft === 0 ? STATUS_COLOR.expired : STATUS_COLOR.valid,
+              }}
+            >
+              {qrSecondsLeft === 0
+                ? "Expirado"
+                : `${String(Math.floor(qrSecondsLeft / 60)).padStart(2, "0")}:${String(qrSecondsLeft % 60).padStart(2, "0")}`}
+            </span>
 
-          <p className="text-sm text-muted text-center">
-            {qrSecondsLeft === 0
-              ? "Este código ya no es válido. Genera uno nuevo si lo necesitas."
-              : "Pide al fiscalizador que lo escanee con la cámara de su celular."}
-          </p>
-        </div>
+            <p className="text-sm text-muted text-center">
+              {qrSecondsLeft === 0
+                ? "Este código ya no es válido. Genera uno nuevo si lo necesitas."
+                : "Pide al fiscalizador que lo escanee con la cámara de su celular."}
+            </p>
+          </div>
+        )}
       </Modal>
 
       {/* === Bottom sheet: opciones de documento === */}
@@ -431,6 +477,7 @@ export default function VehicleDetailPage({
                 onExpiresAtChange={(_, d) => setUploadExpires(d)}
               />
             )}
+
             <Button
               fullWidth
               size="lg"

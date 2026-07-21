@@ -340,7 +340,7 @@ export default function NewVehiclePage() {
           {DOCUMENT_TYPE_ORDER.map((type) =>
             DUAL_SIDE_TYPES.includes(type) ? (
               <div key={type}>
-                <p className="text-xs font-medium text-muted mb-2">Licencia de conducir</p>
+                <p className="text-sm font-medium text-muted mb-2">Licencia de conducir</p>
                 <LicenciaUploadSlot
                   frontFile={licenciaFront}
                   backFile={licenciaBack}

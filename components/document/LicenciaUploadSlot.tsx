@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState, type DragEvent } from "react"
+import { STATUS_COLOR } from "@/lib/utils/document.utils"
 
 interface SideSlotProps {
   label: string
@@ -151,6 +152,15 @@ export default function LicenciaUploadSlot({
           value={backFile}
           onChange={onBackChange}
         />
+      </div>
+
+      {/* Advertencia formato vigente */}
+      <div className="flex gap-3 rounded-2xl p-4" style={{ backgroundColor: STATUS_COLOR.expiring_soon + "15" }}>
+        <span className="text-lg leading-none shrink-0" aria-hidden>⚠️</span>
+        <p className="text-base leading-relaxed" style={{ color: STATUS_COLOR.expiring_soon }}>
+          Ten en cuenta que los fiscalizadores pueden pedir tu licencia de conducir en físico
+          si esta no presenta el nuevo formato vigente a contar de 2026.
+        </p>
       </div>
 
       {/* Fecha de vencimiento compartida */}
