@@ -27,53 +27,66 @@ export default function LandingPage() {
       </nav>
 
       {/* HERO */}
-      <section className="max-w-5xl mx-auto px-6 pt-20 pb-24 text-center">
-        <div className="inline-flex items-center gap-2 bg-surface border border-black/10 rounded-full px-4 py-1.5 text-xs font-medium text-muted mb-8">
-          <span className="size-1.5 rounded-full bg-valid animate-pulse" />
-          Disponible ahora en Chile
-        </div>
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 size-full object-cover"
+        >
+          <source src="/hero_fiscaliza.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/55 to-black/75" />
 
-        <h1 className="font-syne font-extrabold text-5xl sm:text-6xl md:text-7xl text-ink leading-[1.05] mb-6">
-          Tus documentos<br />
-          <span className="text-muted">siempre listos.</span>
-        </h1>
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center w-full">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 text-xs font-medium text-white/90 mb-8">
+            <span className="size-1.5 rounded-full bg-valid animate-pulse" />
+            Disponible ahora en Chile
+          </div>
 
-        <p className="text-lg text-muted max-w-xl mx-auto mb-10 leading-relaxed">
-          ¿Fiscalización en camino? Tus documentos a la mano, todos en tu celular,
-          sin búsquedas, sin tarjetas, en segundos.
-        </p>
+          <h1 className="font-syne font-extrabold text-5xl sm:text-6xl md:text-7xl text-white leading-[1.05] mb-6">
+            Tus documentos<br />
+            <span className="text-white/70">siempre listos.</span>
+          </h1>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link
-            href="/register"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-ink text-white px-8 py-4 rounded-2xl text-base font-medium hover:bg-ink/90 transition-all hover:-translate-y-0.5"
-          >
-            Empezar gratis
-          </Link>
-          <Link
-            href="/login"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-surface border border-black/10 text-ink px-8 py-4 rounded-2xl text-base font-medium hover:bg-black/5 transition-colors"
-          >
-            Ya tengo cuenta
-          </Link>
-        </div>
+          <p className="text-lg text-white/85 max-w-xl mx-auto mb-10 leading-relaxed">
+            ¿Fiscalización en camino? Tus documentos a la mano, todos en tu celular,
+            sin búsquedas, sin tarjetas, en segundos.
+          </p>
 
-        {/* Doc pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-12">
-          {[
-            "Licencia de conducir",
-            "Revisión técnica",
-            "Permiso de circulación",
-            "SOAP",
-          ].map((label) => (
-            <span
-              key={label}
-              className="inline-flex items-center gap-1.5 bg-surface border border-black/10 rounded-full px-3 py-1.5 text-xs font-medium text-ink"
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="/register"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-ink px-8 py-4 rounded-2xl text-base font-medium hover:bg-white/90 transition-all hover:-translate-y-0.5"
             >
-              <span className="size-1.5 rounded-full bg-valid" />
-              {label}
-            </span>
-          ))}
+              Empezar gratis
+            </Link>
+            <Link
+              href="/login"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md border border-white/25 text-white px-8 py-4 rounded-2xl text-base font-medium hover:bg-white/20 transition-colors"
+            >
+              Ya tengo cuenta
+            </Link>
+          </div>
+
+          {/* Doc pills */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-12">
+            {[
+              "Licencia de conducir",
+              "Revisión técnica",
+              "Permiso de circulación",
+              "SOAP",
+            ].map((label) => (
+              <span
+                key={label}
+                className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5 text-xs font-medium text-white"
+              >
+                <span className="size-1.5 rounded-full bg-valid" />
+                {label}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 
