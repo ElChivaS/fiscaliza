@@ -1,8 +1,56 @@
 import Link from "next/link"
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/config/site"
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/icon`,
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+      url: SITE_URL,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      offers: [
+        {
+          "@type": "Offer",
+          name: "Free",
+          price: "0",
+          priceCurrency: "CLP",
+        },
+        {
+          "@type": "Offer",
+          name: "Pro",
+          price: "4990",
+          priceCurrency: "CLP",
+        },
+        {
+          "@type": "Offer",
+          name: "Business",
+          price: "14990",
+          priceCurrency: "CLP",
+        },
+      ],
+    },
+  ],
+}
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+
       {/* NAV */}
       <nav className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-black/5">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">

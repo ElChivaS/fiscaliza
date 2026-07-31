@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Syne, DM_Sans } from "next/font/google";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/config/site";
 import "./globals.css";
 
 const syne = Syne({
@@ -15,14 +16,34 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "FISCALIZA — Tu bóveda vehicular digital",
-  description:
-    "Centraliza tu licencia, revisión técnica, permiso de circulación y SOAP. Muéstralos al fiscalizador desde tu celular en segundos.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — Tu bóveda vehicular digital`,
+    template: `%s · ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "FISCALIZA",
+    title: SITE_NAME,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_CL",
+    url: "/",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — Tu bóveda vehicular digital`,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — Tu bóveda vehicular digital`,
+    description: SITE_DESCRIPTION,
   },
 };
 

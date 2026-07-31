@@ -16,7 +16,13 @@ export function proxy(request: NextRequest) {
                        pathname.startsWith("/auth/") ||
                        pathname.startsWith("/_next") ||
                        pathname.startsWith("/api") ||
-                       pathname.startsWith("/qr")
+                       pathname.startsWith("/qr") ||
+                       pathname === "/robots.txt" ||
+                       pathname === "/sitemap.xml" ||
+                       pathname.startsWith("/opengraph-image") ||
+                       pathname.startsWith("/twitter-image") ||
+                       pathname.startsWith("/icon") ||
+                       pathname.startsWith("/apple-icon")
 
   // No autenticado → redirigir a login
   if (!session && !isAuthRoute && !isPublic) {
