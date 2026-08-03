@@ -168,7 +168,7 @@ export default function LandingPage() {
             ].map(({ n, title, desc }) => (
               <div
                 key={n}
-                className="rounded-2xl p-6 border-l-4 border-expired bg-background"
+                className="rounded-2xl p-6 border-l-4 border-b-dark-surface bg-background"
               >
                 <span className="text-xs font-syne font-bold text-muted mb-3 block">
                   {n}

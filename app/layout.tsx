@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Syne, DM_Sans } from "next/font/google";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/config/site";
+import FeedbackTab from "@/components/ui/FeedbackTab";
 import "./globals.css";
 
 const syne = Syne({
@@ -63,6 +64,7 @@ export default function RootLayout({
     <html lang="es" className={`${syne.variable} ${dmSans.variable} h-full`}>
       <body className="min-h-full bg-background text-ink antialiased">
         {children}
+        <FeedbackTab />
       </body>
     </html>
   );
