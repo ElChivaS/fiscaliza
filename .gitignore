@@ -42,6 +42,10 @@ serviceAccountKey.json
 
 # local security/audit reports
 informe.md
+informe-fiscaliza-310726.md
+
+# mockups / prototipos locales
+fiscaliza-mockup.html
 
 # typescript
 *.tsbuildinfo
