@@ -21,8 +21,13 @@ export default function DashboardPage() {
   const { vehicles, fetchVehiclesWithDocuments, fetched: vehiclesFetched } = useVehiclesStore()
 
   useEffect(() => {
-    fetchVehiclesWithDocuments()
-  }, [fetchVehiclesWithDocuments])
+    // Esperar a que la sesión de Firebase termine de restaurarse (profile listo)
+    // antes de pedir los vehículos — si se llama antes, auth.currentUser aún es
+    // null, el fetch falla con "No autenticado", y el reset() del authStore al
+    // resolver el usuario real deja fetched en false para siempre (dashboard
+    // pegado en skeleton, sin nada que reintente el fetch).
+    if (profile) fetchVehiclesWithDocuments()
+  }, [profile, fetchVehiclesWithDocuments])
 
   const [showPlans, setShowPlans] = useState(false)
 
