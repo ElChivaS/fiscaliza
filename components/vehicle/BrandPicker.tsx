@@ -8,10 +8,12 @@ interface Props {
   value:      string
   category?:  VehicleCategory
   onChange:   (brand: VehicleBrand) => void
+  onClear?:   () => void
 }
 
-export default function BrandPicker({ value, category, onChange }: Props) {
+export default function BrandPicker({ value, category, onChange, onClear }: Props) {
   const [search, setSearch] = useState("")
+  const [brokenLogos, setBrokenLogos] = useState<Set<string>>(new Set())
 
   const filtered = VEHICLE_BRANDS.filter((b) => {
     if (category && b.category !== category) return false
@@ -25,12 +27,12 @@ export default function BrandPicker({ value, category, onChange }: Props) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar marca..."
-          className="w-full h-10 rounded-xl border border-black/10 bg-surface pl-3 pr-9 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
+          className="w-full h-10 border-0 border-b border-black/15 bg-transparent pr-9 text-sm text-ink placeholder:text-placeholder transition-colors duration-150 focus:border-ink focus:outline-none"
         />
         {search && (
           <button
             type="button"
-            onClick={() => setSearch("")}
+            onClick={() => { setSearch(""); onClear?.() }}
             aria-label="Borrar búsqueda"
             className="absolute right-2.5 top-1/2 -translate-y-1/2 text-expired"
           >
@@ -64,21 +66,15 @@ export default function BrandPicker({ value, category, onChange }: Props) {
             >
               {/* Logo o badge */}
               <div className="size-10 flex items-center justify-center">
-                {logoUrl ? (
+                {logoUrl && !brokenLogos.has(brand.slug) ? (
                   <Image
                     src={logoUrl}
                     alt={brand.name}
                     width={40}
                     height={40}
                     className="object-contain size-9"
-                    onError={(e) => {
-                      // Fallback si no carga
-                      const target = e.target as HTMLImageElement
-                      target.style.display = "none"
-                      const parent = target.parentElement
-                      if (parent) {
-                        parent.innerHTML = `<span class="size-10 rounded-xl bg-black/8 flex items-center justify-center text-sm font-bold font-syne text-ink">${brand.name[0]}</span>`
-                      }
+                    onError={() => {
+                      setBrokenLogos((prev) => new Set(prev).add(brand.slug))
                     }}
                   />
                 ) : (

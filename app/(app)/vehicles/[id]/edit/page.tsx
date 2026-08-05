@@ -193,7 +193,7 @@ export default function EditVehiclePage({
             value={alias}
             onChange={(e) => setAlias(e.target.value)}
             placeholder="Mi auto"
-            className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
+            className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-ink/20"
           />
         </div>
 
@@ -204,7 +204,7 @@ export default function EditVehiclePage({
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
               placeholder="Toyota"
-              className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
+              className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-ink/20"
             />
           </div>
           <div>
@@ -213,7 +213,7 @@ export default function EditVehiclePage({
               value={model}
               onChange={(e) => setModel(e.target.value)}
               placeholder="Corolla"
-              className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
+              className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-ink/20"
             />
           </div>
         </div>
@@ -227,7 +227,7 @@ export default function EditVehiclePage({
             placeholder="2020"
             min="1900"
             max={new Date().getFullYear() + 1}
-            className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
+            className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-ink/20"
           />
         </div>
 

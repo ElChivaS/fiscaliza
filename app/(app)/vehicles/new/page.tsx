@@ -7,6 +7,7 @@ import { useOrganization } from "@/hooks/useOrganization"
 import PageHeader from "@/components/layout/PageHeader"
 import Button from "@/components/ui/Button"
 import PricingModal from "@/components/ui/PricingModal"
+import FloatingInput from "@/components/ui/FloatingInput"
 import DocumentUploadSlot from "@/components/document/DocumentUploadSlot"
 import LicenciaUploadSlot from "@/components/document/LicenciaUploadSlot"
 import BrandPicker from "@/components/vehicle/BrandPicker"
@@ -73,6 +74,12 @@ export default function NewVehiclePage() {
 
   function handleBrandSelect(brand: VehicleBrand) {
     setSelectedBrand(brand)
+    setSelectedModel(null)
+    setCustomModel("")
+  }
+
+  function handleBrandClear() {
+    setSelectedBrand(null)
     setSelectedModel(null)
     setCustomModel("")
   }
@@ -246,36 +253,32 @@ export default function NewVehiclePage() {
           </div>
 
           {/* Patente */}
-          <Field label="Patente *" hint={category === "moto" ? "Formato moto: LLL000 (ej: JRH017)" : "Formato: BBXX00 o AB1234"}>
-            <div className="relative">
-              <input
-                value={plate}
-                onChange={(e) => setPlate(e.target.value.toUpperCase())}
-                placeholder="AAAA00"
-                maxLength={6}
-                className={[
-                  "w-full h-12 rounded-2xl border bg-surface px-4 text-sm text-ink font-syne font-bold tracking-widest placeholder:font-sans placeholder:tracking-normal placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-ink/20 uppercase",
-                  plateError ? "border-expired" : "border-black/10",
-                ].join(" ")}
-              />
-              {plateChecking && (
-                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <span className="size-4 rounded-full border-2 border-ink border-t-transparent animate-spin block" />
-                </div>
-              )}
-            </div>
-            {plateError && <p className="text-xs text-expired mt-1">{plateError}</p>}
-          </Field>
+          <div className="relative">
+            <FloatingInput
+              label={category === "moto" ? "Patente moto *" : "Patente *"}
+              value={plate}
+              onChange={(v) => setPlate(v.toUpperCase())}
+              placeholder={category === "moto" ? "JRH017" : "BBXX00"}
+              maxLength={6}
+              error={plateError}
+              hint={category === "moto" ? "Formato moto: LLL000 (ej: JRH017)" : "Formato: BBXX00 o AB1234"}
+              className="font-syne font-bold tracking-widest uppercase placeholder:font-sans placeholder:font-normal placeholder:tracking-normal"
+            />
+            {plateChecking && (
+              <div className="absolute right-0 top-4">
+                <span className="size-4 rounded-full border-2 border-ink border-t-transparent animate-spin block" />
+              </div>
+            )}
+          </div>
 
           {/* Alias */}
-          <Field label="Alias *" hint="Ej: Mi Corolla, Camioneta de trabajo">
-            <input
-              value={alias}
-              onChange={(e) => setAlias(e.target.value)}
-              placeholder="Mi auto"
-              className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
-            />
-          </Field>
+          <FloatingInput
+            label="Alias *"
+            value={alias}
+            onChange={setAlias}
+            placeholder="Mi auto"
+            hint="Ej: Mi Corolla, Camioneta de trabajo"
+          />
 
           {/* Marca */}
           <Field label="Marca">
@@ -284,41 +287,41 @@ export default function NewVehiclePage() {
               value={selectedBrand?.name ?? ""}
               category={category}
               onChange={handleBrandSelect}
+              onClear={handleBrandClear}
             />
           </Field>
 
           {/* Modelo — solo si hay marca seleccionada */}
           {selectedBrand && (
-            <Field label="Modelo">
-              {selectedBrand.name === "Otro" ? (
-                <input
-                  value={customModel}
-                  onChange={(e) => setCustomModel(e.target.value)}
-                  placeholder="Ej: Hilux"
-                  className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
-                />
-              ) : (
+            selectedBrand.name === "Otro" ? (
+              <FloatingInput
+                label="Modelo"
+                value={customModel}
+                onChange={setCustomModel}
+                placeholder="Ej: Hilux"
+              />
+            ) : (
+              <Field label="Modelo">
                 <ModelPicker
+                  key={selectedBrand.slug}
                   brand={selectedBrand}
                   value={selectedModel?.name ?? ""}
                   onChange={handleModelSelect}
                 />
-              )}
-            </Field>
+              </Field>
+            )
           )}
 
           {/* Año */}
-          <Field label="Año">
-            <input
-              type="number"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              placeholder="2020"
-              min="1900"
-              max={new Date().getFullYear() + 1}
-              className="w-full h-12 rounded-2xl border border-black/10 bg-surface px-4 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
-            />
-          </Field>
+          <FloatingInput
+            label="Año"
+            type="number"
+            value={year}
+            onChange={setYear}
+            placeholder="2020"
+            min="1900"
+            max={new Date().getFullYear() + 1}
+          />
 
           <Button
             fullWidth
