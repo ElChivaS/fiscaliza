@@ -86,6 +86,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
       L("Spark",    "hatchback"),
       L("Onix",     "hatchback"),
       L("Sail",     "sedan"),
+      L("Prisma",   "sedan"),
       L("Cavalier", "sedan"),
       L("Tracker",  "suv"),
       L("Captiva",  "suv"),
