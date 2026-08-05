@@ -20,12 +20,30 @@ export default function BrandPicker({ value, category, onChange }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      <input
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Buscar marca..."
-        className="w-full h-10 rounded-xl border border-black/10 bg-surface px-3 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
-      />
+      <div className="relative">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Buscar marca..."
+          className="w-full h-10 rounded-xl border border-black/10 bg-surface pl-3 pr-9 text-sm text-ink placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ink/20"
+        />
+        {search && (
+          <button
+            type="button"
+            onClick={() => setSearch("")}
+            aria-label="Borrar búsqueda"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-expired"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" className="size-5">
+              <path
+                fillRule="evenodd"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM9.53 8.47a.75.75 0 0 0-1.06 1.06L10.94 12l-2.47 2.47a.75.75 0 1 0 1.06 1.06L12 13.06l2.47 2.47a.75.75 0 1 0 1.06-1.06L13.06 12l2.47-2.47a.75.75 0 0 0-1.06-1.06L12 10.94 9.53 8.47Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        )}
+      </div>
 
       <div className="grid grid-cols-4 gap-2 max-h-64 overflow-y-auto pr-1">
         {filtered.map((brand) => {

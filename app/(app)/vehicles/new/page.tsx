@@ -235,18 +235,18 @@ export default function NewVehiclePage() {
                   className={[
                     "h-12 rounded-2xl border text-sm font-medium transition-all",
                     category === cat
-                      ? "border-ink bg-ink text-cream"
+                      ? "border-ink bg-ink text-background"
                       : "border-black/10 bg-surface text-muted hover:border-black/20",
                   ].join(" ")}
                 >
-                  {cat === "auto" ? "🚗 Auto" : "🏍 Moto"}
+                  {cat === "auto" ? "Auto" : "Moto"}
                 </button>
               ))}
             </div>
           </div>
 
           {/* Patente */}
-          <Field label="Patente *" hint={category === "moto" ? "Formato moto: LLL000 (ej: JRH017)" : "Formato chileno: BBXX00 o AB1234"}>
+          <Field label="Patente *" hint={category === "moto" ? "Formato moto: LLL000 (ej: JRH017)" : "Formato: BBXX00 o AB1234"}>
             <div className="relative">
               <input
                 value={plate}

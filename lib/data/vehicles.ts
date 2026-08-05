@@ -26,6 +26,7 @@ export interface VehicleBrand {
   name:     string
   slug:     string
   hasLogo:  boolean
+  logoUrl?: string  // override — para marcas sin logo en BRAND_LOGO_BASE (ej. motos)
   category: VehicleCategory
   models:   VehicleModel[]
 }
@@ -187,7 +188,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "MG", slug: "mg", hasLogo: false, category: "auto",
+    name: "MG", slug: "mg", hasLogo: true, category: "auto",
     models: [
       L("MG 3",    "hatchback"),
       L("MG 5",    "sedan"),
@@ -199,7 +200,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "BYD", slug: "byd", hasLogo: false, category: "auto",
+    name: "BYD", slug: "byd", hasLogo: true, category: "auto",
     models: [
       L("Dolphin",   "hatchback"),
       L("F3",        "sedan"),
@@ -210,7 +211,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "Chery", slug: "chery", hasLogo: false, category: "auto",
+    name: "Chery", slug: "chery", hasLogo: true, category: "auto",
     models: [
       L("QQ",         "hatchback"),
       L("Arrizo 5",   "sedan"),
@@ -222,7 +223,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "JAC", slug: "jac", hasLogo: false, category: "auto",
+    name: "JAC", slug: "jac", hasLogo: true, category: "auto",
     models: [
       L("J4",  "sedan"),
       L("S3",  "suv"),
@@ -281,7 +282,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "Foton", slug: "foton", hasLogo: false, category: "auto",
+    name: "Foton", slug: "foton", hasLogo: true, category: "auto",
     models: [
       L("Tunland",    "pickup"),
       L("Tunland G7", "pickup"),
@@ -291,7 +292,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "Geely", slug: "geely", hasLogo: false, category: "auto",
+    name: "Geely", slug: "geely", hasLogo: true, category: "auto",
     models: [
       L("Emgrand",  "sedan"),
       L("Coolray",  "suv"),
@@ -300,7 +301,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "Haval", slug: "haval", hasLogo: false, category: "auto",
+    name: "Haval", slug: "haval", hasLogo: true, category: "auto",
     models: [
       L("H2",      "suv"),
       L("H6",      "suv"),
@@ -388,6 +389,7 @@ const MOTO_BRANDS: VehicleBrand[] = [
   },
   {
     name: "Yamaha", slug: "yamaha", hasLogo: true, category: "moto",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Yamaha_Motor_logo.svg/250px-Yamaha_Motor_logo.svg.png",
     models: [
       L("YBR 125",     "naked"),
       L("FZ 150i",     "naked"),
@@ -408,6 +410,7 @@ const MOTO_BRANDS: VehicleBrand[] = [
   },
   {
     name: "Kawasaki", slug: "kawasaki", hasLogo: true, category: "moto",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Kawasaki_Motors_logo.svg/250px-Kawasaki_Motors_logo.svg.png",
     models: [
       L("Z400",         "naked"),
       L("Z650",         "naked"),
@@ -467,7 +470,8 @@ const MOTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "Bajaj", slug: "bajaj", hasLogo: false, category: "moto",
+    name: "Bajaj", slug: "bajaj", hasLogo: true, category: "moto",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Bajaj_Auto_logo.svg/250px-Bajaj_Auto_logo.svg.png",
     models: [
       L("Boxer 100",    "naked"),
       L("Rouser NS 200","naked"),
@@ -478,7 +482,8 @@ const MOTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "Royal Enfield", slug: "royal-enfield", hasLogo: false, category: "moto",
+    name: "Royal Enfield", slug: "royal-enfield", hasLogo: true, category: "moto",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Royal_Enfield_logo.svg/250px-Royal_Enfield_logo.svg.png",
     models: [
       L("Meteor 350",     "cruiser"),
       L("Classic 350",    "cruiser"),
@@ -490,7 +495,7 @@ const MOTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "Lifan", slug: "lifan", hasLogo: false, category: "moto",
+    name: "Lifan", slug: "lifan", hasLogo: true, category: "moto",
     models: [
       L("KP 150",    "naked"),
       L("KPS 150",   "naked"),
@@ -500,7 +505,8 @@ const MOTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "TVS", slug: "tvs", hasLogo: false, category: "moto",
+    name: "TVS", slug: "tvs", hasLogo: true, category: "moto",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/TVS_logo_%282024%29.png/250px-TVS_logo_%282024%29.png",
     models: [
       L("Sport 100",     "naked"),
       L("Apache RTR 160","naked"),
@@ -510,7 +516,8 @@ const MOTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "Benelli", slug: "benelli", hasLogo: false, category: "moto",
+    name: "Benelli", slug: "benelli", hasLogo: true, category: "moto",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/ad/Benelli_logo_2019.png",
     models: [
       L("TNT 135",      "naked"),
       L("TNT 150i",     "naked"),
@@ -522,6 +529,7 @@ const MOTO_BRANDS: VehicleBrand[] = [
   },
   {
     name: "Ducati", slug: "ducati", hasLogo: true, category: "moto",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Ducati_red_logo.svg/250px-Ducati_red_logo.svg.png",
     models: [
       L("Monster 797",    "naked"),
       L("Monster 937",    "naked"),
@@ -535,6 +543,7 @@ const MOTO_BRANDS: VehicleBrand[] = [
   },
   {
     name: "Harley-Davidson", slug: "harley-davidson", hasLogo: true, category: "moto",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Harley-Davidson_logo.svg/250px-Harley-Davidson_logo.svg.png",
     models: [
       L("Sportster S",        "cruiser"),
       L("Iron 883",           "cruiser"),
@@ -568,7 +577,8 @@ const MOTO_BRANDS: VehicleBrand[] = [
     ],
   },
   {
-    name: "Keeway", slug: "keeway", hasLogo: false, category: "moto",
+    name: "Keeway", slug: "keeway", hasLogo: true, category: "moto",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Keeway_logo.svg/250px-Keeway_logo.svg.png",
     models: [
       L("RKS 125",        "naked"),
       L("Superlight 200", "cafe_racer"),
@@ -609,7 +619,7 @@ export const BRAND_LOGO_BASE =
 
 export function getBrandLogoUrl(brand: VehicleBrand): string | null {
   if (!brand.hasLogo) return null
-  return `${BRAND_LOGO_BASE}/${brand.slug}.png`
+  return brand.logoUrl ?? `${BRAND_LOGO_BASE}/${brand.slug}.png`
 }
 
 export const BODY_TYPE_LABELS: Record<BodyType, string> = {
