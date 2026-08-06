@@ -11,6 +11,16 @@ interface Props {
   onClear?:   () => void
 }
 
+// Algunos logos del dataset traen mucho margen transparente alrededor del
+// isotipo y se ven chicos con object-contain — se agrandan puntualmente.
+const LOGO_SCALE: Record<string, number> = {
+  kia:      1.35,
+  mg:       1.5,
+  peugeot:  1.3,
+  jac:      1.45,
+  changan:  1.55,
+}
+
 export default function BrandPicker({ value, category, onChange, onClear }: Props) {
   const [search, setSearch] = useState("")
   const [brokenLogos, setBrokenLogos] = useState<Set<string>>(new Set())
@@ -47,7 +57,7 @@ export default function BrandPicker({ value, category, onChange, onClear }: Prop
         )}
       </div>
 
-      <div className="grid grid-cols-4 gap-2 max-h-64 overflow-y-auto pr-1">
+      <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
         {filtered.map((brand) => {
           const logoUrl = getBrandLogoUrl(brand)
           const isSelected = value === brand.name
@@ -56,40 +66,33 @@ export default function BrandPicker({ value, category, onChange, onClear }: Prop
             <button
               key={brand.slug}
               type="button"
+              title={brand.name}
+              aria-label={brand.name}
               onClick={() => { setSearch(brand.name); onChange(brand) }}
               className={[
-                "flex flex-col items-center gap-1.5 p-2 rounded-2xl border transition-all duration-150",
+                "relative aspect-square overflow-hidden p-1.5 rounded-2xl border transition-all duration-150",
                 isSelected
                   ? "border-ink bg-ink/5 shadow-sm"
                   : "border-black/8 bg-surface hover:border-black/20 hover:bg-black/3",
               ].join(" ")}
             >
-              {/* Logo o badge */}
-              <div className="size-10 flex items-center justify-center">
-                {logoUrl && !brokenLogos.has(brand.slug) ? (
-                  <Image
-                    src={logoUrl}
-                    alt={brand.name}
-                    width={40}
-                    height={40}
-                    className="object-contain size-9"
-                    onError={() => {
-                      setBrokenLogos((prev) => new Set(prev).add(brand.slug))
-                    }}
-                  />
-                ) : (
-                  <span className="size-10 rounded-xl bg-black/8 flex items-center justify-center text-sm font-bold font-syne text-ink">
-                    {brand.name[0]}
-                  </span>
-                )}
-              </div>
-
-              <span className={[
-                "text-[10px] font-medium text-center leading-tight",
-                isSelected ? "text-ink" : "text-muted",
-              ].join(" ")}>
-                {brand.name}
-              </span>
+              {logoUrl && !brokenLogos.has(brand.slug) ? (
+                <Image
+                  src={logoUrl}
+                  alt={brand.name}
+                  fill
+                  sizes="(max-width: 448px) 33vw, 140px"
+                  className="object-contain p-2"
+                  style={LOGO_SCALE[brand.slug] ? { transform: `scale(${LOGO_SCALE[brand.slug]})` } : undefined}
+                  onError={() => {
+                    setBrokenLogos((prev) => new Set(prev).add(brand.slug))
+                  }}
+                />
+              ) : (
+                <span className="absolute inset-0 flex items-center justify-center px-1 text-center text-sm font-semibold font-syne leading-tight text-ink">
+                  {brand.name}
+                </span>
+              )}
             </button>
           )
         })}
