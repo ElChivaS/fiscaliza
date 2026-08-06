@@ -1,0 +1,627 @@
+{
+  "metadata": {
+    "description": "Catálogo de motocicletas disponibles en Chile — 30 marcas provistas por el usuario + 3 del catálogo anterior que no estaban en esa lista (Lifan, Keeway, Bera)",
+    "brands_expected": 33,
+    "models_per_brand": 10
+  },
+  "schema": {
+    "brand": [
+      "id",
+      "name",
+      "country",
+      "founded",
+      "website",
+      "logo",
+      "manufacturerGroup",
+      "premium"
+    ],
+    "model": [
+      "id",
+      "name",
+      "category",
+      "engineCc",
+      "bodyType",
+      "yearsAvailable",
+      "origin",
+      "image",
+      "discontinued",
+      "availableInChile"
+    ]
+  },
+  "brands": [
+    {
+      "id": "honda", "name": "Honda", "country": "Japón", "founded": 1948,
+      "website": "https://www.honda.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/honda.png",
+      "manufacturerGroup": "Honda Motor Co.", "premium": false,
+      "models": [
+        { "id": "honda-cb190r", "name": "CB 190R", "category": "Naked", "engineCc": 184, "bodyType": "naked", "yearsAvailable": "2018-2026", "origin": "Brasil", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-cb500f", "name": "CB 500F", "category": "Naked", "engineCc": 471, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-cb650r", "name": "CB 650R", "category": "Naked", "engineCc": 649, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-cbr500r", "name": "CBR 500R", "category": "Deportiva", "engineCc": 471, "bodyType": "racing", "yearsAvailable": "2019-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-cbr650r", "name": "CBR 650R", "category": "Deportiva", "engineCc": 649, "bodyType": "racing", "yearsAvailable": "2019-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-wave-110i", "name": "Wave 110i", "category": "Naked económica", "engineCc": 110, "bodyType": "naked", "yearsAvailable": "2015-2026", "origin": "Brasil", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-pcx160", "name": "PCX 160", "category": "Scooter", "engineCc": 157, "bodyType": "scooter", "yearsAvailable": "2021-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-africa-twin", "name": "Africa Twin", "category": "Adventure/Enduro", "engineCc": 1084, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-xr150l", "name": "XR 150L", "category": "Enduro", "engineCc": 149, "bodyType": "enduro", "yearsAvailable": "2016-2026", "origin": "Brasil", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-nt1100", "name": "NT1100", "category": "Touring", "engineCc": 1084, "bodyType": "touring", "yearsAvailable": "2022-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "yamaha", "name": "Yamaha", "country": "Japón", "founded": 1955,
+      "website": "https://www.yamaha-motor.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Yamaha_Motor_logo.svg/250px-Yamaha_Motor_logo.svg.png",
+      "manufacturerGroup": "Yamaha Motor Co.", "premium": false,
+      "models": [
+        { "id": "yamaha-ybr125", "name": "YBR 125", "category": "Naked económica", "engineCc": 124, "bodyType": "naked", "yearsAvailable": "2010-2026", "origin": "Brasil", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "yamaha-fz150i", "name": "FZ 150i", "category": "Naked", "engineCc": 149, "bodyType": "naked", "yearsAvailable": "2014-2026", "origin": "Indonesia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "yamaha-mt03", "name": "MT-03", "category": "Naked", "engineCc": 321, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Indonesia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "yamaha-mt07", "name": "MT-07", "category": "Naked", "engineCc": 689, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "yamaha-mt09", "name": "MT-09", "category": "Naked", "engineCc": 890, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "yamaha-yzf-r3", "name": "YZF-R3", "category": "Deportiva", "engineCc": 321, "bodyType": "racing", "yearsAvailable": "2019-2026", "origin": "Indonesia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "yamaha-yzf-r1", "name": "YZF-R1", "category": "Deportiva", "engineCc": 998, "bodyType": "racing", "yearsAvailable": "2020-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "yamaha-nmax-155", "name": "NMAX 155", "category": "Scooter", "engineCc": 155, "bodyType": "scooter", "yearsAvailable": "2021-2026", "origin": "Indonesia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "yamaha-tenere-700", "name": "Ténéré 700", "category": "Adventure/Enduro", "engineCc": 689, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "yamaha-xtz150", "name": "XTZ 150", "category": "Enduro", "engineCc": 150, "bodyType": "enduro", "yearsAvailable": "2016-2026", "origin": "Brasil", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "suzuki", "name": "Suzuki", "country": "Japón", "founded": 1909,
+      "website": "https://www.globalsuzuki.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/suzuki.png",
+      "manufacturerGroup": "Suzuki Motor Corporation", "premium": false,
+      "models": [
+        { "id": "suzuki-gn125", "name": "GN 125", "category": "Naked económica", "engineCc": 124, "bodyType": "naked", "yearsAvailable": "2000-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-gsx-s750", "name": "GSX-S750", "category": "Naked", "engineCc": 749, "bodyType": "naked", "yearsAvailable": "2017-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-gsx-s1000", "name": "GSX-S1000", "category": "Naked", "engineCc": 999, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-gsx-r750", "name": "GSX-R750", "category": "Deportiva", "engineCc": 750, "bodyType": "racing", "yearsAvailable": "2018-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-gsx-r1000", "name": "GSX-R1000", "category": "Deportiva", "engineCc": 999, "bodyType": "racing", "yearsAvailable": "2017-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-v-strom-650", "name": "V-Strom 650", "category": "Adventure/Enduro", "engineCc": 645, "bodyType": "enduro", "yearsAvailable": "2017-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-v-strom-1000", "name": "V-Strom 1000", "category": "Adventure/Enduro", "engineCc": 1037, "bodyType": "enduro", "yearsAvailable": "2018-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-burgman-400", "name": "Burgman 400", "category": "Scooter", "engineCc": 400, "bodyType": "scooter", "yearsAvailable": "2017-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-boulevard-m50", "name": "Boulevard M50", "category": "Cruiser", "engineCc": 805, "bodyType": "cruiser", "yearsAvailable": "2015-2022", "origin": "Japón", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "suzuki-boulevard-c50", "name": "Boulevard C50", "category": "Cruiser", "engineCc": 805, "bodyType": "cruiser", "yearsAvailable": "2015-2022", "origin": "Japón", "image": null, "discontinued": true, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "kawasaki", "name": "Kawasaki", "country": "Japón", "founded": 1896,
+      "website": "https://www.kawasaki.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Kawasaki_Motors_logo.svg/250px-Kawasaki_Motors_logo.svg.png",
+      "manufacturerGroup": "Kawasaki Heavy Industries", "premium": false,
+      "models": [
+        { "id": "kawasaki-z400", "name": "Z400", "category": "Naked", "engineCc": 399, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kawasaki-z650", "name": "Z650", "category": "Naked", "engineCc": 649, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kawasaki-z900", "name": "Z900", "category": "Naked", "engineCc": 948, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kawasaki-ninja-400", "name": "Ninja 400", "category": "Deportiva", "engineCc": 399, "bodyType": "racing", "yearsAvailable": "2018-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kawasaki-ninja-zx10r", "name": "Ninja ZX-10R", "category": "Deportiva", "engineCc": 998, "bodyType": "racing", "yearsAvailable": "2021-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kawasaki-versys-650", "name": "Versys 650", "category": "Adventure/Enduro", "engineCc": 649, "bodyType": "enduro", "yearsAvailable": "2015-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kawasaki-versys-1000", "name": "Versys 1000", "category": "Adventure/Enduro", "engineCc": 1043, "bodyType": "enduro", "yearsAvailable": "2019-2026", "origin": "Japón", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kawasaki-klx150", "name": "KLX 150", "category": "Enduro", "engineCc": 144, "bodyType": "enduro", "yearsAvailable": "2016-2026", "origin": "Indonesia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kawasaki-vulcan-s", "name": "Vulcan S", "category": "Cruiser", "engineCc": 649, "bodyType": "cruiser", "yearsAvailable": "2015-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kawasaki-w175", "name": "W175", "category": "Café Racer", "engineCc": 177, "bodyType": "cafe_racer", "yearsAvailable": "2019-2026", "origin": "Indonesia", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "ktm", "name": "KTM", "country": "Austria", "founded": 1934,
+      "website": "https://www.ktm.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/ktm.png",
+      "manufacturerGroup": "Pierer Mobility Group", "premium": false,
+      "models": [
+        { "id": "ktm-duke-200", "name": "Duke 200", "category": "Naked", "engineCc": 199, "bodyType": "naked", "yearsAvailable": "2017-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ktm-duke-390", "name": "Duke 390", "category": "Naked", "engineCc": 399, "bodyType": "naked", "yearsAvailable": "2018-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ktm-duke-890", "name": "Duke 890", "category": "Naked", "engineCc": 889, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ktm-duke-1290", "name": "Duke 1290", "category": "Naked", "engineCc": 1301, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ktm-rc-390", "name": "RC 390", "category": "Deportiva", "engineCc": 373, "bodyType": "racing", "yearsAvailable": "2022-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ktm-adventure-390", "name": "Adventure 390", "category": "Adventure/Enduro", "engineCc": 373, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ktm-adventure-890", "name": "Adventure 890", "category": "Adventure/Enduro", "engineCc": 889, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ktm-adventure-1290", "name": "Adventure 1290", "category": "Adventure/Enduro", "engineCc": 1301, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ktm-exc-350", "name": "EXC 350", "category": "Enduro competición", "engineCc": 350, "bodyType": "enduro", "yearsAvailable": "2018-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ktm-exc-f-450", "name": "EXC-F 450", "category": "Enduro competición", "engineCc": 450, "bodyType": "enduro", "yearsAvailable": "2018-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "bmw-motorrad", "name": "BMW Motorrad", "country": "Alemania", "founded": 1923,
+      "website": "https://www.bmw-motorrad.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/bmw.png",
+      "manufacturerGroup": "BMW Group", "premium": true,
+      "models": [
+        { "id": "bmw-motorrad-g310r", "name": "G 310 R", "category": "Naked", "engineCc": 313, "bodyType": "naked", "yearsAvailable": "2017-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-motorrad-g310gs", "name": "G 310 GS", "category": "Adventure/Enduro", "engineCc": 313, "bodyType": "enduro", "yearsAvailable": "2017-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-motorrad-f900r", "name": "F 900 R", "category": "Naked", "engineCc": 895, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Alemania", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-motorrad-f900xr", "name": "F 900 XR", "category": "Touring deportiva", "engineCc": 895, "bodyType": "touring", "yearsAvailable": "2020-2026", "origin": "Alemania", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-motorrad-r1250gs", "name": "R 1250 GS", "category": "Adventure/Enduro", "engineCc": 1254, "bodyType": "enduro", "yearsAvailable": "2019-2026", "origin": "Alemania", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-motorrad-r1250rt", "name": "R 1250 RT", "category": "Touring", "engineCc": 1254, "bodyType": "touring", "yearsAvailable": "2019-2026", "origin": "Alemania", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-motorrad-s1000r", "name": "S 1000 R", "category": "Naked", "engineCc": 999, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "Alemania", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-motorrad-s1000rr", "name": "S 1000 RR", "category": "Deportiva", "engineCc": 999, "bodyType": "racing", "yearsAvailable": "2019-2026", "origin": "Alemania", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-motorrad-r18", "name": "R 18", "category": "Cruiser", "engineCc": 1802, "bodyType": "cruiser", "yearsAvailable": "2020-2026", "origin": "Alemania", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-motorrad-c400gt", "name": "C 400 GT", "category": "Scooter", "engineCc": 350, "bodyType": "scooter", "yearsAvailable": "2019-2026", "origin": "Alemania", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "ducati", "name": "Ducati", "country": "Italia", "founded": 1926,
+      "website": "https://www.ducati.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Ducati_red_logo.svg/250px-Ducati_red_logo.svg.png",
+      "manufacturerGroup": "Volkswagen Group", "premium": true,
+      "models": [
+        { "id": "ducati-monster-937", "name": "Monster 937", "category": "Naked", "engineCc": 937, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ducati-scrambler-800", "name": "Scrambler 800", "category": "Café Racer", "engineCc": 803, "bodyType": "cafe_racer", "yearsAvailable": "2019-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ducati-scrambler-icon", "name": "Scrambler Icon", "category": "Café Racer", "engineCc": 803, "bodyType": "cafe_racer", "yearsAvailable": "2019-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ducati-panigale-v2", "name": "Panigale V2", "category": "Deportiva", "engineCc": 955, "bodyType": "racing", "yearsAvailable": "2020-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ducati-panigale-v4", "name": "Panigale V4", "category": "Deportiva", "engineCc": 1103, "bodyType": "racing", "yearsAvailable": "2018-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ducati-multistrada-v2", "name": "Multistrada V2", "category": "Adventure/Enduro", "engineCc": 937, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ducati-multistrada-v4", "name": "Multistrada V4", "category": "Adventure/Enduro", "engineCc": 1158, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ducati-diavel-v4", "name": "Diavel V4", "category": "Cruiser deportivo", "engineCc": 1158, "bodyType": "cruiser", "yearsAvailable": "2023-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ducati-streetfighter-v4", "name": "Streetfighter V4", "category": "Naked deportiva", "engineCc": 1103, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ducati-desertx", "name": "DesertX", "category": "Adventure/Enduro", "engineCc": 937, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "triumph", "name": "Triumph", "country": "Reino Unido", "founded": 1902,
+      "website": "https://www.triumphmotorcycles.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/triumph.png",
+      "manufacturerGroup": "Triumph Motorcycles Ltd.", "premium": true,
+      "models": [
+        { "id": "triumph-street-triple", "name": "Street Triple", "category": "Naked", "engineCc": 765, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "triumph-speed-triple", "name": "Speed Triple", "category": "Naked", "engineCc": 1160, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "Reino Unido", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "triumph-tiger-900", "name": "Tiger 900", "category": "Adventure/Enduro", "engineCc": 888, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "triumph-tiger-1200", "name": "Tiger 1200", "category": "Adventure/Enduro", "engineCc": 1160, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "Reino Unido", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "triumph-bonneville-t100", "name": "Bonneville T100", "category": "Café Racer", "engineCc": 900, "bodyType": "cafe_racer", "yearsAvailable": "2021-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "triumph-bonneville-t120", "name": "Bonneville T120", "category": "Café Racer", "engineCc": 1200, "bodyType": "cafe_racer", "yearsAvailable": "2021-2026", "origin": "Reino Unido", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "triumph-thruxton-rs", "name": "Thruxton RS", "category": "Café Racer", "engineCc": 1200, "bodyType": "cafe_racer", "yearsAvailable": "2020-2026", "origin": "Reino Unido", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "triumph-speed-twin", "name": "Speed Twin", "category": "Café Racer", "engineCc": 1200, "bodyType": "cafe_racer", "yearsAvailable": "2021-2026", "origin": "Reino Unido", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "triumph-rocket-3", "name": "Rocket 3", "category": "Cruiser", "engineCc": 2458, "bodyType": "cruiser", "yearsAvailable": "2020-2026", "origin": "Reino Unido", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "triumph-daytona-660", "name": "Daytona 660", "category": "Deportiva", "engineCc": 660, "bodyType": "racing", "yearsAvailable": "2024-2026", "origin": "Tailandia", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "royal-enfield", "name": "Royal Enfield", "country": "India", "founded": 1901,
+      "website": "https://www.royalenfield.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Royal_Enfield_logo.svg/250px-Royal_Enfield_logo.svg.png",
+      "manufacturerGroup": "Eicher Motors", "premium": false,
+      "models": [
+        { "id": "royal-enfield-meteor-350", "name": "Meteor 350", "category": "Cruiser", "engineCc": 349, "bodyType": "cruiser", "yearsAvailable": "2021-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "royal-enfield-classic-350", "name": "Classic 350", "category": "Cruiser", "engineCc": 349, "bodyType": "cruiser", "yearsAvailable": "2021-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "royal-enfield-hunter-350", "name": "Hunter 350", "category": "Naked", "engineCc": 349, "bodyType": "naked", "yearsAvailable": "2022-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "royal-enfield-himalayan-450", "name": "Himalayan 450", "category": "Adventure/Enduro", "engineCc": 452, "bodyType": "enduro", "yearsAvailable": "2024-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "royal-enfield-guerrilla-450", "name": "Guerrilla 450", "category": "Café Racer", "engineCc": 452, "bodyType": "cafe_racer", "yearsAvailable": "2024-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "royal-enfield-interceptor-650", "name": "Interceptor 650", "category": "Café Racer", "engineCc": 648, "bodyType": "cafe_racer", "yearsAvailable": "2019-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "royal-enfield-continental-gt", "name": "Continental GT", "category": "Café Racer", "engineCc": 648, "bodyType": "cafe_racer", "yearsAvailable": "2019-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "royal-enfield-scram-411", "name": "Scram 411", "category": "Adventure/Enduro", "engineCc": 411, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "royal-enfield-bullet-350", "name": "Bullet 350", "category": "Cruiser", "engineCc": 349, "bodyType": "cruiser", "yearsAvailable": "2023-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "royal-enfield-super-meteor-650", "name": "Super Meteor 650", "category": "Cruiser", "engineCc": 648, "bodyType": "cruiser", "yearsAvailable": "2023-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "bajaj", "name": "Bajaj", "country": "India", "founded": 1945,
+      "website": "https://www.bajajauto.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Bajaj_Auto_logo.svg/250px-Bajaj_Auto_logo.svg.png",
+      "manufacturerGroup": "Bajaj Auto", "premium": false,
+      "models": [
+        { "id": "bajaj-boxer-100", "name": "Boxer 100", "category": "Naked económica", "engineCc": 99, "bodyType": "naked", "yearsAvailable": "2005-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bajaj-pulsar-220", "name": "Pulsar 220", "category": "Naked deportiva", "engineCc": 220, "bodyType": "naked", "yearsAvailable": "2010-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bajaj-pulsar-ns200", "name": "Pulsar NS200", "category": "Naked deportiva", "engineCc": 199, "bodyType": "naked", "yearsAvailable": "2017-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bajaj-rouser-ns200", "name": "Rouser NS 200", "category": "Naked deportiva", "engineCc": 199, "bodyType": "naked", "yearsAvailable": "2017-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bajaj-rouser-rs200", "name": "Rouser RS 200", "category": "Deportiva", "engineCc": 199, "bodyType": "racing", "yearsAvailable": "2017-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bajaj-rouser-as200", "name": "Rouser AS 200", "category": "Adventure/Enduro", "engineCc": 199, "bodyType": "enduro", "yearsAvailable": "2016-2022", "origin": "India", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "bajaj-dominar-400", "name": "Dominar 400", "category": "Touring deportiva", "engineCc": 373, "bodyType": "touring", "yearsAvailable": "2019-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bajaj-avenger-220", "name": "Avenger 220", "category": "Cruiser", "engineCc": 220, "bodyType": "cruiser", "yearsAvailable": "2015-2023", "origin": "India", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "bajaj-ct100", "name": "CT100", "category": "Naked económica", "engineCc": 102, "bodyType": "naked", "yearsAvailable": "2008-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bajaj-pulsar-ns400z", "name": "Pulsar NS400Z", "category": "Naked deportiva", "engineCc": 373, "bodyType": "naked", "yearsAvailable": "2023-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "tvs", "name": "TVS", "country": "India", "founded": 1978,
+      "website": "https://www.tvsmotor.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/TVS_logo_%282024%29.png/250px-TVS_logo_%282024%29.png",
+      "manufacturerGroup": "TVS Motor Company", "premium": false,
+      "models": [
+        { "id": "tvs-sport-100", "name": "Sport 100", "category": "Naked económica", "engineCc": 99, "bodyType": "naked", "yearsAvailable": "2010-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "tvs-apache-rtr160", "name": "Apache RTR 160", "category": "Naked deportiva", "engineCc": 160, "bodyType": "naked", "yearsAvailable": "2018-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "tvs-apache-rtr200", "name": "Apache RTR 200", "category": "Naked deportiva", "engineCc": 197, "bodyType": "naked", "yearsAvailable": "2018-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "tvs-apache-rr310", "name": "Apache RR 310", "category": "Deportiva", "engineCc": 312, "bodyType": "racing", "yearsAvailable": "2018-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "tvs-ronin-225", "name": "Ronin 225", "category": "Café Racer", "engineCc": 225, "bodyType": "cafe_racer", "yearsAvailable": "2022-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "tvs-raider-125", "name": "Raider 125", "category": "Naked", "engineCc": 124, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "tvs-ntorq-125", "name": "NTorq 125", "category": "Scooter", "engineCc": 124, "bodyType": "scooter", "yearsAvailable": "2018-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "tvs-jupiter", "name": "Jupiter", "category": "Scooter", "engineCc": 113, "bodyType": "scooter", "yearsAvailable": "2013-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "tvs-apache-rtx300", "name": "Apache RTX 300", "category": "Adventure/Enduro", "engineCc": 292, "bodyType": "enduro", "yearsAvailable": "2025-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "tvs-star-city-plus", "name": "Star City Plus", "category": "Naked económica", "engineCc": 110, "bodyType": "naked", "yearsAvailable": "2015-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "cfmoto", "name": "CFMOTO", "country": "China", "founded": 1989,
+      "website": "https://www.cfmoto.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/CFMOTO_Logo.svg/250px-CFMOTO_Logo.svg.png",
+      "manufacturerGroup": "CFMoto", "premium": false,
+      "models": [
+        { "id": "cfmoto-125nk", "name": "125NK", "category": "Naked", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "cfmoto-300nk", "name": "300NK", "category": "Naked", "engineCc": 292, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "cfmoto-450nk", "name": "450NK", "category": "Naked", "engineCc": 449, "bodyType": "naked", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "cfmoto-650nk", "name": "650NK", "category": "Naked", "engineCc": 649, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "cfmoto-300sr", "name": "300SR", "category": "Deportiva", "engineCc": 292, "bodyType": "racing", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "cfmoto-450ss", "name": "450SS", "category": "Deportiva", "engineCc": 449, "bodyType": "racing", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "cfmoto-300gt", "name": "300GT", "category": "Touring deportiva", "engineCc": 292, "bodyType": "touring", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "cfmoto-650mt", "name": "650MT", "category": "Adventure/Enduro", "engineCc": 649, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "cfmoto-800mt", "name": "800MT", "category": "Adventure/Enduro", "engineCc": 799, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "cfmoto-700clx", "name": "700CL-X", "category": "Café Racer", "engineCc": 693, "bodyType": "cafe_racer", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "benelli", "name": "Benelli", "country": "Italia", "founded": 1911,
+      "website": "https://www.benelli.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Benelli_logo_2019.png",
+      "manufacturerGroup": "Qianjiang Group", "premium": false,
+      "models": [
+        { "id": "benelli-tnt135", "name": "TNT 135", "category": "Naked", "engineCc": 134, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "benelli-tnt300", "name": "TNT 300", "category": "Naked", "engineCc": 300, "bodyType": "naked", "yearsAvailable": "2018-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "benelli-tnt600i", "name": "TNT 600i", "category": "Naked", "engineCc": 600, "bodyType": "naked", "yearsAvailable": "2017-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "benelli-leoncino-250", "name": "Leoncino 250", "category": "Café Racer", "engineCc": 249, "bodyType": "cafe_racer", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "benelli-leoncino-500", "name": "Leoncino 500", "category": "Café Racer", "engineCc": 500, "bodyType": "cafe_racer", "yearsAvailable": "2018-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "benelli-trk502", "name": "TRK 502", "category": "Adventure/Enduro", "engineCc": 500, "bodyType": "enduro", "yearsAvailable": "2018-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "benelli-trk800", "name": "TRK 800", "category": "Adventure/Enduro", "engineCc": 754, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "benelli-302r", "name": "302R", "category": "Deportiva", "engineCc": 300, "bodyType": "racing", "yearsAvailable": "2018-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "benelli-502c", "name": "502C", "category": "Cruiser", "engineCc": 500, "bodyType": "cruiser", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "benelli-imperiale-400", "name": "Imperiale 400", "category": "Cruiser clásica", "engineCc": 374, "bodyType": "cruiser", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "qjmotor", "name": "QJMotor", "country": "China", "founded": 1985,
+      "website": "https://www.qjmotor.com",
+      "logo": null,
+      "manufacturerGroup": "Qianjiang Group", "premium": false,
+      "models": [
+        { "id": "qjmotor-srk125", "name": "SRK 125", "category": "Deportiva", "engineCc": 125, "bodyType": "racing", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "qjmotor-srk250", "name": "SRK 250", "category": "Deportiva", "engineCc": 249, "bodyType": "racing", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "qjmotor-srk600", "name": "SRK 600", "category": "Deportiva", "engineCc": 599, "bodyType": "racing", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "qjmotor-sq350", "name": "SQ350", "category": "Adventure/Enduro", "engineCc": 349, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "qjmotor-srt800rx", "name": "SRT 800RX", "category": "Naked", "engineCc": 799, "bodyType": "naked", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "qjmotor-srv250", "name": "SRV 250", "category": "Naked", "engineCc": 249, "bodyType": "naked", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "qjmotor-ltm125", "name": "LTM 125", "category": "Adventure/Enduro liviana", "engineCc": 125, "bodyType": "enduro", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "qjmotor-domination-350", "name": "Domination 350", "category": "Cruiser", "engineCc": 349, "bodyType": "cruiser", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "qjmotor-srg600", "name": "SRG 600", "category": "Naked", "engineCc": 599, "bodyType": "naked", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "qjmotor-srk-600rr", "name": "SRK 600RR", "category": "Deportiva", "engineCc": 599, "bodyType": "racing", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "voge", "name": "Voge", "country": "China", "founded": 2018,
+      "website": "https://www.vogeglobal.com",
+      "logo": null,
+      "manufacturerGroup": "Loncin Holdings", "premium": false,
+      "models": [
+        { "id": "voge-300ac", "name": "300AC", "category": "Naked", "engineCc": 292, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "voge-300rr", "name": "300RR", "category": "Deportiva", "engineCc": 292, "bodyType": "racing", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "voge-500r", "name": "500R", "category": "Deportiva", "engineCc": 493, "bodyType": "racing", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "voge-500ds", "name": "500DS", "category": "Adventure/Enduro", "engineCc": 493, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "voge-650dsx", "name": "650DSX", "category": "Adventure/Enduro", "engineCc": 649, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "voge-cu625", "name": "CU625", "category": "Café Racer", "engineCc": 578, "bodyType": "cafe_racer", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "voge-rr666s", "name": "RR 666 S", "category": "Deportiva", "engineCc": 660, "bodyType": "racing", "yearsAvailable": "2025-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "voge-300ds", "name": "300DS", "category": "Adventure/Enduro", "engineCc": 292, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "voge-125x", "name": "125X", "category": "Adventure/Enduro liviana", "engineCc": 125, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "voge-350dsx", "name": "350DSX", "category": "Adventure/Enduro", "engineCc": 349, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "zontes", "name": "Zontes", "country": "China", "founded": 2003,
+      "website": "https://www.zontes.com",
+      "logo": null,
+      "manufacturerGroup": "Guangdong Tayo Motorcycle Technology", "premium": false,
+      "models": [
+        { "id": "zontes-310r", "name": "310R", "category": "Deportiva", "engineCc": 312, "bodyType": "racing", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "zontes-310x", "name": "310X", "category": "Naked", "engineCc": 312, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "zontes-350t", "name": "350T", "category": "Adventure/Enduro", "engineCc": 349, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "zontes-350d", "name": "350D", "category": "Adventure/Enduro", "engineCc": 349, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "zontes-350e", "name": "350E", "category": "Naked", "engineCc": 349, "bodyType": "naked", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "zontes-gk350", "name": "GK350", "category": "Café Racer", "engineCc": 349, "bodyType": "cafe_racer", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "zontes-703rr", "name": "703RR", "category": "Deportiva", "engineCc": 693, "bodyType": "racing", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "zontes-703f", "name": "703F", "category": "Naked", "engineCc": 693, "bodyType": "naked", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "zontes-125u", "name": "125U", "category": "Naked económica", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "zontes-155v", "name": "155V", "category": "Scooter", "engineCc": 155, "bodyType": "scooter", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "kove", "name": "Kove", "country": "China", "founded": 2017,
+      "website": "https://www.kovemoto.com",
+      "logo": null,
+      "manufacturerGroup": "Kove Moto", "premium": false,
+      "models": [
+        { "id": "kove-321rr", "name": "321RR", "category": "Deportiva", "engineCc": 321, "bodyType": "racing", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kove-450rally", "name": "450 Rally", "category": "Adventure/Enduro", "engineCc": 449, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kove-500rally", "name": "500 Rally", "category": "Adventure/Enduro", "engineCc": 499, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kove-800x", "name": "800X", "category": "Adventure/Enduro", "engineCc": 799, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kove-800x-pro", "name": "800X Pro", "category": "Adventure/Enduro", "engineCc": 799, "bodyType": "enduro", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "kove-450cc-rally-pro", "name": "450 Rally Pro", "category": "Enduro competición", "engineCc": 449, "bodyType": "enduro", "yearsAvailable": "2024-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "kove-160rr", "name": "160RR", "category": "Deportiva", "engineCc": 160, "bodyType": "racing", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "kove-300rr", "name": "300RR", "category": "Deportiva", "engineCc": 292, "bodyType": "racing", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "kove-cf450", "name": "CF450", "category": "Motocross", "engineCc": 449, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "kove-321r", "name": "321R", "category": "Naked", "engineCc": 321, "bodyType": "naked", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "kymco", "name": "Kymco", "country": "Taiwán", "founded": 1963,
+      "website": "https://www.kymco.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/KYMCO_logo.svg/250px-KYMCO_logo.svg.png",
+      "manufacturerGroup": "Kwang Yang Motor Co.", "premium": false,
+      "models": [
+        { "id": "kymco-agility-125", "name": "Agility 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2015-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kymco-like-125", "name": "Like 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2018-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kymco-people-s-150", "name": "People S 150", "category": "Scooter", "engineCc": 150, "bodyType": "scooter", "yearsAvailable": "2017-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kymco-downtown-350i", "name": "Downtown 350i", "category": "Scooter", "engineCc": 349, "bodyType": "scooter", "yearsAvailable": "2019-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kymco-xciting-400", "name": "Xciting 400", "category": "Scooter", "engineCc": 399, "bodyType": "scooter", "yearsAvailable": "2018-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kymco-ak550", "name": "AK 550", "category": "Scooter deportivo", "engineCc": 550, "bodyType": "scooter", "yearsAvailable": "2018-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kymco-cv3", "name": "CV3", "category": "Scooter de 3 ruedas", "engineCc": 550, "bodyType": "scooter", "yearsAvailable": "2022-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "kymco-visar", "name": "Visar", "category": "Naked", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kymco-k-xct-125", "name": "K-XCT 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2016-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kymco-super8-150", "name": "Super 8 150", "category": "Scooter", "engineCc": 150, "bodyType": "scooter", "yearsAvailable": "2016-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "sym", "name": "SYM", "country": "Taiwán", "founded": 1954,
+      "website": "https://www.sym-global.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/SYM_logo_of_Sanyang_Motor_20180408.svg/250px-SYM_logo_of_Sanyang_Motor_20180408.svg.png",
+      "manufacturerGroup": "Sanyang Motor", "premium": false,
+      "models": [
+        { "id": "sym-symphony-125", "name": "Symphony 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2015-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "sym-fiddle-125", "name": "Fiddle 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2016-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "sym-jet-14-125", "name": "Jet 14 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2018-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "sym-cruisym-300", "name": "Cruisym 300", "category": "Scooter", "engineCc": 278, "bodyType": "scooter", "yearsAvailable": "2019-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "sym-maxsym-400", "name": "Maxsym 400", "category": "Scooter", "engineCc": 399, "bodyType": "scooter", "yearsAvailable": "2020-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "sym-maxsym-tl-508", "name": "Maxsym TL 508", "category": "Scooter deportivo", "engineCc": 508, "bodyType": "scooter", "yearsAvailable": "2022-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "sym-wolf-125", "name": "Wolf 125", "category": "Naked", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2015-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "sym-nh-t-300", "name": "NH-T 300", "category": "Adventure/Enduro", "engineCc": 278, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "sym-orbit-125", "name": "Orbit 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2017-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "sym-x-pro-125", "name": "X-Pro 125", "category": "Naked", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "Taiwán", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "piaggio", "name": "Piaggio", "country": "Italia", "founded": 1884,
+      "website": "https://www.piaggiogroup.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Piaggio-logo.svg/250px-Piaggio-logo.svg.png",
+      "manufacturerGroup": "Piaggio Group", "premium": false,
+      "models": [
+        { "id": "piaggio-liberty-125", "name": "Liberty 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2015-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "piaggio-liberty-150", "name": "Liberty 150", "category": "Scooter", "engineCc": 150, "bodyType": "scooter", "yearsAvailable": "2015-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "piaggio-beverly-300", "name": "Beverly 300", "category": "Scooter", "engineCc": 278, "bodyType": "scooter", "yearsAvailable": "2018-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "piaggio-beverly-400", "name": "Beverly 400", "category": "Scooter", "engineCc": 399, "bodyType": "scooter", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "piaggio-medley-150", "name": "Medley 150", "category": "Scooter", "engineCc": 150, "bodyType": "scooter", "yearsAvailable": "2016-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "piaggio-mp3-300", "name": "MP3 300", "category": "Scooter de 3 ruedas", "engineCc": 278, "bodyType": "scooter", "yearsAvailable": "2019-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "piaggio-mp3-500", "name": "MP3 500", "category": "Scooter de 3 ruedas", "engineCc": 493, "bodyType": "scooter", "yearsAvailable": "2019-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "piaggio-fly-125", "name": "Fly 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2014-2026", "origin": "Vietnam", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "piaggio-zip-50", "name": "Zip 50", "category": "Scooter económico", "engineCc": 50, "bodyType": "scooter", "yearsAvailable": "2010-2026", "origin": "Vietnam", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "piaggio-1", "name": "Piaggio 1", "category": "Scooter eléctrico", "engineCc": 0, "bodyType": "scooter", "yearsAvailable": "2022-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "vespa", "name": "Vespa", "country": "Italia", "founded": 1946,
+      "website": "https://www.vespa.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Vespa-logo.svg/250px-Vespa-logo.svg.png",
+      "manufacturerGroup": "Piaggio Group", "premium": true,
+      "models": [
+        { "id": "vespa-primavera-150", "name": "Primavera 150", "category": "Scooter clásico", "engineCc": 150, "bodyType": "scooter", "yearsAvailable": "2014-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "vespa-sprint-150", "name": "Sprint 150", "category": "Scooter clásico", "engineCc": 150, "bodyType": "scooter", "yearsAvailable": "2014-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "vespa-gts-300", "name": "GTS 300", "category": "Scooter clásico", "engineCc": 278, "bodyType": "scooter", "yearsAvailable": "2019-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "vespa-gts-super-300", "name": "GTS Super 300", "category": "Scooter clásico", "engineCc": 278, "bodyType": "scooter", "yearsAvailable": "2022-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "vespa-lx-125", "name": "LX 125", "category": "Scooter clásico", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2010-2020", "origin": "Italia", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "vespa-elettrica", "name": "Elettrica", "category": "Scooter eléctrico", "engineCc": 0, "bodyType": "scooter", "yearsAvailable": "2019-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "vespa-946", "name": "946", "category": "Scooter premium", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2013-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "vespa-px-150", "name": "PX 150", "category": "Scooter clásico", "engineCc": 150, "bodyType": "scooter", "yearsAvailable": "2015-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "vespa-primavera-50", "name": "Primavera 50", "category": "Scooter económico", "engineCc": 50, "bodyType": "scooter", "yearsAvailable": "2014-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "vespa-gts-300-hpe", "name": "GTS 300 HPE", "category": "Scooter deportivo", "engineCc": 278, "bodyType": "scooter", "yearsAvailable": "2023-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "aprilia", "name": "Aprilia", "country": "Italia", "founded": 1945,
+      "website": "https://www.aprilia.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Aprilia-logo.svg/250px-Aprilia-logo.svg.png",
+      "manufacturerGroup": "Piaggio Group", "premium": true,
+      "models": [
+        { "id": "aprilia-rs-457", "name": "RS 457", "category": "Deportiva", "engineCc": 457, "bodyType": "racing", "yearsAvailable": "2023-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "aprilia-rs-660", "name": "RS 660", "category": "Deportiva", "engineCc": 659, "bodyType": "racing", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "aprilia-rsv4", "name": "RSV4", "category": "Deportiva", "engineCc": 1099, "bodyType": "racing", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "aprilia-tuono-660", "name": "Tuono 660", "category": "Naked", "engineCc": 659, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "aprilia-tuono-v4", "name": "Tuono V4", "category": "Naked", "engineCc": 1077, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "aprilia-tuareg-660", "name": "Tuareg 660", "category": "Adventure/Enduro", "engineCc": 659, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "aprilia-sr-gt-200", "name": "SR GT 200", "category": "Scooter", "engineCc": 174, "bodyType": "scooter", "yearsAvailable": "2022-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "aprilia-sxr-160", "name": "SXR 160", "category": "Scooter", "engineCc": 155, "bodyType": "scooter", "yearsAvailable": "2018-2026", "origin": "Vietnam", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "aprilia-shiver-900", "name": "Shiver 900", "category": "Naked", "engineCc": 896, "bodyType": "naked", "yearsAvailable": "2017-2023", "origin": "Italia", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "aprilia-dorsoduro-900", "name": "Dorsoduro 900", "category": "Naked deportiva", "engineCc": 896, "bodyType": "naked", "yearsAvailable": "2017-2021", "origin": "Italia", "image": null, "discontinued": true, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "moto-guzzi", "name": "Moto Guzzi", "country": "Italia", "founded": 1921,
+      "website": "https://www.motoguzzi.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Moto_Guzzi_Logo.jpg/250px-Moto_Guzzi_Logo.jpg",
+      "manufacturerGroup": "Piaggio Group", "premium": true,
+      "models": [
+        { "id": "moto-guzzi-v7", "name": "V7", "category": "Café Racer", "engineCc": 853, "bodyType": "cafe_racer", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "moto-guzzi-v9-bobber", "name": "V9 Bobber", "category": "Cruiser", "engineCc": 853, "bodyType": "cruiser", "yearsAvailable": "2016-2023", "origin": "Italia", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "moto-guzzi-v85-tt", "name": "V85 TT", "category": "Adventure/Enduro", "engineCc": 853, "bodyType": "enduro", "yearsAvailable": "2019-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "moto-guzzi-v100-mandello", "name": "V100 Mandello", "category": "Touring deportiva", "engineCc": 1042, "bodyType": "touring", "yearsAvailable": "2022-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "moto-guzzi-california-1400", "name": "California 1400", "category": "Cruiser", "engineCc": 1380, "bodyType": "cruiser", "yearsAvailable": "2013-2020", "origin": "Italia", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "moto-guzzi-audace", "name": "Audace", "category": "Cruiser", "engineCc": 1380, "bodyType": "cruiser", "yearsAvailable": "2015-2020", "origin": "Italia", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "moto-guzzi-eldorado", "name": "Eldorado", "category": "Cruiser", "engineCc": 1380, "bodyType": "cruiser", "yearsAvailable": "2018-2022", "origin": "Italia", "image": null, "discontinued": true, "availableInChile": false },
+        { "id": "moto-guzzi-v7-stone", "name": "V7 Stone", "category": "Café Racer", "engineCc": 853, "bodyType": "cafe_racer", "yearsAvailable": "2021-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "moto-guzzi-mgx-21", "name": "MGX-21", "category": "Cruiser", "engineCc": 1380, "bodyType": "cruiser", "yearsAvailable": "2016-2020", "origin": "Italia", "image": null, "discontinued": true, "availableInChile": false },
+        { "id": "moto-guzzi-stelvio", "name": "Stelvio", "category": "Adventure/Enduro", "engineCc": 1042, "bodyType": "enduro", "yearsAvailable": "2024-2026", "origin": "Italia", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "harley-davidson", "name": "Harley-Davidson", "country": "Estados Unidos", "founded": 1903,
+      "website": "https://www.harley-davidson.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Harley-Davidson_logo.svg/250px-Harley-Davidson_logo.svg.png",
+      "manufacturerGroup": "Harley-Davidson Motor Company", "premium": true,
+      "models": [
+        { "id": "harley-davidson-sportster-s", "name": "Sportster S", "category": "Cruiser", "engineCc": 1252, "bodyType": "cruiser", "yearsAvailable": "2021-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "harley-davidson-iron-883", "name": "Iron 883", "category": "Cruiser", "engineCc": 883, "bodyType": "cruiser", "yearsAvailable": "2015-2022", "origin": "Estados Unidos", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "harley-davidson-fat-boy", "name": "Fat Boy", "category": "Cruiser", "engineCc": 1868, "bodyType": "cruiser", "yearsAvailable": "2018-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "harley-davidson-fat-bob", "name": "Fat Bob", "category": "Cruiser", "engineCc": 1868, "bodyType": "cruiser", "yearsAvailable": "2018-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "harley-davidson-street-bob", "name": "Street Bob", "category": "Cruiser", "engineCc": 1746, "bodyType": "cruiser", "yearsAvailable": "2018-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "harley-davidson-road-king", "name": "Road King", "category": "Touring", "engineCc": 1868, "bodyType": "touring", "yearsAvailable": "2017-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "harley-davidson-street-glide", "name": "Street Glide", "category": "Touring", "engineCc": 1868, "bodyType": "touring", "yearsAvailable": "2017-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "harley-davidson-road-glide", "name": "Road Glide", "category": "Touring", "engineCc": 1868, "bodyType": "touring", "yearsAvailable": "2017-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "harley-davidson-low-rider-s", "name": "Low Rider S", "category": "Cruiser", "engineCc": 1868, "bodyType": "cruiser", "yearsAvailable": "2020-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "harley-davidson-pan-america-1250", "name": "Pan America 1250", "category": "Adventure/Enduro", "engineCc": 1252, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "indian", "name": "Indian Motorcycle", "country": "Estados Unidos", "founded": 1901,
+      "website": "https://www.indianmotorcycle.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Indian_Motorcycle_logo.svg/250px-Indian_Motorcycle_logo.svg.png",
+      "manufacturerGroup": "Polaris Industries", "premium": true,
+      "models": [
+        { "id": "indian-scout", "name": "Scout", "category": "Cruiser", "engineCc": 999, "bodyType": "cruiser", "yearsAvailable": "2015-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "indian-scout-bobber", "name": "Scout Bobber", "category": "Cruiser", "engineCc": 999, "bodyType": "cruiser", "yearsAvailable": "2018-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "indian-chief", "name": "Chief", "category": "Cruiser", "engineCc": 1890, "bodyType": "cruiser", "yearsAvailable": "2022-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "indian-chief-dark-horse", "name": "Chief Dark Horse", "category": "Cruiser", "engineCc": 1890, "bodyType": "cruiser", "yearsAvailable": "2022-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "indian-chieftain", "name": "Chieftain", "category": "Touring", "engineCc": 1890, "bodyType": "touring", "yearsAvailable": "2019-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "indian-roadmaster", "name": "Roadmaster", "category": "Touring", "engineCc": 1890, "bodyType": "touring", "yearsAvailable": "2019-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "indian-springfield", "name": "Springfield", "category": "Touring", "engineCc": 1890, "bodyType": "touring", "yearsAvailable": "2016-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "indian-ftr", "name": "FTR", "category": "Naked deportiva", "engineCc": 1203, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "indian-sport-scout", "name": "Sport Scout", "category": "Cruiser deportivo", "engineCc": 999, "bodyType": "cruiser", "yearsAvailable": "2024-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "indian-pursuit", "name": "Pursuit", "category": "Touring", "engineCc": 1890, "bodyType": "touring", "yearsAvailable": "2022-2026", "origin": "Estados Unidos", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "husqvarna", "name": "Husqvarna", "country": "Suecia", "founded": 1903,
+      "website": "https://www.husqvarna-motorcycles.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Husqvarna_Logo.png/250px-Husqvarna_Logo.png",
+      "manufacturerGroup": "Pierer Mobility Group", "premium": true,
+      "models": [
+        { "id": "husqvarna-svartpilen-401", "name": "Svartpilen 401", "category": "Naked", "engineCc": 399, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "husqvarna-vitpilen-401", "name": "Vitpilen 401", "category": "Café Racer", "engineCc": 399, "bodyType": "cafe_racer", "yearsAvailable": "2021-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "husqvarna-svartpilen-125", "name": "Svartpilen 125", "category": "Naked", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "husqvarna-norden-901", "name": "Norden 901", "category": "Adventure/Enduro", "engineCc": 889, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "husqvarna-fe-350", "name": "FE 350", "category": "Enduro competición", "engineCc": 350, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "husqvarna-fe-450", "name": "FE 450", "category": "Enduro competición", "engineCc": 450, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "husqvarna-tc-125", "name": "TC 125", "category": "Motocross", "engineCc": 125, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "husqvarna-te-300", "name": "TE 300", "category": "Enduro competición", "engineCc": 293, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "husqvarna-svartpilen-801", "name": "Svartpilen 801", "category": "Naked", "engineCc": 799, "bodyType": "naked", "yearsAvailable": "2024-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "husqvarna-norden-901-expedition", "name": "Norden 901 Expedition", "category": "Adventure/Enduro", "engineCc": 889, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "gasgas", "name": "GasGas", "country": "España", "founded": 1985,
+      "website": "https://www.gasgas.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/GasGas_Logo.jpg/250px-GasGas_Logo.jpg",
+      "manufacturerGroup": "Pierer Mobility Group", "premium": false,
+      "models": [
+        { "id": "gasgas-ec-300", "name": "EC 300", "category": "Enduro competición", "engineCc": 293, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gasgas-mc-450f", "name": "MC 450F", "category": "Motocross", "engineCc": 450, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gasgas-es-700", "name": "ES 700", "category": "Adventure/Enduro", "engineCc": 693, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gasgas-sm-700", "name": "SM 700", "category": "Naked", "engineCc": 693, "bodyType": "naked", "yearsAvailable": "2023-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gasgas-txt-racing", "name": "TXT Racing", "category": "Trial", "engineCc": 300, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "España", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "gasgas-duke-125", "name": "Duke 125", "category": "Naked", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2022-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gasgas-duke-390", "name": "Duke 390", "category": "Naked", "engineCc": 399, "bodyType": "naked", "yearsAvailable": "2022-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gasgas-mc-250", "name": "MC 250", "category": "Motocross", "engineCc": 250, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gasgas-ec-250f", "name": "EC 250F", "category": "Enduro competición", "engineCc": 250, "bodyType": "enduro", "yearsAvailable": "2021-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gasgas-wild-ac", "name": "Wild AC", "category": "Enduro eléctrica", "engineCc": 0, "bodyType": "enduro", "yearsAvailable": "2023-2026", "origin": "Austria", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "hero", "name": "Hero", "country": "India", "founded": 1984,
+      "website": "https://www.heromotocorp.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Hero_MotoCorp_Logo.svg/250px-Hero_MotoCorp_Logo.svg.png",
+      "manufacturerGroup": "Hero MotoCorp", "premium": false,
+      "models": [
+        { "id": "hero-splendor-plus", "name": "Splendor Plus", "category": "Naked económica", "engineCc": 97, "bodyType": "naked", "yearsAvailable": "2010-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hero-hf-deluxe", "name": "HF Deluxe", "category": "Naked económica", "engineCc": 97, "bodyType": "naked", "yearsAvailable": "2012-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hero-glamour", "name": "Glamour", "category": "Naked económica", "engineCc": 124, "bodyType": "naked", "yearsAvailable": "2015-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hero-super-splendor", "name": "Super Splendor", "category": "Naked económica", "engineCc": 124, "bodyType": "naked", "yearsAvailable": "2014-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hero-xtreme-160r", "name": "Xtreme 160R", "category": "Naked deportiva", "engineCc": 163, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hero-xpulse-200", "name": "Xpulse 200", "category": "Adventure/Enduro", "engineCc": 199, "bodyType": "enduro", "yearsAvailable": "2019-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hero-karizma-xmr", "name": "Karizma XMR", "category": "Naked deportiva", "engineCc": 210, "bodyType": "naked", "yearsAvailable": "2023-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "hero-destini-125", "name": "Destini 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2018-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hero-pleasure-plus", "name": "Pleasure Plus", "category": "Scooter", "engineCc": 110, "bodyType": "scooter", "yearsAvailable": "2016-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hero-mavrick-440", "name": "Mavrick 440", "category": "Naked", "engineCc": 440, "bodyType": "naked", "yearsAvailable": "2024-2026", "origin": "India", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "loncin", "name": "Loncin", "country": "China", "founded": 1993,
+      "website": "https://www.loncin.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/LONCIN_LOGO.jpg/250px-LONCIN_LOGO.jpg",
+      "manufacturerGroup": "Loncin Holdings", "premium": false,
+      "models": [
+        { "id": "loncin-lx110", "name": "LX110", "category": "Naked económica", "engineCc": 110, "bodyType": "naked", "yearsAvailable": "2012-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "loncin-lx150", "name": "LX150", "category": "Naked económica", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2014-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "loncin-cr4-125", "name": "CR4 125", "category": "Naked", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "loncin-voge-300ac", "name": "Voge 300AC", "category": "Naked", "engineCc": 292, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": true, "availableInChile": false },
+        { "id": "loncin-lx200gy", "name": "LX200GY", "category": "Enduro", "engineCc": 200, "bodyType": "enduro", "yearsAvailable": "2017-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "loncin-jl150-68", "name": "JL150-68", "category": "Scooter", "engineCc": 150, "bodyType": "scooter", "yearsAvailable": "2015-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "loncin-lx250gy", "name": "LX250GY", "category": "Enduro", "engineCc": 250, "bodyType": "enduro", "yearsAvailable": "2018-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "loncin-cr5-150", "name": "CR5 150", "category": "Naked", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "loncin-lx125t", "name": "LX125T", "category": "Naked económica", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2013-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "loncin-jl125-30", "name": "JL125-30", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2016-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "haojue", "name": "Haojue", "country": "China", "founded": 1993,
+      "website": "https://www.haojue.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Haojue_Holdings_logo.svg/250px-Haojue_Holdings_logo.svg.png",
+      "manufacturerGroup": "Haojue Group / Suzuki Motor Corporation", "premium": false,
+      "models": [
+        { "id": "haojue-dr160", "name": "DR160", "category": "Naked deportiva", "engineCc": 162, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haojue-nk150", "name": "NK150", "category": "Naked", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2017-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haojue-uhr150", "name": "UHR150", "category": "Adventure/Enduro liviana", "engineCc": 150, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haojue-tr300", "name": "TR300", "category": "Adventure/Enduro", "engineCc": 300, "bodyType": "enduro", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haojue-hj125-8", "name": "HJ125-8", "category": "Naked económica", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2010-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haojue-hj150-9", "name": "HJ150-9", "category": "Naked económica", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2012-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haojue-dl250", "name": "DL250", "category": "Naked deportiva", "engineCc": 250, "bodyType": "naked", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haojue-xcr300", "name": "XCR300", "category": "Deportiva", "engineCc": 300, "bodyType": "racing", "yearsAvailable": "2023-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "haojue-vr150", "name": "VR150", "category": "Café Racer", "engineCc": 150, "bodyType": "cafe_racer", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haojue-suzuki-gsx125", "name": "Suzuki GSX125", "category": "Deportiva", "engineCc": 125, "bodyType": "racing", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "lifan", "name": "Lifan", "country": "China", "founded": 1992,
+      "website": "https://www.lifan.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/lifan.png",
+      "manufacturerGroup": "Lifan Group", "premium": false,
+      "models": [
+        { "id": "lifan-kp150", "name": "KP 150", "category": "Naked", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2016-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "lifan-kps150", "name": "KPS 150", "category": "Naked", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2017-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "lifan-kp200", "name": "KP 200", "category": "Naked", "engineCc": 200, "bodyType": "naked", "yearsAvailable": "2018-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "lifan-kps200", "name": "KPS 200", "category": "Deportiva", "engineCc": 200, "bodyType": "racing", "yearsAvailable": "2018-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "lifan-x-pect-150", "name": "X-Pect 150", "category": "Adventure/Enduro liviana", "engineCc": 150, "bodyType": "enduro", "yearsAvailable": "2019-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "lifan-lf150-10s", "name": "LF150-10S", "category": "Naked económica", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2015-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "lifan-v16", "name": "V16", "category": "Naked económica", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2014-2022", "origin": "China", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "lifan-ktm150", "name": "KT 150", "category": "Enduro", "engineCc": 150, "bodyType": "enduro", "yearsAvailable": "2016-2022", "origin": "China", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "lifan-ax150", "name": "AX 150", "category": "Adventure/Enduro liviana", "engineCc": 150, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "lifan-city-r150", "name": "City R150", "category": "Naked", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "keeway", "name": "Keeway", "country": "China", "founded": 2003,
+      "website": "https://www.keewaymotor.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Keeway_logo.svg/250px-Keeway_logo.svg.png",
+      "manufacturerGroup": "Qianjiang Group", "premium": false,
+      "models": [
+        { "id": "keeway-rks-125", "name": "RKS 125", "category": "Naked", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2018-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "keeway-superlight-200", "name": "Superlight 200", "category": "Café Racer", "engineCc": 200, "bodyType": "cafe_racer", "yearsAvailable": "2019-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "keeway-patagonia-250", "name": "Patagonia 250", "category": "Adventure/Enduro", "engineCc": 250, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "keeway-v-twin-250", "name": "V-Twin 250", "category": "Cruiser", "engineCc": 250, "bodyType": "cruiser", "yearsAvailable": "2019-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "keeway-k-light-250v", "name": "K-Light 250V", "category": "Cruiser", "engineCc": 250, "bodyType": "cruiser", "yearsAvailable": "2020-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "keeway-blackster-250", "name": "Blackster 250", "category": "Cruiser", "engineCc": 250, "bodyType": "cruiser", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "keeway-dorado-250", "name": "Dorado 250", "category": "Cruiser", "engineCc": 250, "bodyType": "cruiser", "yearsAvailable": "2021-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "keeway-zahara-125", "name": "Zahara 125", "category": "Scooter", "engineCc": 125, "bodyType": "scooter", "yearsAvailable": "2017-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "keeway-f-act-50", "name": "F-Act 50", "category": "Scooter económico", "engineCc": 50, "bodyType": "scooter", "yearsAvailable": "2016-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "keeway-sixties-300", "name": "Sixties 300", "category": "Scooter clásico", "engineCc": 278, "bodyType": "scooter", "yearsAvailable": "2022-2026", "origin": "China", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "bera", "name": "Bera", "country": "Colombia", "founded": 1996,
+      "website": "https://www.beramotos.com",
+      "logo": null,
+      "manufacturerGroup": "Auteco Mobility", "premium": false,
+      "models": [
+        { "id": "bera-br200", "name": "BR 200", "category": "Naked", "engineCc": 200, "bodyType": "naked", "yearsAvailable": "2018-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "bera-br250", "name": "BR 250", "category": "Naked", "engineCc": 250, "bodyType": "naked", "yearsAvailable": "2019-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "bera-torpedo-200", "name": "Torpedo 200", "category": "Naked", "engineCc": 200, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "bera-explorer-200", "name": "Explorer 200", "category": "Adventure/Enduro", "engineCc": 200, "bodyType": "enduro", "yearsAvailable": "2019-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "bera-explorer-250", "name": "Explorer 250", "category": "Adventure/Enduro", "engineCc": 250, "bodyType": "enduro", "yearsAvailable": "2020-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "bera-ranger-200", "name": "Ranger 200", "category": "Adventure/Enduro", "engineCc": 200, "bodyType": "enduro", "yearsAvailable": "2018-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "bera-ranger-250", "name": "Ranger 250", "category": "Adventure/Enduro", "engineCc": 250, "bodyType": "enduro", "yearsAvailable": "2019-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "bera-nkd-125", "name": "NKD 125", "category": "Naked económica", "engineCc": 125, "bodyType": "naked", "yearsAvailable": "2017-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "bera-sbr-200", "name": "SBR 200", "category": "Deportiva", "engineCc": 200, "bodyType": "racing", "yearsAvailable": "2021-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "bera-brz-150", "name": "BRZ 150", "category": "Naked", "engineCc": 150, "bodyType": "naked", "yearsAvailable": "2020-2026", "origin": "Colombia", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    }
+  ]
+}

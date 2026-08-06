@@ -43,6 +43,7 @@ const AUTO_BRANDS: VehicleBrand[] = [
       L("Corolla",      "sedan"),
       L("Corolla Cross","suv"),
       L("Camry",        "sedan"),
+      L("Raize",        "suv"),
       L("RAV4",         "suv"),
       L("CH-R",         "suv"),
       L("Fortuner",     "suv"),

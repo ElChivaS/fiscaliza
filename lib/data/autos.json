@@ -1,0 +1,625 @@
+{
+  "metadata": {
+    "description": "Catálogo de autos disponibles en Chile — 30 marcas provistas por el usuario + 3 del catálogo anterior que no estaban en esa lista (Haval, Mercedes-Benz, Audi)",
+    "brands_expected": 33,
+    "models_per_brand": 10
+  },
+  "schema": {
+    "brand": [
+      "id",
+      "name",
+      "country",
+      "founded",
+      "website",
+      "logo",
+      "manufacturerGroup",
+      "premium"
+    ],
+    "model": [
+      "id",
+      "name",
+      "segment",
+      "bodyType",
+      "yearsAvailable",
+      "image",
+      "discontinued",
+      "availableInChile"
+    ]
+  },
+  "brands": [
+    {
+      "id": "toyota", "name": "Toyota", "country": "Japón", "founded": 1937,
+      "website": "https://www.toyota.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/toyota.png",
+      "manufacturerGroup": "Toyota Group", "premium": false,
+      "models": [
+        { "id": "toyota-yaris", "name": "Yaris", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "toyota-corolla", "name": "Corolla", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "toyota-corolla-cross", "name": "Corolla Cross", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "toyota-camry", "name": "Camry", "segment": "D", "bodyType": "sedan", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "toyota-raize", "name": "Raize", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "toyota-rav4", "name": "RAV4", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "toyota-hilux", "name": "Hilux", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "toyota-land-cruiser-prado", "name": "Land Cruiser Prado", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "toyota-fortuner", "name": "Fortuner", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2016-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "toyota-gr86", "name": "GR86", "segment": "Deportivo", "bodyType": "coupe", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "suzuki", "name": "Suzuki", "country": "Japón", "founded": 1909,
+      "website": "https://www.globalsuzuki.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/suzuki.png",
+      "manufacturerGroup": "Suzuki Motor Corporation", "premium": false,
+      "models": [
+        { "id": "suzuki-alto", "name": "Alto", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2015-2023", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "suzuki-s-presso", "name": "S-Presso", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-swift", "name": "Swift", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-baleno", "name": "Baleno", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-dzire", "name": "Dzire", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-fronx", "name": "Fronx", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-jimny", "name": "Jimny", "segment": "Off-road", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-vitara", "name": "Vitara", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2016-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-s-cross", "name": "S-Cross", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "suzuki-grand-vitara", "name": "Grand Vitara", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "hyundai", "name": "Hyundai", "country": "Corea del Sur", "founded": 1967,
+      "website": "https://www.hyundai.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/hyundai.png",
+      "manufacturerGroup": "Hyundai Motor Group", "premium": false,
+      "models": [
+        { "id": "hyundai-grand-i10", "name": "Grand i10", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hyundai-i20", "name": "i20", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hyundai-accent", "name": "Accent", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hyundai-elantra", "name": "Elantra", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hyundai-sonata", "name": "Sonata", "segment": "D", "bodyType": "sedan", "yearsAvailable": "2015-2020", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "hyundai-venue", "name": "Venue", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hyundai-creta", "name": "Creta", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hyundai-tucson", "name": "Tucson", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hyundai-santa-fe", "name": "Santa Fe", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "hyundai-staria", "name": "Staria", "segment": "Van/Minivan", "bodyType": "van", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "kia", "name": "Kia", "country": "Corea del Sur", "founded": 1944,
+      "website": "https://www.kia.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/kia.png",
+      "manufacturerGroup": "Hyundai Motor Group", "premium": false,
+      "models": [
+        { "id": "kia-morning", "name": "Morning", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kia-soluto", "name": "Soluto", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kia-rio", "name": "Rio", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kia-cerato", "name": "Cerato", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kia-k3", "name": "K3", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kia-sonet", "name": "Sonet", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kia-seltos", "name": "Seltos", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kia-sportage", "name": "Sportage", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kia-sorento", "name": "Sorento", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "kia-carnival", "name": "Carnival", "segment": "Van/Minivan", "bodyType": "van", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "chevrolet", "name": "Chevrolet", "country": "Estados Unidos", "founded": 1911,
+      "website": "https://www.chevrolet.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/chevrolet.png",
+      "manufacturerGroup": "General Motors", "premium": false,
+      "models": [
+        { "id": "chevrolet-spark-euv", "name": "Spark EUV", "segment": "A-SUV", "bodyType": "suv", "yearsAvailable": "2019-2023", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "chevrolet-onix", "name": "Onix", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chevrolet-onix-plus", "name": "Onix Plus", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chevrolet-sail", "name": "Sail", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2015-2020", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "chevrolet-montana", "name": "Montana", "segment": "Pickup compacta", "bodyType": "pickup", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chevrolet-tracker", "name": "Tracker", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chevrolet-groove", "name": "Groove", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chevrolet-captiva", "name": "Captiva", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chevrolet-traverse", "name": "Traverse", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "chevrolet-silverado", "name": "Silverado", "segment": "Pickup grande", "bodyType": "pickup", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "ford", "name": "Ford", "country": "Estados Unidos", "founded": 1903,
+      "website": "https://www.ford.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/ford.png",
+      "manufacturerGroup": "Ford Motor Company", "premium": false,
+      "models": [
+        { "id": "ford-territory", "name": "Territory", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ford-escape", "name": "Escape", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ford-everest", "name": "Everest", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ford-explorer", "name": "Explorer", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "ford-expedition", "name": "Expedition", "segment": "E-SUV", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "ford-maverick", "name": "Maverick", "segment": "Pickup compacta", "bodyType": "pickup", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "ford-ranger", "name": "Ranger", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ford-f150", "name": "F-150", "segment": "Pickup grande", "bodyType": "pickup", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "ford-mustang", "name": "Mustang", "segment": "Deportivo", "bodyType": "coupe", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "ford-bronco", "name": "Bronco", "segment": "D-SUV Off-road", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "mg", "name": "MG", "country": "Reino Unido", "founded": 1924,
+      "website": "https://www.mgmotor.eu",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/mg.png",
+      "manufacturerGroup": "SAIC Motor", "premium": false,
+      "models": [
+        { "id": "mg-mg3", "name": "MG3", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mg-mg5", "name": "MG5", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mg-gt", "name": "GT", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2016-2021", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "mg-zs", "name": "ZS", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mg-zs-ev", "name": "ZS EV", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mg-rx5", "name": "RX5", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mg-rx8", "name": "RX8", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mg-marvel-r", "name": "Marvel R", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mg-mg4-electric", "name": "MG4 Electric", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mg-cyberster", "name": "Cyberster", "segment": "Deportivo", "bodyType": "coupe", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "mazda", "name": "Mazda", "country": "Japón", "founded": 1920,
+      "website": "https://www.mazda.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/mazda.png",
+      "manufacturerGroup": "Mazda Motor Corporation", "premium": false,
+      "models": [
+        { "id": "mazda-mazda2-sport", "name": "Mazda2 Sport", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mazda-mazda2-sedan", "name": "Mazda2 Sedán", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mazda-mazda3-sport", "name": "Mazda3 Sport", "segment": "C", "bodyType": "hatchback", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mazda-mazda3-sedan", "name": "Mazda3 Sedán", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mazda-cx3", "name": "CX-3", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2016-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mazda-cx30", "name": "CX-30", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mazda-cx5", "name": "CX-5", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mazda-cx60", "name": "CX-60", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mazda-cx90", "name": "CX-90", "segment": "E-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "mazda-mx5", "name": "MX-5", "segment": "Deportivo", "bodyType": "coupe", "yearsAvailable": "2016-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "volkswagen", "name": "Volkswagen", "country": "Alemania", "founded": 1937,
+      "website": "https://www.volkswagen.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/volkswagen.png",
+      "manufacturerGroup": "Volkswagen Group", "premium": false,
+      "models": [
+        { "id": "volkswagen-polo", "name": "Polo", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "volkswagen-virtus", "name": "Virtus", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "volkswagen-vento", "name": "Vento", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2015-2021", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "volkswagen-golf-gti", "name": "Golf GTI", "segment": "C Deportivo", "bodyType": "hatchback", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "volkswagen-t-cross", "name": "T-Cross", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "volkswagen-taos", "name": "Taos", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "volkswagen-tiguan", "name": "Tiguan", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "volkswagen-amarok", "name": "Amarok", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2011-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "volkswagen-id4", "name": "ID.4", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "volkswagen-nivus", "name": "Nivus", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "peugeot", "name": "Peugeot", "country": "Francia", "founded": 1810,
+      "website": "https://www.peugeot.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/peugeot.png",
+      "manufacturerGroup": "Stellantis", "premium": false,
+      "models": [
+        { "id": "peugeot-208", "name": "208", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "peugeot-2008", "name": "2008", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "peugeot-308", "name": "308", "segment": "C", "bodyType": "hatchback", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "peugeot-3008", "name": "3008", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "peugeot-5008", "name": "5008", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "peugeot-partner", "name": "Partner", "segment": "Van comercial", "bodyType": "van", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "peugeot-expert", "name": "Expert", "segment": "Van comercial", "bodyType": "van", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "peugeot-boxer", "name": "Boxer", "segment": "Van comercial grande", "bodyType": "van", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "peugeot-landtrek", "name": "Landtrek", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "peugeot-e-2008", "name": "e-2008", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "nissan", "name": "Nissan", "country": "Japón", "founded": 1933,
+      "website": "https://www.nissan-global.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/nissan.png",
+      "manufacturerGroup": "Alianza Renault-Nissan-Mitsubishi", "premium": false,
+      "models": [
+        { "id": "nissan-versa", "name": "Versa", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "nissan-sentra", "name": "Sentra", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "nissan-altima", "name": "Altima", "segment": "D", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "nissan-kicks", "name": "Kicks", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "nissan-qashqai", "name": "Qashqai", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "nissan-x-trail", "name": "X-Trail", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "nissan-pathfinder", "name": "Pathfinder", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2013-2020", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "nissan-navara", "name": "Navara", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "nissan-frontier-pro", "name": "Frontier Pro", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "nissan-x-trail-e-power", "name": "X-Trail e-Power", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "mitsubishi", "name": "Mitsubishi", "country": "Japón", "founded": 1970,
+      "website": "https://www.mitsubishi-motors.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/mitsubishi.png",
+      "manufacturerGroup": "Alianza Renault-Nissan-Mitsubishi", "premium": false,
+      "models": [
+        { "id": "mitsubishi-mirage", "name": "Mirage", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2014-2024", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "mitsubishi-attrage", "name": "Attrage", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2014-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mitsubishi-eclipse-cross", "name": "Eclipse Cross", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mitsubishi-outlander", "name": "Outlander", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mitsubishi-montero-sport", "name": "Montero Sport", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2015-2019", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "mitsubishi-l200", "name": "L200", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2015-2023", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "mitsubishi-asx", "name": "ASX", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2011-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mitsubishi-xpander", "name": "Xpander", "segment": "Minivan", "bodyType": "van", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mitsubishi-delica", "name": "Delica", "segment": "Van/Minivan", "bodyType": "van", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mitsubishi-triton", "name": "Triton", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "subaru", "name": "Subaru", "country": "Japón", "founded": 1953,
+      "website": "https://www.subaru.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/subaru.png",
+      "manufacturerGroup": "Subaru Corporation", "premium": false,
+      "models": [
+        { "id": "subaru-impreza", "name": "Impreza", "segment": "C", "bodyType": "hatchback", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "subaru-wrx", "name": "WRX", "segment": "C Deportivo", "bodyType": "sedan", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "subaru-brz", "name": "BRZ", "segment": "Deportivo", "bodyType": "coupe", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "subaru-crosstrek", "name": "Crosstrek", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "subaru-forester", "name": "Forester", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "subaru-outback", "name": "Outback", "segment": "D", "bodyType": "wagon", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "subaru-legacy", "name": "Legacy", "segment": "D", "bodyType": "sedan", "yearsAvailable": "2015-2021", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "subaru-solterra", "name": "Solterra", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "subaru-xv", "name": "XV", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2017-2023", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "subaru-evoltis", "name": "Evoltis", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "honda", "name": "Honda", "country": "Japón", "founded": 1948,
+      "website": "https://www.honda.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/honda.png",
+      "manufacturerGroup": "Honda Motor Co.", "premium": false,
+      "models": [
+        { "id": "honda-city", "name": "City", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-civic", "name": "Civic", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-accord", "name": "Accord", "segment": "D", "bodyType": "sedan", "yearsAvailable": "2018-2023", "image": null, "discontinued": true, "availableInChile": false },
+        { "id": "honda-hrv", "name": "HR-V", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-zrv", "name": "ZR-V", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-crv", "name": "CR-V", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-pilot", "name": "Pilot", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "honda-ridgeline", "name": "Ridgeline", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "honda-brv", "name": "BR-V", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "honda-civic-type-r", "name": "Civic Type R", "segment": "C Deportivo", "bodyType": "hatchback", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "renault", "name": "Renault", "country": "Francia", "founded": 1899,
+      "website": "https://www.renault.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/renault.png",
+      "manufacturerGroup": "Renault Group", "premium": false,
+      "models": [
+        { "id": "renault-kwid", "name": "Kwid", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "renault-logan", "name": "Logan", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2014-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "renault-sandero", "name": "Sandero", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2014-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "renault-stepway", "name": "Stepway", "segment": "B-SUV", "bodyType": "hatchback", "yearsAvailable": "2014-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "renault-duster", "name": "Duster", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "renault-oroch", "name": "Oroch", "segment": "Pickup compacta", "bodyType": "pickup", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "renault-arkana", "name": "Arkana", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "renault-koleos", "name": "Koleos", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "renault-kangoo", "name": "Kangoo", "segment": "Van comercial", "bodyType": "van", "yearsAvailable": "2013-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "renault-master", "name": "Master", "segment": "Van comercial grande", "bodyType": "van", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "citroen", "name": "Citroën", "country": "Francia", "founded": 1919,
+      "website": "https://www.citroen.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/citroen.png",
+      "manufacturerGroup": "Stellantis", "premium": false,
+      "models": [
+        { "id": "citroen-c3", "name": "C3", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "citroen-c3-aircross", "name": "C3 Aircross", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "citroen-c4", "name": "C4", "segment": "C", "bodyType": "hatchback", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "citroen-c4-cactus", "name": "C4 Cactus", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2018-2021", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "citroen-c5-aircross", "name": "C5 Aircross", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "citroen-berlingo", "name": "Berlingo", "segment": "Van comercial", "bodyType": "van", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "citroen-jumpy", "name": "Jumpy", "segment": "Van comercial", "bodyType": "van", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "citroen-jumper", "name": "Jumper", "segment": "Van comercial grande", "bodyType": "van", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "citroen-e-c4", "name": "ë-C4", "segment": "C", "bodyType": "hatchback", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "citroen-basalt", "name": "Basalt", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "fiat", "name": "Fiat", "country": "Italia", "founded": 1899,
+      "website": "https://www.fiat.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/fiat.png",
+      "manufacturerGroup": "Stellantis", "premium": false,
+      "models": [
+        { "id": "fiat-mobi", "name": "Mobi", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2016-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "fiat-argo", "name": "Argo", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "fiat-cronos", "name": "Cronos", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "fiat-pulse", "name": "Pulse", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "fiat-fastback", "name": "Fastback", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "fiat-toro", "name": "Toro", "segment": "Pickup compacta", "bodyType": "pickup", "yearsAvailable": "2016-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "fiat-strada", "name": "Strada", "segment": "Pickup compacta", "bodyType": "pickup", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "fiat-fiorino", "name": "Fiorino", "segment": "Van comercial pequeña", "bodyType": "van", "yearsAvailable": "2014-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "fiat-ducato", "name": "Ducato", "segment": "Van comercial grande", "bodyType": "van", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "fiat-500e", "name": "500e", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "jeep", "name": "Jeep", "country": "Estados Unidos", "founded": 1943,
+      "website": "https://www.jeep.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/jeep.png",
+      "manufacturerGroup": "Stellantis", "premium": false,
+      "models": [
+        { "id": "jeep-renegade", "name": "Renegade", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jeep-compass", "name": "Compass", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jeep-commander", "name": "Commander", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jeep-wrangler", "name": "Wrangler", "segment": "Off-road", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jeep-gladiator", "name": "Gladiator", "segment": "Pickup mediana Off-road", "bodyType": "pickup", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jeep-grand-cherokee", "name": "Grand Cherokee", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jeep-avenger", "name": "Avenger", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "jeep-wagoneer", "name": "Wagoneer", "segment": "E-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "jeep-cherokee", "name": "Cherokee", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2014-2023", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "jeep-recon", "name": "Recon", "segment": "C-SUV Off-road eléctrico", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "chery", "name": "Chery", "country": "China", "founded": 1997,
+      "website": "https://www.cheryinternational.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/chery.png",
+      "manufacturerGroup": "Chery Holding Group", "premium": false,
+      "models": [
+        { "id": "chery-tiggo-2-pro", "name": "Tiggo 2 Pro", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chery-tiggo-4-pro", "name": "Tiggo 4 Pro", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chery-tiggo-7-pro", "name": "Tiggo 7 Pro", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chery-tiggo-8-pro", "name": "Tiggo 8 Pro", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chery-arrizo-5", "name": "Arrizo 5", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chery-arrizo-8", "name": "Arrizo 8", "segment": "D", "bodyType": "sedan", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chery-eq7", "name": "eQ7", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chery-tiggo-cross", "name": "Tiggo Cross", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chery-tiggo-9", "name": "Tiggo 9", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "chery-fulwin-a8", "name": "Fulwin A8", "segment": "D", "bodyType": "sedan", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "great-wall", "name": "GWM", "country": "China", "founded": 1984,
+      "website": "https://www.gwm-global.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/great-wall.png",
+      "manufacturerGroup": "Great Wall Motors", "premium": false,
+      "models": [
+        { "id": "great-wall-poer", "name": "Poer", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "great-wall-poer-plus", "name": "Poer Plus", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "great-wall-cannon-alpha", "name": "Cannon Alpha", "segment": "Pickup mediana premium", "bodyType": "pickup", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "great-wall-jolion", "name": "Jolion", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "great-wall-haval-h6", "name": "Haval H6", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "great-wall-haval-h6-hev", "name": "Haval H6 HEV", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "great-wall-tank-300", "name": "Tank 300", "segment": "Off-road premium", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "great-wall-tank-500", "name": "Tank 500", "segment": "D-SUV premium Off-road", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "great-wall-ora-03", "name": "Ora 03", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "great-wall-wey-80", "name": "Wey 80", "segment": "D-SUV premium", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "changan", "name": "Changan", "country": "China", "founded": 1862,
+      "website": "https://www.globalchangan.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/changan.png",
+      "manufacturerGroup": "Changan Automobile", "premium": false,
+      "models": [
+        { "id": "changan-alsvin", "name": "Alsvin", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "changan-cs15", "name": "CS15", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "changan-cs35-plus", "name": "CS35 Plus", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "changan-cs55-plus", "name": "CS55 Plus", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "changan-cs75-plus", "name": "CS75 Plus", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "changan-uni-t", "name": "UNI-T", "segment": "C-SUV coupé", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "changan-uni-k", "name": "UNI-K", "segment": "D-SUV coupé", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "changan-hunter", "name": "Hunter", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "changan-hunter-plus", "name": "Hunter Plus", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "changan-lumin", "name": "Lumin", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "geely", "name": "Geely", "country": "China", "founded": 1986,
+      "website": "https://www.geely.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/geely.png",
+      "manufacturerGroup": "Zhejiang Geely Holding Group", "premium": false,
+      "models": [
+        { "id": "geely-gx3-pro", "name": "GX3 Pro", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "geely-coolray", "name": "Coolray", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "geely-starray", "name": "Starray", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "geely-okavango", "name": "Okavango", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "geely-monjaro", "name": "Monjaro", "segment": "D-SUV premium", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "geely-emgrand", "name": "Emgrand", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "geely-geometry-c", "name": "Geometry C", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "geely-ex5", "name": "EX5", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "geely-panda-mini", "name": "Panda Mini", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "geely-galaxy-e5", "name": "Galaxy E5", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "jetour", "name": "Jetour", "country": "China", "founded": 2018,
+      "website": "https://www.jetour.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/jetour.png",
+      "manufacturerGroup": "Chery Holding Group", "premium": false,
+      "models": [
+        { "id": "jetour-x50", "name": "X50", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jetour-x70", "name": "X70", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jetour-x70-plus", "name": "X70 Plus", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jetour-x90-plus", "name": "X90 Plus", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jetour-dashing", "name": "Dashing", "segment": "B-SUV coupé", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jetour-traveller", "name": "Traveller", "segment": "Van/MPV", "bodyType": "van", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jetour-t2", "name": "T2", "segment": "C-SUV Off-road", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jetour-x95", "name": "X95", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jetour-shanhai-l6", "name": "Shanhai L6", "segment": "D-SUV híbrido", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "jetour-shanhai-t1", "name": "Shanhai T1", "segment": "Off-road híbrido", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "jac", "name": "JAC", "country": "China", "founded": 1964,
+      "website": "https://jacen.jac.com.cn",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/jac.png",
+      "manufacturerGroup": "JAC Group", "premium": false,
+      "models": [
+        { "id": "jac-js2", "name": "JS2", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jac-js4", "name": "JS4", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jac-js6", "name": "JS6", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jac-j7", "name": "J7", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jac-t6", "name": "T6", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jac-t8-pro", "name": "T8 Pro", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jac-x200", "name": "X200", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jac-sunray", "name": "Sunray", "segment": "Van comercial", "bodyType": "van", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jac-e30x", "name": "E30X", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jac-hunter-ev", "name": "Hunter EV", "segment": "Pickup mediana eléctrica", "bodyType": "pickup", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "maxus", "name": "Maxus", "country": "China", "founded": 2011,
+      "website": "https://www.maxusmotor.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/maxus.png",
+      "manufacturerGroup": "SAIC Motor", "premium": false,
+      "models": [
+        { "id": "maxus-t60", "name": "T60", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "maxus-t90", "name": "T90", "segment": "Pickup grande", "bodyType": "pickup", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "maxus-et90", "name": "eT90", "segment": "Pickup grande eléctrica", "bodyType": "pickup", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "maxus-d90", "name": "D90", "segment": "D-SUV Off-road", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "maxus-g10", "name": "G10", "segment": "Van/MPV grande", "bodyType": "van", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "maxus-v80", "name": "V80", "segment": "Van comercial grande", "bodyType": "van", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "maxus-deliver-9", "name": "Deliver 9", "segment": "Van comercial grande", "bodyType": "van", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "maxus-mifa-9", "name": "Mifa 9", "segment": "MPV premium eléctrica", "bodyType": "van", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "maxus-edeliver-3", "name": "eDeliver 3", "segment": "Van comercial eléctrica pequeña", "bodyType": "van", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "maxus-edeliver-9", "name": "eDeliver 9", "segment": "Van comercial eléctrica grande", "bodyType": "van", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "foton", "name": "Foton", "country": "China", "founded": 1996,
+      "website": "https://www.foton.com.cn",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/foton.png",
+      "manufacturerGroup": "BAIC Group", "premium": false,
+      "models": [
+        { "id": "foton-tunland-g7", "name": "Tunland G7", "segment": "Pickup mediana", "bodyType": "pickup", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "foton-tunland-v9", "name": "Tunland V9", "segment": "Pickup mediana premium", "bodyType": "pickup", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "foton-tm3", "name": "TM3", "segment": "Pickup compacta", "bodyType": "pickup", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "foton-aumark", "name": "Aumark", "segment": "Camión liviano", "bodyType": "van", "yearsAvailable": "2015-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "foton-view-cs2", "name": "View CS2", "segment": "Van comercial", "bodyType": "van", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "foton-toano", "name": "Toano", "segment": "Bus/Van", "bodyType": "van", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "foton-gratour", "name": "Gratour", "segment": "Van comercial liviana", "bodyType": "van", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "foton-eaumark", "name": "eAumark", "segment": "Camión eléctrico liviano", "bodyType": "van", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "foton-wonder", "name": "Wonder", "segment": "Van comercial", "bodyType": "van", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "foton-miler", "name": "Miler", "segment": "Van comercial liviana", "bodyType": "van", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "byd", "name": "BYD", "country": "China", "founded": 2003,
+      "website": "https://www.byd.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/byd.png",
+      "manufacturerGroup": "BYD Company Limited", "premium": false,
+      "models": [
+        { "id": "byd-dolphin-mini", "name": "Dolphin Mini", "segment": "A", "bodyType": "hatchback", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "byd-dolphin", "name": "Dolphin", "segment": "B", "bodyType": "hatchback", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "byd-atto-3", "name": "Atto 3", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "byd-seal", "name": "Seal", "segment": "D", "bodyType": "sedan", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "byd-sealion-7", "name": "Sealion 7", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "byd-seal-u-dmi", "name": "Seal U DM-i", "segment": "C-SUV híbrido", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "byd-han", "name": "Han", "segment": "D", "bodyType": "sedan", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "byd-tang", "name": "Tang", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "byd-yuan-pro", "name": "Yuan Pro", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "byd-shark", "name": "Shark", "segment": "Pickup mediana híbrida", "bodyType": "pickup", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "omoda", "name": "Omoda", "country": "China", "founded": 2022,
+      "website": "https://www.omodajaecoo-global.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/omoda.png",
+      "manufacturerGroup": "Chery Holding Group", "premium": false,
+      "models": [
+        { "id": "omoda-c5", "name": "C5", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "omoda-e5", "name": "E5", "segment": "B-SUV eléctrico", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "omoda-c7", "name": "C7", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "omoda-c3", "name": "C3", "segment": "A-SUV", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "omoda-c9", "name": "C9", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "omoda-omoda-7", "name": "Omoda 7", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "omoda-omoda-9", "name": "Omoda 9", "segment": "D-SUV híbrido", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "omoda-c5-ev", "name": "C5 EV", "segment": "B-SUV eléctrico", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "omoda-omoda-3-ev", "name": "Omoda 3 EV", "segment": "A-SUV eléctrico", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "omoda-omoda-gt", "name": "Omoda GT", "segment": "Deportivo", "bodyType": "coupe", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "jaecoo", "name": "Jaecoo", "country": "China", "founded": 2023,
+      "website": "https://www.omodajaecoo-global.com",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Jaecoo_wordmark.svg/250px-Jaecoo_wordmark.svg.png",
+      "manufacturerGroup": "Chery Holding Group", "premium": false,
+      "models": [
+        { "id": "jaecoo-j5", "name": "J5", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jaecoo-j6", "name": "J6", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jaecoo-j7", "name": "J7", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jaecoo-j8", "name": "J8", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jaecoo-j9", "name": "J9", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "jaecoo-j7-phev", "name": "J7 PHEV", "segment": "C-SUV híbrido enchufable", "bodyType": "suv", "yearsAvailable": "2024-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "jaecoo-j6-ev", "name": "J6 EV", "segment": "C-SUV eléctrico", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "jaecoo-j5-ev", "name": "J5 EV", "segment": "B-SUV eléctrico", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "jaecoo-j8-phev", "name": "J8 PHEV", "segment": "D-SUV híbrido enchufable", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "jaecoo-j9-phev", "name": "J9 PHEV", "segment": "D-SUV híbrido enchufable", "bodyType": "suv", "yearsAvailable": "2025-2026", "image": null, "discontinued": false, "availableInChile": false }
+      ]
+    },
+    {
+      "id": "bmw", "name": "BMW", "country": "Alemania", "founded": 1916,
+      "website": "https://www.bmw.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/bmw.png",
+      "manufacturerGroup": "BMW Group", "premium": true,
+      "models": [
+        { "id": "bmw-serie-1", "name": "Serie 1", "segment": "C premium", "bodyType": "hatchback", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-serie-2", "name": "Serie 2", "segment": "C premium", "bodyType": "coupe", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-serie-3", "name": "Serie 3", "segment": "D premium", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-serie-5", "name": "Serie 5", "segment": "E premium", "bodyType": "sedan", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-x1", "name": "X1", "segment": "C-SUV premium", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-x3", "name": "X3", "segment": "D-SUV premium", "bodyType": "suv", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-x5", "name": "X5", "segment": "E-SUV premium", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-x7", "name": "X7", "segment": "E-SUV premium grande", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-i4", "name": "i4", "segment": "D premium eléctrico", "bodyType": "sedan", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "bmw-ix", "name": "iX", "segment": "E-SUV premium eléctrico", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "haval", "name": "Haval", "country": "China", "founded": 2013,
+      "website": "https://www.havalmotor.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/haval.png",
+      "manufacturerGroup": "Great Wall Motors", "premium": false,
+      "models": [
+        { "id": "haval-h2", "name": "H2", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2016-2022", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "haval-h6", "name": "H6", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haval-h6-gt", "name": "H6 GT", "segment": "C-SUV coupé", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haval-h9", "name": "H9", "segment": "D-SUV Off-road", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haval-jolion", "name": "Jolion", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haval-dargo", "name": "Dargo", "segment": "C-SUV coupé", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "haval-f7", "name": "F7", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2019-2023", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "haval-f7x", "name": "F7x", "segment": "C-SUV coupé", "bodyType": "suv", "yearsAvailable": "2019-2023", "image": null, "discontinued": true, "availableInChile": true },
+        { "id": "haval-big-dog", "name": "Big Dog", "segment": "C-SUV Off-road", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "haval-m6", "name": "M6", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "mercedes-benz", "name": "Mercedes-Benz", "country": "Alemania", "founded": 1926,
+      "website": "https://www.mercedes-benz.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/mercedes-benz.png",
+      "manufacturerGroup": "Mercedes-Benz Group", "premium": true,
+      "models": [
+        { "id": "mercedes-benz-clase-a", "name": "Clase A", "segment": "B premium", "bodyType": "hatchback", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mercedes-benz-clase-c", "name": "Clase C", "segment": "D premium", "bodyType": "sedan", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mercedes-benz-clase-e", "name": "Clase E", "segment": "E premium", "bodyType": "sedan", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mercedes-benz-clase-s", "name": "Clase S", "segment": "F premium lujo", "bodyType": "sedan", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mercedes-benz-gla", "name": "GLA", "segment": "B-SUV premium", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mercedes-benz-glb", "name": "GLB", "segment": "C-SUV premium 7 plazas", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mercedes-benz-glc", "name": "GLC", "segment": "C-SUV premium", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mercedes-benz-gle", "name": "GLE", "segment": "D-SUV premium", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mercedes-benz-gls", "name": "GLS", "segment": "E-SUV premium grande", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "mercedes-benz-sprinter", "name": "Sprinter", "segment": "Van comercial", "bodyType": "van", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
+      "id": "audi", "name": "Audi", "country": "Alemania", "founded": 1909,
+      "website": "https://www.audi.com",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/audi.png",
+      "manufacturerGroup": "Volkswagen Group", "premium": true,
+      "models": [
+        { "id": "audi-a1", "name": "A1", "segment": "B premium", "bodyType": "hatchback", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "audi-a3", "name": "A3", "segment": "C premium", "bodyType": "sedan", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "audi-a4", "name": "A4", "segment": "D premium", "bodyType": "sedan", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "audi-a6", "name": "A6", "segment": "E premium", "bodyType": "sedan", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "audi-a8", "name": "A8", "segment": "F premium lujo", "bodyType": "sedan", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "audi-q2", "name": "Q2", "segment": "B-SUV premium", "bodyType": "suv", "yearsAvailable": "2017-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "audi-q3", "name": "Q3", "segment": "C-SUV premium", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "audi-q5", "name": "Q5", "segment": "D-SUV premium", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "audi-q7", "name": "Q7", "segment": "E-SUV premium", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "audi-q8", "name": "Q8", "segment": "E-SUV premium coupé", "bodyType": "suv", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    }
+  ]
+}
