@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore"
 import { firebaseApp } from "./config"
 import type { User } from "firebase/auth"
+import { TESTER_PROMO_DURATION_MS } from "@/types/document.types"
 import type {
   Organization,
   Profile,
@@ -111,7 +112,8 @@ function toFirestoreDocument(data: DocumentData): Document {
 
 export async function createUserProfile(
   user: User,
-  fullName?: string
+  fullName?: string,
+  isTester?: boolean
 ): Promise<{ organizationId: string; fullName: string }> {
   const profileRef = doc(db, "profiles", user.uid)
   const existing   = await getDoc(profileRef)
@@ -125,15 +127,21 @@ export async function createUserProfile(
 
   const name = fullName ?? user.displayName ?? user.email?.split("@")[0] ?? "Usuario"
 
-  // Crear organización
+  // Crear organización. El plan queda en "free" incluso para testers — el mes
+  // gratis de Pro es self-service, lo activa la propia persona más adelante
+  // (ver activateTesterPromo). Los campos de promo se inicializan igual para
+  // todos para que nunca queden `undefined` en el doc.
   const orgRef = await addDoc(collection(db, "organizations"), {
-    name:             `${name}'s Fiscaliza`,
-    type:             "personal",
-    plan:             "free",
-    plan_expires_at:  null,
-    stripe_customer_id: null,
-    created_at:       serverTimestamp(),
-    updated_at:       serverTimestamp(),
+    name:                `${name}'s Fiscaliza`,
+    type:                "personal",
+    plan:                "free",
+    plan_expires_at:     null,
+    stripe_customer_id:  null,
+    is_tester_promo:     false,
+    tester_promo_start:  null,
+    tester_promo_end:    null,
+    created_at:          serverTimestamp(),
+    updated_at:          serverTimestamp(),
   })
 
   // Crear perfil
@@ -143,9 +151,62 @@ export async function createUserProfile(
     full_name:       name,
     avatar_url:      user.photoURL ?? null,
     email:           user.email,
+    is_tester:       isTester ?? false,
+    tester_since:    isTester ? new Date().toISOString() : null,
   })
 
   return { organizationId: orgRef.id, fullName: name }
+}
+
+// ─── Programa de testers ─────────────────────────────────────────────────────
+
+/**
+ * Crea el lead de un tester que completó el modal de bienvenida, antes de
+ * que exista cuenta. No requiere sesión (ver regla `testers` en firestore.rules).
+ */
+export async function createTesterLead(data: {
+  fullName:    string
+  email:       string
+  vehicleNote: string
+}): Promise<void> {
+  await addDoc(collection(db, "testers"), {
+    full_name:    data.fullName,
+    email:        data.email,
+    vehicle_note: data.vehicleNote,
+    created_at:   serverTimestamp(),
+  })
+}
+
+/**
+ * Activa el mes gratis de Pro de un tester (self-service, cuando él quiera).
+ * El llamador es responsable de haber verificado elegibilidad antes de mostrar
+ * el botón (is_tester, no usado todavía, dentro del año de plazo).
+ */
+export async function activateTesterPromo(orgId: string): Promise<void> {
+  const now = new Date()
+  const end = new Date(now.getTime() + TESTER_PROMO_DURATION_MS)
+  await updateDoc(doc(db, "organizations", orgId), {
+    plan:               "pro",
+    is_tester_promo:    true,
+    tester_promo_start: now.toISOString(),
+    tester_promo_end:   end.toISOString(),
+    plan_expires_at:    end.toISOString(),
+    updated_at:         serverTimestamp(),
+  })
+}
+
+/**
+ * Baja a Free el Pro regalado a un tester una vez vencido. No limpia
+ * tester_promo_start/end — queda como registro de que ya usó su beneficio,
+ * para que no pueda volver a activarlo.
+ */
+export async function expireTesterPromo(orgId: string): Promise<void> {
+  await updateDoc(doc(db, "organizations", orgId), {
+    plan:             "free",
+    is_tester_promo:  false,
+    plan_expires_at:  null,
+    updated_at:       serverTimestamp(),
+  })
 }
 
 export async function getProfile(userId: string): Promise<Profile | null> {

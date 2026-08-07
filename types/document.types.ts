@@ -108,3 +108,20 @@ export interface QrShare {
   created_at:         string
   expires_at:         string
 }
+
+// ─── Programa de testers ─────────────────────────────────────────────────────
+
+/** Lead capturado en el modal de bienvenida a testers, antes de que exista cuenta. */
+export interface TesterLead {
+  id:           string
+  full_name:    string
+  email:        string
+  vehicle_note: string
+  created_at:   string
+}
+
+/** Duración del mes gratis de Pro una vez que el tester lo activa. */
+export const TESTER_PROMO_DURATION_MS = 30 * 24 * 60 * 60 * 1000
+
+/** Plazo que tiene un tester para activar su mes gratis desde que se registró. */
+export const TESTER_PROMO_ELIGIBILITY_MS = 365 * 24 * 60 * 60 * 1000

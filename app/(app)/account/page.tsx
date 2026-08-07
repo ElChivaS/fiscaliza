@@ -4,7 +4,7 @@ import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { logout, sendResetEmail, auth } from "@/lib/firebase/auth"
-import { updateProfile as fbUpdateProfile } from "@/lib/firebase/firestore"
+import { updateProfile as fbUpdateProfile, activateTesterPromo } from "@/lib/firebase/firestore"
 import { uploadAvatar } from "@/lib/firebase/storage"
 import { useOrganization } from "@/hooks/useOrganization"
 import { useAuthStore } from "@/stores/authStore"
@@ -13,6 +13,7 @@ import Button from "@/components/ui/Button"
 import PricingModal from "@/components/ui/PricingModal"
 import { toast } from "@/components/ui/Toast"
 import AccountSkeleton from "@/components/skeletons/AccountSkeleton"
+import { TESTER_PROMO_ELIGIBILITY_MS } from "@/types/document.types"
 
 const PLAN_LABELS: Record<string, string> = {
   free:     "Free",
@@ -29,6 +30,7 @@ export default function AccountPage() {
   const [savingName, setSavingName]     = useState(false)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const [showPlans, setShowPlans] = useState(false)
+  const [activatingTesterPromo, setActivatingTesterPromo] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   async function handleSaveName() {
@@ -90,11 +92,44 @@ export default function AccountPage() {
     router.refresh()
   }
 
+  async function handleActivateTesterPromo() {
+    if (!organization) return
+    setActivatingTesterPromo(true)
+    try {
+      await activateTesterPromo(organization.id)
+      const now = new Date()
+      const end = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
+      useAuthStore.setState((s) => ({
+        organization: s.organization ? {
+          ...s.organization,
+          plan:               "pro",
+          is_tester_promo:    true,
+          tester_promo_start: now.toISOString(),
+          tester_promo_end:   end.toISOString(),
+          plan_expires_at:    end.toISOString(),
+        } : s.organization,
+      }))
+      toast("¡Mes de Pro activado!", "success")
+    } catch {
+      toast("Error al activar tu mes gratis", "error")
+    } finally {
+      setActivatingTesterPromo(false)
+    }
+  }
+
   if (loading) {
     return <AccountSkeleton />
   }
 
   const displayName = profile?.full_name ?? "Usuario"
+
+  const testerEligible = !!(
+    profile?.is_tester &&
+    !organization?.tester_promo_start &&
+    profile.tester_since &&
+    Date.now() < new Date(profile.tester_since).getTime() + TESTER_PROMO_ELIGIBILITY_MS
+  )
+  const testerPromoActive = !!organization?.is_tester_promo
 
   return (
     <div className="max-w-md mx-auto px-4 flex flex-col min-h-[calc(100vh-5rem)]">
@@ -210,6 +245,33 @@ export default function AccountPage() {
           )}
         </div>
       </div>
+
+      {/* Banner de tester */}
+      {testerEligible && (
+        <div className="rounded-2xl bg-ink/5 border border-ink/10 p-4 mb-6 flex flex-col gap-2">
+          <p className="text-sm text-ink">
+            🎉 Eres Tester — tienes un mes del plan Pro gratis para activar cuando quieras
+            {profile?.tester_since && (
+              <>, válido hasta{" "}
+                {new Date(
+                  new Date(profile.tester_since).getTime() + TESTER_PROMO_ELIGIBILITY_MS
+                ).toLocaleDateString("es-CL", { day: "numeric", month: "short", year: "numeric" })}
+              </>
+            )}.
+          </p>
+          <Button size="sm" loading={activatingTesterPromo} onClick={handleActivateTesterPromo}>
+            Activar mi mes gratis
+          </Button>
+        </div>
+      )}
+      {testerPromoActive && organization?.tester_promo_end && (
+        <div className="rounded-2xl bg-ink/5 border border-ink/10 p-4 mb-6">
+          <p className="text-sm text-ink">
+            🎉 Pro gratis por ser tester — vence el{" "}
+            {new Date(organization.tester_promo_end).toLocaleDateString("es-CL", { day: "numeric", month: "short", year: "numeric" })}
+          </p>
+        </div>
+      )}
 
       {/* Menú */}
       <div className="flex flex-col gap-1 rounded-2xl bg-surface border border-black/8 overflow-hidden mb-4">
