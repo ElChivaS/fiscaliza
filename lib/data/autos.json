@@ -114,6 +114,7 @@
         { "id": "chevrolet-groove", "name": "Groove", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
         { "id": "chevrolet-captiva", "name": "Captiva", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": true },
         { "id": "chevrolet-traverse", "name": "Traverse", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2018-2026", "image": null, "discontinued": false, "availableInChile": false },
+        { "id": "chevrolet-prisma", "name": "Prisma", "segment": "B", "bodyType": "sedan", "yearsAvailable": "2017-2019", "image": null, "discontinued": false, "availableInChile": false },
         { "id": "chevrolet-silverado", "name": "Silverado", "segment": "Pickup grande", "bodyType": "pickup", "yearsAvailable": "2019-2026", "image": null, "discontinued": false, "availableInChile": false }
       ]
     },
