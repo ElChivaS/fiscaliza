@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { signInWithGoogle, registerWithEmail } from "@/lib/firebase/auth"
 import Button from "@/components/ui/Button"
+import TesterWelcomeModal from "@/components/auth/TesterWelcomeModal"
 
 function getPasswordStrength(p: string): { label: string; color: string; width: string } {
   if (p.length === 0) return { label: "", color: "", width: "0%" }
@@ -31,6 +32,9 @@ function setSessionCookie() {
 
 export default function RegisterPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const isTesterInvite = searchParams.get("tester") === "1"
+
   const [name, setName]                 = useState("")
   const [email, setEmail]               = useState("")
   const [password, setPassword]         = useState("")
@@ -39,7 +43,17 @@ export default function RegisterPage() {
   const [loadingOAuth, setLoadingOAuth] = useState(false)
   const [error, setError]               = useState<string | null>(null)
 
+  const [showTesterModal, setShowTesterModal] = useState(isTesterInvite)
+  const [isTesterSignup, setIsTesterSignup]   = useState(false)
+
   const strength = getPasswordStrength(password)
+
+  function handleTesterComplete(data: { fullName: string; email: string }) {
+    setName(data.fullName)
+    setEmail(data.email)
+    setIsTesterSignup(true)
+    setShowTesterModal(false)
+  }
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault()
@@ -47,7 +61,7 @@ export default function RegisterPage() {
     setLoading(true)
     setError(null)
     try {
-      await registerWithEmail(email, password, name.trim())
+      await registerWithEmail(email, password, name.trim(), isTesterSignup)
       setSessionCookie()
       router.push("/dashboard")
     } catch (err) {
@@ -92,6 +106,14 @@ export default function RegisterPage() {
               Inicia sesión
             </Link>
           </p>
+
+          {isTesterSignup && (
+            <div className="rounded-2xl bg-ink/5 border border-ink/10 px-4 py-3 mb-6 text-lg text-ink">
+              Registrándote como tester 🎉 — Podrás activar tu MES GRATIS del plan Pro con el botón "Activar mi mes gratis" en la configuración de tu cuenta.
+              <br />
+              <span className="text-xs font-medium">Recuerda: Tienes un año para activarla.</span>
+            </div>
+          )}
 
           <Button
             variant="secondary"
@@ -205,6 +227,12 @@ export default function RegisterPage() {
           <Link href="#" className="underline underline-offset-2">términos de uso</Link>.
         </p>
       </footer>
+
+      <TesterWelcomeModal
+        open={showTesterModal}
+        onClose={() => setShowTesterModal(false)}
+        onComplete={handleTesterComplete}
+      />
     </div>
   )
 }

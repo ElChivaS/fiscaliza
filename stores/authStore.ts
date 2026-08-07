@@ -2,7 +2,7 @@
 
 import { create } from "zustand"
 import { onAuthStateChanged, auth } from "@/lib/firebase/auth"
-import { getProfile, getOrganization, getPlanLimits } from "@/lib/firebase/firestore"
+import { getProfile, getOrganization, getPlanLimits, expireTesterPromo } from "@/lib/firebase/firestore"
 import type { Organization, Profile, PlanLimits } from "@/types/document.types"
 import { useVehiclesStore } from "./vehiclesStore"
 
@@ -55,12 +55,24 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         const profile = await getProfile(user.uid)
         if (!profile) throw new Error("Perfil no encontrado")
 
-        const [organization, planLimits] = await Promise.all([
+        let [organization, planLimits] = await Promise.all([
           getOrganization(profile.organization_id),
           getOrganization(profile.organization_id).then((org) =>
             org ? getPlanLimits(org.plan) : null
           ),
         ])
+
+        // Mes gratis de tester vencido — se revierte a Free al abrir la app
+        // (no hay Cloud Functions en este proyecto para hacerlo en segundo plano).
+        if (
+          organization?.is_tester_promo &&
+          organization.plan_expires_at &&
+          new Date(organization.plan_expires_at) < new Date()
+        ) {
+          await expireTesterPromo(organization.id)
+          organization = await getOrganization(organization.id)
+          planLimits   = organization ? await getPlanLimits(organization.plan) : null
+        }
 
         set({ profile, organization, planLimits, loading: false })
       } catch (err) {

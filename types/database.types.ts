@@ -19,6 +19,9 @@ export type Database = {
           plan: "free" | "pro" | "business"
           plan_expires_at: string | null
           stripe_customer_id: string | null
+          is_tester_promo: boolean
+          tester_promo_start: string | null
+          tester_promo_end: string | null
           created_at: string
           updated_at: string
         }
@@ -29,6 +32,9 @@ export type Database = {
           plan?: "free" | "pro" | "business"
           plan_expires_at?: string | null
           stripe_customer_id?: string | null
+          is_tester_promo?: boolean
+          tester_promo_start?: string | null
+          tester_promo_end?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -39,6 +45,9 @@ export type Database = {
           plan?: "free" | "pro" | "business"
           plan_expires_at?: string | null
           stripe_customer_id?: string | null
+          is_tester_promo?: boolean
+          tester_promo_start?: string | null
+          tester_promo_end?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -50,6 +59,8 @@ export type Database = {
           role: "owner" | "admin" | "driver"
           full_name: string | null
           avatar_url: string | null
+          is_tester: boolean
+          tester_since: string | null
         }
         Insert: {
           id: string
@@ -57,6 +68,8 @@ export type Database = {
           role?: "owner" | "admin" | "driver"
           full_name?: string | null
           avatar_url?: string | null
+          is_tester?: boolean
+          tester_since?: string | null
         }
         Update: {
           id?: string
@@ -64,6 +77,8 @@ export type Database = {
           role?: "owner" | "admin" | "driver"
           full_name?: string | null
           avatar_url?: string | null
+          is_tester?: boolean
+          tester_since?: string | null
         }
         Relationships: [
           {

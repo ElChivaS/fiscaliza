@@ -73,5 +73,20 @@ service cloud.firestore {
       allow update: if false; // Inmutable
       allow delete: if false;
     }
+
+    // ── testers: leads del modal de bienvenida, se escriben SIN sesión ───────
+    // (el modal aparece antes de que exista cuenta). Validación mínima para
+    // evitar basura/abuso; nadie puede leer/editar desde el cliente.
+    match /testers/{leadId} {
+      allow create: if request.resource.data.full_name is string
+        && request.resource.data.full_name.size() > 0
+        && request.resource.data.full_name.size() < 200
+        && request.resource.data.email is string
+        && request.resource.data.email.size() > 0
+        && request.resource.data.email.size() < 200
+        && request.resource.data.vehicle_note is string
+        && request.resource.data.vehicle_note.size() < 300;
+      allow read, update, delete: if false;
+    }
   }
 }
