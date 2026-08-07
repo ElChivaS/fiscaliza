@@ -2,6 +2,7 @@
 
 import { use, useEffect, useRef, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { auth, onAuthStateChanged } from "@/lib/firebase/auth"
 import { getVehicle, getDocumentsForVehicle } from "@/lib/firebase/firestore"
 import { getDocumentUrl } from "@/lib/firebase/storage"
 import { enrichWithStatus } from "@/lib/utils/document.utils"
@@ -100,6 +101,14 @@ export default function PresentPage({
   const [loadingUrl, setLoadingUrl] = useState(false)
   const [renderError, setRenderError] = useState<string | null>(null)
 
+  // Firebase Auth rehidrata la sesión de forma asíncrona en cada carga completa
+  // de página (refresh, entrada directa, cold-start de PWA). Si consultamos
+  // Firestore antes de que termine, request.auth llega null y las reglas
+  // rechazan la lectura con "Missing or insufficient permissions" — por eso
+  // esperamos el primer callback de onAuthStateChanged antes de leer nada.
+  const [authReady, setAuthReady] = useState(false)
+  const [loadError, setLoadError] = useState<string | null>(null)
+
   const canvasRef     = useRef<HTMLCanvasElement>(null)
   const canvasBackRef = useRef<HTMLCanvasElement>(null)
 
@@ -111,40 +120,58 @@ export default function PresentPage({
     } catch {}
   }, [])
 
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, () => setAuthReady(true))
+    return unsub
+  }, [])
+
   // Cargar vehículo y documentos desde Firestore
   useEffect(() => {
+    if (!authReady) return
+
     async function load() {
-      const v = await getVehicle(vehicleId)
-      if (!v) return
-      setVehicle(v)
-      const rawDocs = await getDocumentsForVehicle(vehicleId, v.organization_id)
+      if (!auth.currentUser) {
+        router.replace("/login")
+        return
+      }
 
-      const byType: Partial<Record<DocumentType, DocumentWithStatus>> = {}
-      let front: DocumentWithStatus | null = null
-      let back:  DocumentWithStatus | null = null
+      try {
+        setLoadError(null)
+        const v = await getVehicle(vehicleId)
+        if (!v) return
+        setVehicle(v)
+        const rawDocs = await getDocumentsForVehicle(vehicleId, v.organization_id)
 
-      rawDocs.forEach((d) => {
-        const enriched = enrichWithStatus(d)
-        if (d.type === "licencia") {
-          if (d.side === "back") back  = enriched
-          else                   front = enriched  // front o null (doc antiguo sin side)
-        } else {
-          byType[d.type as DocumentType] = enriched
+        const byType: Partial<Record<DocumentType, DocumentWithStatus>> = {}
+        let front: DocumentWithStatus | null = null
+        let back:  DocumentWithStatus | null = null
+
+        rawDocs.forEach((d) => {
+          const enriched = enrichWithStatus(d)
+          if (d.type === "licencia") {
+            if (d.side === "back") back  = enriched
+            else                   front = enriched  // front o null (doc antiguo sin side)
+          } else {
+            byType[d.type as DocumentType] = enriched
+          }
+        })
+
+        setDocs(byType)
+        setLicenciaFront(front)
+        setLicenciaBack(back)
+
+        // El representante de licencia en byType es el frente (para el badge de estado)
+        if (front ?? back) {
+          byType["licencia"] = (front ?? back)!
+          setDocs({ ...byType })
         }
-      })
-
-      setDocs(byType)
-      setLicenciaFront(front)
-      setLicenciaBack(back)
-
-      // El representante de licencia en byType es el frente (para el badge de estado)
-      if (front ?? back) {
-        byType["licencia"] = (front ?? back)!
-        setDocs({ ...byType })
+      } catch (err) {
+        console.error("[present] fallo al cargar vehículo/documentos:", err)
+        setLoadError(err instanceof Error ? err.message : "Error al cargar los documentos")
       }
     }
     load()
-  }, [vehicleId])
+  }, [vehicleId, authReady, router])
 
   // Obtener URLs al cambiar de tab
   const loadDocUrls = useCallback(async (type: DocumentType) => {
@@ -279,7 +306,16 @@ export default function PresentPage({
 
       {/* Área de documento */}
       <main className="flex-1 overflow-auto flex flex-col items-center px-4 py-2 gap-3">
-        {loadingUrl ? (
+        {loadError ? (
+          <div className="flex flex-col items-center justify-center w-full h-full text-center gap-3">
+            <p className="text-red-400 text-sm">No se pudieron cargar los documentos</p>
+            <p className="text-white/20 text-xs wrap-break-word">{loadError}</p>
+          </div>
+        ) : !authReady || !vehicle ? (
+          <div className="flex items-center justify-center w-full h-full">
+            <Spinner size="lg" className="text-white/40" />
+          </div>
+        ) : loadingUrl ? (
           <div className="flex items-center justify-center w-full h-full">
             <Spinner size="lg" className="text-white/40" />
           </div>
@@ -319,7 +355,7 @@ export default function PresentPage({
                   />
                 ) : (
                   <div className="w-full h-32 flex items-center justify-center">
-                    <Spinner />
+                    <p className="text-red-400 text-xs">No se pudo obtener la URL</p>
                   </div>
                 )}
               </div>
@@ -350,7 +386,7 @@ export default function PresentPage({
                   />
                 ) : (
                   <div className="w-full h-32 flex items-center justify-center">
-                    <Spinner />
+                    <p className="text-red-400 text-xs">No se pudo obtener la URL</p>
                   </div>
                 )}
               </div>
@@ -390,8 +426,8 @@ export default function PresentPage({
             style={{ maxHeight: "calc(100dvh - 200px)" }}
           />
         ) : (
-          <div className="flex items-center justify-center h-40">
-            <Spinner />
+          <div className="flex flex-col items-center justify-center w-full h-full text-center gap-2">
+            <p className="text-red-400 text-sm">No se pudo obtener la URL del documento</p>
           </div>
         )}
       </main>

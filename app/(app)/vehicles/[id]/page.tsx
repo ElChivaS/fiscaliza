@@ -35,13 +35,16 @@ export default function VehicleDetailPage({
   const [fallbackVehicle, setFallbackVehicle] = useState<Vehicle | null>(null)
   const vehicle = vehicles.find((v) => v.id === id) ?? fallbackVehicle ?? null
 
-  // Si el store no tiene el vehículo, cargarlo directamente
+  // Si el store no tiene el vehículo, cargarlo directamente. Espera a que
+  // `profile` esté listo (sesión de Firebase restaurada) antes de leer nada —
+  // mismo criterio que el dashboard, ver comentario ahí.
   useEffect(() => {
+    if (!profile) return
     if (!vehicles.find((v) => v.id === id)) {
       fetchVehiclesWithDocuments()
       getVehicle(id).then((v) => { if (v) setFallbackVehicle(v) })
     }
-  }, [id, vehicles, fetchVehiclesWithDocuments])
+  }, [id, vehicles, fetchVehiclesWithDocuments, profile])
 
   const {
     documents,
@@ -86,8 +89,9 @@ export default function VehicleDetailPage({
   }, [showQr, qrExpiresAt])
 
   useEffect(() => {
+    if (!profile) return
     fetchDocuments()
-  }, [fetchDocuments])
+  }, [fetchDocuments, profile])
 
   if (!vehicle) {
     return <VehicleDetailSkeleton />
