@@ -62,13 +62,13 @@ export default function LandingPage() {
               href="/login"
               className="text-sm font-medium text-muted hover:text-ink transition-colors"
             >
-              Iniciar sesión
+              Ingresa
             </Link>
             <Link
               href="/register"
               className="text-sm font-medium bg-ink text-white px-4 py-2 rounded-xl hover:bg-ink/90 transition-colors"
             >
-              Crear cuenta
+              Prueba Fiscaliza Gratis
             </Link>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function LandingPage() {
               href="/register"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-ink px-8 py-4 rounded-2xl text-base font-medium hover:bg-white/90 transition-all hover:-translate-y-0.5"
             >
-              Empezar gratis
+              Prueba Fiscaliza gratis
             </Link>
             <Link
               href="/login"
@@ -240,7 +240,7 @@ export default function LandingPage() {
             href="/register"
             className="inline-flex items-center gap-2 bg-white text-ink px-8 py-4 rounded-2xl text-base font-medium hover:bg-white/90 transition-colors"
           >
-            Crear cuenta gratuita
+            Prueba Fiscaliza Gratis
           </Link>
         </div>
       </section>
