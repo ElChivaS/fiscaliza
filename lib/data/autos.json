@@ -569,6 +569,22 @@
       ]
     },
     {
+      "id": "gac", "name": "GAC", "country": "China", "founded": 2008,
+      "website": "https://www.gacgroup.com/",
+      "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/gac.png",
+      "manufacturerGroup": "Guangzhou Automobile Group Co., Ltd.", "premium": false,
+      "models": [
+        { "id": "gac-gs3-power", "name": "GS3 Power", "segment": "B-SUV", "bodyType": "suv", "yearsAvailable": "2020-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gac-gs4-power", "name": "GS4 Power", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gac-emzoom", "name": "Emzoom", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gac-emkoo", "name": "Emkoo", "segment": "C-SUV", "bodyType": "suv", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gac-gs8", "name": "GS8", "segment": "D-SUV", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gac-empow", "name": "Empow", "segment": "C", "bodyType": "sedan", "yearsAvailable": "2021-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gac-aion-es", "name": "Aion ES", "segment": "C eléctrico", "bodyType": "sedan", "yearsAvailable": "2023-2026", "image": null, "discontinued": false, "availableInChile": true },
+        { "id": "gac-aion-y", "name": "Aion Y", "segment": "C-SUV eléctrico", "bodyType": "suv", "yearsAvailable": "2022-2026", "image": null, "discontinued": false, "availableInChile": true }
+      ]
+    },
+    {
       "id": "haval", "name": "Haval", "country": "China", "founded": 2013,
       "website": "https://www.havalmotor.com",
       "logo": "https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/optimized/haval.png",
