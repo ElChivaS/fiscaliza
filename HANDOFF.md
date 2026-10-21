@@ -53,7 +53,7 @@ FISCALIZA es una PWA (Next.js 16 + Firebase) que centraliza los documentos vehic
 
 ## Próximos pasos
 
-1. **Deploy de reglas pendiente (último punto acordado)**: revisar en Firebase Console qué rulesets están vivos y decidir si se despliega `firestore.rules` + `storage.rules`. El fix #1 (profiles) se desplegó durante la auditoría y la regla de `testers` con `feature/testers`, pero no hay registro de un deploy posterior para el fix de Storage (#2) ni para el nuevo límite de tamaño/tipo (#5) — el archivo local puede estar corregido mientras producción sigue con las reglas viejas. El deploy es manual, sin CI/CD: hacerlo después de cualquier cambio de rules.
+1. **Deploy de reglas**: completado (2026-10-20) desde `feature/firebase-rules-update` con `npx firebase-tools deploy --only firestore:rules,storage --project fiscaliza-61539`.
 2. Revisar con el usuario los campos marcados con criterio propio (no verificados 1 a 1) en `autos.json`/`motos.json`: `availableInChile`, `discontinued`, `yearsAvailable`, `origin` — incluye los años/segmentos de GAC corregidos en esta sesión.
 3. Decidir qué hacer con las 4 marcas de moto sin logo (QJMotor, Voge, Zontes, Kove) y con Bera (auto) — no hay fuente de logo libre confiable todavía (por ahora muestran el nombre en vez de logo).
 4. Acomodar UI de input para escribir marca y modelo cuando usuario selecciona 'otro' a agregar vehículo.
