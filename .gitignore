@@ -54,6 +54,7 @@ HANDOFF.md
 
 # mockups / prototipos locales
 fiscaliza-mockup.html
+_mockups/
 
 # typescript
 *.tsbuildinfo
