@@ -13,6 +13,10 @@ FISCALIZA es una PWA (Next.js 16 + Firebase) que centraliza los documentos vehic
 
 ## Estado actual
 
+**Sesión 2026-10-20 — demo Propuesta D y despliegue de reglas Firebase** (rama `feature/firebase-rules-update`):
+
+- **Reglas desplegadas**: `firestore.rules` y `storage.rules` publicados en `fiscaliza-61539` con `npx firebase-tools deploy --only firestore:rules,storage --project fiscaliza-61539`. Storage ahora aplica límite `<10MB`, `contentType` `application/pdf|image/.*` y validación cruzada org vía `firestore.get()` (requiere IAM correcto). Firestore mantiene las reglas actuales (incluida `testers` sin sesión).
+
 **Sesión 2026-10-20 — demo Propuesta D sobre `master`** (merge `118f766` desde `feature/demo-propuesta-d`):
 
 - **Mockups/demo D completo**: `_mockups/demo-d/` con 16 vistas HTML navegables, CSS base/app, flujo auth/dashboard/vehículo/QR/modo presentación. `d-00-landing.html` restaurado idéntico a `_mockups/home-d-senal.html` (644 líneas). Enlaces entre todas las vistas funcionales.
@@ -45,7 +49,7 @@ FISCALIZA es una PWA (Next.js 16 + Firebase) que centraliza los documentos vehic
 1. **Race condition de auth** en `app/present/[vehicleId]/[docType]/page.tsx` y en `app/(app)/vehicles/[id]/page.tsx`: ambas páginas leían Firestore apenas montaban, sin esperar a que Firebase Auth terminara de rehidratar la sesión en cada carga completa de página (refresh, entrada directa, cold-start de PWA) — la consulta salía con `request.auth` null y Firestore la rechazaba con "Missing or insufficient permissions". Arreglado esperando el primer `onAuthStateChanged`/gateando en `profile` (mismo patrón que ya usaba el dashboard, ver comentario ahí).
 2. **Permiso de IAM faltante para el lookup cruzado Storage→Firestore**: `storage.rules` usa `firestore.get(...)` dentro de `userOrgId()`, y el proyecto nunca tuvo aprovisionado el rol de IAM necesario — todas las subidas/lecturas fallaban con `storage/unauthorized` (403). Se solucionó desde la consola de Firebase (Storage → Reglas → "Corregir problema" → "Adjuntar permisos").
 
-**Ramas ya mergeadas a `master`** (más reciente primero): `feature/demo-propuesta-d` (demo D navegable + ajustes), `feature/testers` (mes gratis de Pro para testers), `fix/doc-view` (race condition de auth + permiso IAM de Storage), `style/vehicle-form-ui` (grid de marcas a 3 columnas, solo logo), `feature/vehicle-db` (integración del catálogo extendido autos.json/motos.json), `fix/nuevo-vehiculo`, `feature/feedback`, `feature/SEO-tech-base`.
+**Ramas ya mergeadas a `master`** (más reciente primero): `feature/firebase-rules-update` (despliegue reglas Firebase), `feature/demo-propuesta-d` (demo D navegable + ajustes), `feature/testers` (mes gratis de Pro para testers), `fix/doc-view` (race condition de auth + permiso IAM de Storage), `style/vehicle-form-ui` (grid de marcas a 3 columnas, solo logo), `feature/vehicle-db` (integración del catálogo extendido autos.json/motos.json), `fix/nuevo-vehiculo`, `feature/feedback`, `feature/SEO-tech-base`.
 
 ## Próximos pasos
 
