@@ -39,7 +39,7 @@ export default function TesterWelcomeModal({ open, onClose, onComplete }: Tester
   }
 
   return (
-    <Modal open={open} onClose={onClose} bottomSheet>
+    <Modal open={open} onClose={onClose} bottomSheet closeOnOverlayClick={false} closeOnEscape={false}>
       <div className="flex flex-col gap-1 mb-5 text-center">
         <p className="text-3xl">🎉</p>
         <h2 className="font-syne font-bold text-xl text-ink">¡Bienvenido, tester!</h2>

@@ -8,6 +8,8 @@ interface ModalProps {
   title?: string
   children: ReactNode
   bottomSheet?: boolean
+  closeOnOverlayClick?: boolean
+  closeOnEscape?: boolean
 }
 
 export default function Modal({
@@ -16,12 +18,26 @@ export default function Modal({
   title,
   children,
   bottomSheet = false,
+  closeOnOverlayClick = true,
+  closeOnEscape = true,
 }: ModalProps) {
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden"
     else document.body.style.overflow = ""
     return () => { document.body.style.overflow = "" }
   }, [open])
+
+  useEffect(() => {
+    if (!open || !closeOnEscape) return
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault()
+        onClose()
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown)
+    return () => document.removeEventListener("keydown", handleKeyDown)
+  }, [open, closeOnEscape, onClose])
 
   if (!open) return null
 
@@ -30,7 +46,7 @@ export default function Modal({
       {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={closeOnOverlayClick ? onClose : undefined}
       />
 
       {/* Panel */}
