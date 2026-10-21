@@ -5,7 +5,6 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { signInWithGoogle, signInWithEmail } from "@/lib/firebase/auth"
 import Button from "@/components/ui/Button"
-import { FallingPattern } from "@/components/ui/falling-pattern"
 
 const FIREBASE_ERRORS: Record<string, string> = {
   "auth/invalid-credential":       "Email o contraseña incorrectos.",
@@ -69,16 +68,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Falling pattern ocupa toda la pantalla fija */}
-      <FallingPattern
-        color="rgba(17,16,16,0.4)"
-        backgroundColor="#f5f3ef"
-        duration={120}
-        blurIntensity="0.8em"
-        density={1}
-        className="fixed inset-0 -z-10"
-      />
+    <div className="min-h-screen bg-background flex flex-col">
 
       <header className="px-6 py-8 text-center">
         <Link href="/" className="font-syne font-bold text-2xl text-ink">
