@@ -1,7 +1,7 @@
 # FISCALIZA — Handoff
 
 > Última actualización: 2026-10-20 · Rama activa: `master` (limpia, sin cambios pendientes)
-> Este documento se actualiza cada vez que se hace un "todo al día" (commit + push + merge a `master`). Sirve para retomar el proyecto sin reconstruir el contexto desde cero.
+> Este documento se actualiza **únicamente** cuando se pide explícitamente "poner todo al día" (commit + push + merge a `master`). **NO** se commitea/pushea de forma automática. Sirve para retomar el proyecto sin reconstruir el contexto desde cero.
 
 ## ⚠️ Al retomar trabajo: verificar la rama primero
 
